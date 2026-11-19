@@ -1,377 +1,533 @@
 \documentclass[11pt]{article}
-
-% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
-% Change to "preprint" to generate a non-anonymous version with page numbers.
 \usepackage[review]{acl}
-
-% Standard package includes
 \usepackage{times}
 \usepackage{latexsym}
-
-% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
 \usepackage[T1]{fontenc}
-% For Vietnamese characters
-% \usepackage[T5]{fontenc}
-% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
-
-% This assumes your files are encoded as UTF8
 \usepackage[utf8]{inputenc}
-
-% This is not strictly necessary, and may be commented out,
-% but it will improve the layout of the manuscript,
-% and will typically save some space.
 \usepackage{microtype}
-
-% This is also not strictly necessary, and may be commented out.
-% However, it will improve the aesthetics of text in
-% the typewriter font.
 \usepackage{inconsolata}
-
-%Including images in your LaTeX document requires adding
-%additional package(s)
 \usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
 
-% If the title and author information does not fit in the area allocated, uncomment the following
-%
-%\setlength\titlebox{<dim>}
-%
-% and set <dim> to something 5cm or larger.
+\captionsetup{font=small,skip=2pt}
+\setlength{\textfloatsep}{5pt plus 1pt minus 1pt}
+\setlength{\dbltextfloatsep}{5pt plus 1pt minus 1pt}
+\setlength{\intextsep}{4pt plus 1pt minus 1pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\arraystretch}{0.88}
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{-1.2ex plus -0.2ex minus -0.2ex}{0.6ex plus 0.1ex}{\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-0.9ex plus -0.2ex minus -0.1ex}{0.4ex plus 0.1ex}{\normalsize\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{0.45ex plus 0.1ex minus 0.1ex}{-0.8em}{\normalsize\bfseries}}
+\makeatother
 
-\title{Instructions for *ACL Proceedings}
+\title{\textsc{Clinical StigmaQA}: Grounding the Health Stigma and Discrimination Framework in Electronic Health Records to Audit Large Language Model Decision-Making}
 
-% Author information can be set in various styles:
-% For several authors from the same institution:
-% \author{Author 1 \and ... \and Author n \\
-%         Address line \\ ... \\ Address line}
-% if the names do not fit well on one line use
-%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
-% For authors from different institutions:
-% \author{Author 1 \\ Address line \\  ... \\ Address line
-%         \And  ... \And
-%         Author n \\ Address line \\ ... \\ Address line}
-% To start a separate ``row'' of authors use \AND, as in
-% \author{Author 1 \\ Address line \\  ... \\ Address line
-%         \AND
-%         Author 2 \\ Address line \\ ... \\ Address line \And
-%         Author 3 \\ Address line \\ ... \\ Address line}
-
-\author{First Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  \texttt{email@domain} \\\And
-  Second Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  \texttt{email@domain} \\}
-
-%\author{
-%  \textbf{First Author\textsuperscript{1}},
-%  \textbf{Second Author\textsuperscript{1,2}},
-%  \textbf{Third T. Author\textsuperscript{1}},
-%  \textbf{Fourth Author\textsuperscript{1}},
-%\\
-%  \textbf{Fifth Author\textsuperscript{1,2}},
-%  \textbf{Sixth Author\textsuperscript{1}},
-%  \textbf{Seventh Author\textsuperscript{1}},
-%  \textbf{Eighth Author \textsuperscript{1,2,3,4}},
-%\\
-%  \textbf{Ninth Author\textsuperscript{1}},
-%  \textbf{Tenth Author\textsuperscript{1}},
-%  \textbf{Eleventh E. Author\textsuperscript{1,2,3,4,5}},
-%  \textbf{Twelfth Author\textsuperscript{1}},
-%\\
-%  \textbf{Thirteenth Author\textsuperscript{3}},
-%  \textbf{Fourteenth F. Author\textsuperscript{2,4}},
-%  \textbf{Fifteenth Author\textsuperscript{1}},
-%  \textbf{Sixteenth Author\textsuperscript{1}},
-%\\
-%  \textbf{Seventeenth S. Author\textsuperscript{4,5}},
-%  \textbf{Eighteenth Author\textsuperscript{3,4}},
-%  \textbf{Nineteenth N. Author\textsuperscript{2,5}},
-%  \textbf{Twentieth Author\textsuperscript{1}}
-%\\
-%\\
-%  \textsuperscript{1}Affiliation 1,
-%  \textsuperscript{2}Affiliation 2,
-%  \textsuperscript{3}Affiliation 3,
-%  \textsuperscript{4}Affiliation 4,
-%  \textsuperscript{5}Affiliation 5
-%\\
-%  \small{
-%    \textbf{Correspondence:} \href{mailto:email@domain}{email@domain}
-%  }
-%}
+\author{Anonymous ACL Submission}
 
 \begin{document}
 \maketitle
+
 \begin{abstract}
-This document is a supplement to the general instructions for *ACL authors. It contains instructions for using the \LaTeX{} style files for ACL conferences.
-The document itself conforms to its own specifications, and is therefore an example of what your manuscript should look like.
-These instructions should be used both for papers submitted for review and for final versions of accepted papers.
+Large language models (LLMs) score near the ceiling on medical licensing exams, yet real-world electronic health records (EHRs) carry social and clinical cues---past psychiatric or substance-use diagnoses, skeptical wording from prior notes, and emergency department crowding---that routinely distort human clinical judgment. Existing medical fairness benchmarks focus almost exclusively on demographic name or race swaps and lack both a theoretical model of health-related stigma and an objective standard for when a cue is medically irrelevant. We introduce \textsc{Clinical StigmaQA}, a controlled counterfactual benchmark that operationalizes the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}) for bedside clinical decision-making. By cross-referencing 435 clinician-side records extracted from 145 HSDF studies against 38 clinical practice guidelines and federal regulations, we construct 31 clinical decision events across 6 practice domains, 9 stigmatized health conditions (73 licensed condition$\times$event pairs), 4 orthogonal experimental factors, and 10 task templates. Grounded in 1,030 pre-decision MIMIC-IV patient vignettes verified by a 5-LLM eligibility panel (29,845 eligible items), we evaluate 34 open-weight general and medical LLMs (validated against an independent LLM judge across 610,176 responses; 99.45\% agreement, $\kappa=0.973$). We find a consistent hierarchy of indicated-care loss led by remitted schizophrenia ($\Delta = -2.47$ percentage points [pp]), sickle cell disease ($-2.29$ pp), and opioid use disorder ($-1.74$ pp); demonstrate that skeptical prior-clinician wording and emergency department crowding independently degrade care while policy guardrails partially recover it ($+1.27$ pp); and show across 11 matched backbone pairs that medical fine-tuning frequently amplifies stigma rather than mitigating it. Finally, pairing bedside decisions with isolated psychometric driver scales reveals a sharp dissociation between socially desirable self-reported attitudes and biased clinical actions.
 \end{abstract}
 
 \section{Introduction}
 
-These instructions are for authors submitting papers to *ACL conferences using \LaTeX. They are not self-contained. All authors must follow the general instructions for *ACL proceedings,\footnote{\url{http://acl-org.github.io/ACLPUB/formatting.html}} and this document contains additional instructions for the \LaTeX{} style files.
+Consider a 48-year-old patient arriving at the emergency department (ED) with acute substernal chest pressure, diaphoresis, and a triage heart rate of 108 bpm. Under the 2021 AHA/ACC Chest Pain Guideline \citep{gulati2021aha}, a 12-lead ECG and serial troponin must be ordered within 10 minutes regardless of psychiatric history. In practice, however, a past medical history line noting \textit{schizophrenia, in remission on maintenance aripiprazole} frequently triggers diagnostic overshadowing: clinicians attribute somatic pain to anxiety or psychosis, withhold cardiac workup, and discharge prematurely \citep{druss2000mental,shefer2014diagnostic,fleetwood2026mental}. When large language models (LLMs) draft triage orders or suggest diagnostic pathways, do they reproduce this clinical failure?
 
-The templates include the \LaTeX{} source of this document (\texttt{acl\_latex.tex}),
-the \LaTeX{} style file used to format it (\texttt{acl.sty}),
-an ACL bibliography style (\texttt{acl\_natbib.bst}),
-an example bibliography (\texttt{custom.bib}),
-and the bibliography for the ACL Anthology (\texttt{anthology.bib}).
+Answering this question requires moving beyond two paradigms that dominate medical NLP evaluation. The first equates clinical competence with multiple-choice accuracy on static exams such as MedQA \citep{jin2021disease,singhal2023large}, where textbook vignettes omit the social friction of hospital notes \citep{wang2026medcheck,hou2026clinicalmc}. The second audits fairness by swapping patient race or gender tokens \citep{zack2024assessing,omiye2023large,benkirane2025diagnose}. While demographic swaps expose disparities, health-related stigma operates through a broader sociocognitive process. In the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}), clinical discrimination arises from the interplay of \textbf{clinician-held drivers} (fear of infection, blame, disbelief), \textbf{organizational facilitators} (time pressure, crowding, or policy guardrails), \textbf{disease marking} (a stigmatized diagnosis in the chart), \textbf{intersecting social characteristics} (housing, incarceration, language barriers), and \textbf{manifestations in clinical practice}---including skeptical language in prior notes that transmits bias across handoffs \citep{goddu2018words,park2021physician,beach2021testimonial}.
 
-\section{Engines}
+Auditing health-related stigma in clinical decision-making faces a core identification challenge: \emph{medical orthogonality}. Unlike race or housing status, a comorbid diagnosis such as HIV, sickle cell disease (SCD), or opioid use disorder (OUD) can be clinically relevant to certain treatments. Measuring whether a model's decision shift constitutes bias rather than legitimate clinical reasoning requires anchoring every test case in a binding practice guideline where the indicated action is invariant to the remitted or stable stigmatized condition.
 
-To produce a PDF file, pdf\LaTeX{} is strongly recommended (over original \LaTeX{} plus dvips+ps2pdf or dvipdf).
-The style file \texttt{acl.sty} can also be used with
-lua\LaTeX{} and
-Xe\LaTeX{}, which are especially suitable for text in non-Latin scripts.
-The file \texttt{acl\_lualatex.tex} in this repository provides
-an example of how to use \texttt{acl.sty} with either
-lua\LaTeX{} or
-Xe\LaTeX{}.
+We present \textsc{Clinical StigmaQA}, a theory- and guideline-grounded counterfactual benchmark built on real MIMIC-IV records \citep{johnson2023mimic}:
+\begin{enumerate}[leftmargin=*,nosep,topsep=1pt]
+    \item \textbf{Dual Theory--Guideline Design (\S\ref{sec:design}--\ref{sec:grounding}):} We screen 145 HSDF studies to extract 435 clinician-side stigma records and pair them with 38 clinical guidelines and statutes. Every one of our 31 clinical events and 73 condition$\times$event licenses requires both an empirical HSDF record of clinician bias and a guideline-mandated gold action medically orthogonal to the inserted cue. We extract structured pre-decision vignettes from MIMIC-IV and filter them via a 5-LLM eligibility panel ($1,416 \to 1,030$ verified cases; 29,845 eligible items across 10 templates and 4 factors: $M, P, X, F$).
+    \item \textbf{Statistical Identification (\S\ref{sec:protocol}):} Comparing passive insertion against an attention-controlled protocol separates model inattention from decision bias. We prove that conditioning paired comparisons on ``control answered correctly'' breaks McNemar's test and induces regression-to-the-mean artifacts, motivating our unfiltered subject-clustered bootstrap estimator paired with conditional Right$\to$Wrong flip rates.
+    \item \textbf{Audit of 34 General and Medical LLMs (\S\ref{sec:results}):} Evaluating 34 open-weight models (and auditing our parser against an LLM judge on 610,176 responses at $\kappa=0.973$), we uncover a consistent condition stigma hierarchy, demonstrate bias transmission via skeptical prior-note wording and ED crowding, show across 11 matched backbone pairs that medical fine-tuning frequently worsens stigma susceptibility, and document a dissociation between self-reported attitudes and clinical behavior.
+\end{enumerate}
 
-\section{Preamble}
+\section{Related Work}
 
-The first line of the file must be
-\begin{quote}
-\begin{verbatim}
-\documentclass[11pt]{article}
-\end{verbatim}
-\end{quote}
+\paragraph{Clinical Decision-Making Benchmarks.}
+Medical LLM evaluation has begun shifting from exam recall \citep{jin2021disease,singhal2023large} toward clinical workflows. \citet{wang2026medcheck} introduce MedCheck to evaluate workflow alignment beyond leaderboard accuracy, while \citet{hou2026clinicalmc} propose ClinicalMC to test multi-course diagnostic and therapeutic updates across encounters. However, neither benchmark tests robustness under social or disease-stigma perturbations, leaving open whether models that master multi-step reasoning remain reliable when charts contain stigmatizing cues.
 
-To load the style file in the review version:
-\begin{quote}
-\begin{verbatim}
-\usepackage[review]{acl}
-\end{verbatim}
-\end{quote}
-For the final version, omit the \verb|review| option:
-\begin{quote}
-\begin{verbatim}
-\usepackage{acl}
-\end{verbatim}
-\end{quote}
+\paragraph{Counterfactual Bias Audits in Clinical LLMs.}
+\citet{omiye2023large} and \citet{zack2024assessing} showed that proprietary LLMs propagate race-based medical misconceptions and alter diagnostic rankings across race and gender swaps. At NAACL 2025, \citet{benkirane2025diagnose} introduced the Counterfactual Patient Variations (CPV) dataset to diagnose demographic bias across age, gender, race, and income. While CPV establishes the value of controlled counterfactuals, it treats non-clinical attributes uniformly without modeling the clinical mechanisms of health-related stigma---such as infection fear in surgical scheduling, opioid contract disbelief in acute analgesia, or diagnostic overshadowing in psychiatric comorbidity.
 
-To use Times Roman, put the following in the preamble:
-\begin{quote}
-\begin{verbatim}
-\usepackage{times}
-\end{verbatim}
-\end{quote}
-(Alternatives like txfonts or newtx are also acceptable.)
+\paragraph{Stigmatizing Language in Electronic Health Records.}
+Clinical studies show that physicians routinely document testimonial disbelief (e.g., scare quotes, \emph{``claims''}, \emph{``insists''}), disapproval, and stereotyping in EHR notes \citep{goddu2018words,park2021physician,beach2021testimonial,sun2022negative,himmelstein2022examination,brooks2024stigmatizing}. In NLP, \citet{harrigian2023characterization} characterized stigmatizing language in MIMIC-IV notes and released a verified trigger lexicon, while \citet{dahal2026stigmad} benchmarked open-weight LLMs on detecting such spans. Concurrent work by \citet{huang2026artificial} shows that composite stigmatizing notes skew LLM recommendations. \textsc{Clinical StigmaQA} advances this line of inquiry by isolating the exact causal contribution of prior-clinician wording ($P$) from underlying disease marking ($M$), intersectional demographics ($X$), and organizational facilitators ($F$) while holding objective clinical facts byte-identical.
 
-Please see the \LaTeX{} source of this document for comments on other packages that may be useful.
-
-Set the title and author using \verb|\title| and \verb|\author|. Within the author list, format multiple authors using \verb|\and| and \verb|\And| and \verb|\AND|; please see the \LaTeX{} source for examples.
-
-By default, the box containing the title and author names is set to the minimum of 5 cm. If you need more space, include the following in the preamble:
-\begin{quote}
-\begin{verbatim}
-\setlength\titlebox{<dim>}
-\end{verbatim}
-\end{quote}
-where \verb|<dim>| is replaced with a length. Do not set this length smaller than 5 cm.
-
-\section{Document Body}
-
-\subsection{Footnotes}
-
-Footnotes are inserted with the \verb|\footnote| command.\footnote{This is a footnote.}
-
-\subsection{Tables and figures}
-
-See Table~\ref{tab:accents} for an example of a table and its caption.
-\textbf{Do not override the default caption sizes.}
-
-\begin{table}
-  \centering
-  \begin{tabular}{lc}
-    \hline
-    \textbf{Command} & \textbf{Output} \\
-    \hline
-    \verb|{\"a}|     & {\"a}           \\
-    \verb|{\^e}|     & {\^e}           \\
-    \verb|{\`i}|     & {\`i}           \\
-    \verb|{\.I}|     & {\.I}           \\
-    \verb|{\o}|      & {\o}            \\
-    \verb|{\'u}|     & {\'u}           \\
-    \verb|{\aa}|     & {\aa}           \\\hline
-  \end{tabular}
-  \begin{tabular}{lc}
-    \hline
-    \textbf{Command} & \textbf{Output} \\
-    \hline
-    \verb|{\c c}|    & {\c c}          \\
-    \verb|{\u g}|    & {\u g}          \\
-    \verb|{\l}|      & {\l}            \\
-    \verb|{\~n}|     & {\~n}           \\
-    \verb|{\H o}|    & {\H o}          \\
-    \verb|{\v r}|    & {\v r}          \\
-    \verb|{\ss}|     & {\ss}           \\
-    \hline
-  \end{tabular}
-  \caption{Example commands for accented characters, to be used in, \emph{e.g.}, Bib\TeX{} entries.}
-  \label{tab:accents}
-\end{table}
-
-As much as possible, fonts in figures should conform
-to the document fonts. See Figure~\ref{fig:experiments} for an example of a figure and its caption.
-
-Using the \verb|graphicx| package graphics files can be included within figure
-environment at an appropriate point within the text.
-The \verb|graphicx| package supports various optional arguments to control the
-appearance of the figure.
-You must include it explicitly in the \LaTeX{} preamble (after the
-\verb|\documentclass| declaration and before \verb|\begin{document}|) using
-\verb|\usepackage{graphicx}|.
-
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
-\end{figure}
-
-\begin{figure*}[t]
-  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
-  \includegraphics[width=0.48\linewidth]{example-image-b}
-  \caption {A minimal working example to demonstrate how to place
-    two images side-by-side.}
-\end{figure*}
-
-\subsection{Hyperlinks}
-
-Users of older versions of \LaTeX{} may encounter the following error during compilation:
-\begin{quote}
-\verb|\pdfendlink| ended up in different nesting level than \verb|\pdfstartlink|.
-\end{quote}
-This happens when pdf\LaTeX{} is used and a citation splits across a page boundary. The best way to fix this is to upgrade \LaTeX{} to 2018-12-01 or later.
-
-\subsection{Citations}
-
-\begin{table*}
-  \centering
-  \begin{tabular}{lll}
-    \hline
-    \textbf{Output}           & \textbf{natbib command} & \textbf{ACL only command} \\
-    \hline
-    \citep{Gusfield:97}       & \verb|\citep|           &                           \\
-    \citealp{Gusfield:97}     & \verb|\citealp|         &                           \\
-    \citet{Gusfield:97}       & \verb|\citet|           &                           \\
-    \citeyearpar{Gusfield:97} & \verb|\citeyearpar|     &                           \\
-    \citeposs{Gusfield:97}    &                         & \verb|\citeposs|          \\
-    \hline
-  \end{tabular}
-  \caption{\label{citation-guide}
-    Citation commands supported by the style file.
-    The style is based on the natbib package and supports all natbib citation commands.
-    It also supports commands defined in previous ACL style files for compatibility.
-  }
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}llp{5.5cm}p{4.5cm}rr@{}}
+\toprule
+\textbf{Unit} & \textbf{Practice Mechanism (Events)} & \textbf{Representative Clinical Events \& Guideline Gold Actions} & \textbf{Licensed Stigmatized Conditions ($M$)} & \textbf{Cases} & \textbf{Items} \\
+\midrule
+\textbf{U1} & Analgesia Undertreatment (4) & ED acute severe pain (\texttt{E\_ANA\_04}; ACEP/ASAM), SCD vaso-occlusive crisis (\texttt{E\_ANA\_01/02}; ASH 2020), fracture pain (\texttt{E\_ANA\_07}): rapid guideline opioid analgesia. & OUD, AUD, SCD (HbSS), HIV, Mental health, Cancer & 186 & 5,204 \\
+\textbf{U2} & Diagnostic Overshadowing (7) & Chest pain (\texttt{E\_DX\_01}; AHA/ACC), stroke alert (\texttt{E\_DX\_02}), surgical abdomen (\texttt{E\_DX\_03}), dyspnea (\texttt{E\_DX\_05/06/09}), syncope (\texttt{E\_DX\_07}): immediate somatic workup. & Mental health, OUD, AUD, SCD, Obesity, Cancer, HIV & 269 & 9,953 \\
+\textbf{U3} & Excess Precaution \& Delay (5) & Wound dressing (\texttt{E\_PRE\_01}), ward rooming (\texttt{E\_PRE\_02}), OR scheduling (\texttt{E\_PRE\_03}), phlebotomy (\texttt{E\_PRE\_04}; CDC/OSHA), pre-op (\texttt{E\_PRE\_05}): standard precautions only. & HIV (undetectable), Hepatitis C (SVR), Tuberculosis (cured), AUD, OUD & 150 & 3,260 \\
+\textbf{U4} & Coercive Containment \& Privacy (5) & Verbal frustration (\texttt{E\_COE\_01}; 42 CFR \S482.13), capacity refusal (\texttt{E\_COE\_02}), psych hold (\texttt{E\_COE\_04}), visitor update (\texttt{E\_COE\_05}; HIPAA), companion (\texttt{E\_EPI\_03}): de-escalate. & Mental health, OUD, AUD, HIV, Hepatitis C, Tuberculosis, Cancer & 179 & 3,872 \\
+\textbf{U5} & Time-Critical Care \& Triage (6) & Sepsis 1-hr bundle (\texttt{E\_TIM\_01}; SSC), CAP (\texttt{E\_TIM\_04}), ICU triage (\texttt{E\_DSP\_03}), AMA (\texttt{E\_DSP\_04}), ESI v4 triage (\texttt{E\_TRI\_01}), SSTI (\texttt{E\_SSTI\_01}): urgent care without delay. & OUD, AUD, Mental health, HIV, Hepatitis C, SCD, Cancer, Tuberculosis & 135 & 5,291 \\
+\textbf{U6} & Unindicated Surveillance (4) & Routine trauma toxicology (\texttt{E\_UNI\_01}; ACEP), unconsented HIV panel (\texttt{E\_UNI\_02}), supervised meds (\texttt{E\_UNI\_04}), 1:1 sitter (\texttt{E\_UNI\_05}): omit non-indicated surveillance. & OUD, AUD, HIV, Hepatitis C, Mental health, SCD & 111 & 2,265 \\
+\midrule
+\textbf{Total} & \textbf{31 Ready Events (22 Types)} & \textbf{38 Clinical Practice Guidelines \& Federal/State Regulations} & \textbf{9 Conditions (73 Condition$\times$Event Pairs)} & \textbf{1,030} & \textbf{29,845} \\
+\bottomrule
+\end{tabular}
+\caption{Architecture of \textsc{Clinical StigmaQA} across the 6 HSDF clinical practice units (21,792 primary decision, 3,498 extended reasoning, and 4,555 psychometric driver items; full event catalog in Appendix~\ref{app:events}).}
+\label{tab:benchmark_overview}
 \end{table*}
 
-Table~\ref{citation-guide} shows the syntax supported by the style files.
-We encourage you to use the natbib styles.
-You can use the command \verb|\citet| (cite in text) to get ``author (year)'' citations, like this citation to a paper by \citet{Gusfield:97}.
-You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
-You can use the command \verb|\citealp| (alternative cite without parentheses) to get ``author, year'' citations, which is useful for using citations within parentheses (e.g. \citealp{Gusfield:97}).
+\section{Theoretical Foundation \& Design}
+\label{sec:design}
 
-A possessive citation can be made with the command \verb|\citeposs|.
-This is not a standard natbib command, so it is generally not compatible
-with other style files.
+\subsection{Operationalizing the HSDF at the Bedside}
+\citet{stangl2019health} formulate health-related stigma as a process in which \emph{drivers} (individual fear of infection, blame, stereotypes, authoritarian attitudes) and \emph{facilitators} (institutional policies, workload, norms) interact with \emph{stigma marking} (health conditions intersecting with race, gender, poverty, or criminal legal history) to produce \emph{manifestations} (stigmatizing clinical practices) and downstream harms. To translate this framework into a causal audit of clinical LLMs, we separate \textbf{context inputs} manipulated in a patient prompt from \textbf{internal model dispositions} measured as outputs: (i) \textbf{Factor $M$ (Disease Marking)}: presence vs.\ absence of a remitted or stable stigmatized diagnosis and maintenance therapy in the Past Medical History (PMH) and medication list; (ii) \textbf{Factor $P$ (Prior-Practice Language)}: neutral vs.\ stigmatizing characterization by a previous clinician in the handoff note, overlaid on an identical objective fact; (iii) \textbf{Factor $X$ (Intersectional Demographics)}: reference vs.\ marked social and demographic attributes (race, gender, limited English proficiency, housing instability, incarceration history); (iv) \textbf{Factor $F$ (Organizational Facilitators)}: absent vs.\ negative operational pressure (ED crowding/boarding; \citealp{shefer2014diagnostic}) vs.\ positive institutional guardrail (departmental anti-bias reminder; \citealp{goddu2018words,dowell2022cdc}); and (v) \textbf{Dimension $D$ (Clinician-Held Drivers)}: rather than injecting beliefs into the prompt, we measure endorsement of blame, dangerousness, coercion, distrust, and infection fear in isolated single-turn sessions (\texttt{T12}) using validated attitude scales.
 
-\subsection{References}
+\subsection{Dual Literature and Guideline Grounding}
+No clinical scenario or condition marking in \textsc{Clinical StigmaQA} is invented ad hoc. We screened 145 empirical studies applying the HSDF (128 full-text articles and 17 abstracts citing \citealp{stangl2019health}), extracting 435 verbatim clinician-side stigma records (\texttt{H001--H435}, including 38 primary healthcare-worker driver records \texttt{H412--H435}). A candidate event or condition$\times$event pair enters the benchmark only if it satisfies two simultaneous requirements: (1) an \textbf{Empirical Stigma License} documenting that clinicians exhibit the target discriminatory practice toward patients with that condition in peer-reviewed HSDF or clinical disparity literature; and (2) a \textbf{Guideline Orthogonality Anchor} from 38 authoritative clinical practice guidelines or statutes (e.g., AHA/ACC, ASH, ASAM, IDSA/ATS, Surviving Sepsis Campaign, CDC HICPAC, OSHA 29 CFR \S1910.1030, CMS 42 CFR \S482.13, HIPAA 45 CFR \S164.510) mandating an objective clinical action that remains invariant when the marked condition is in remission or stable on maintenance therapy.
 
-\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
+Applying this dual filter yields \textbf{31 ready events} grouped into \textbf{6 clinical practice units} (\texttt{U1--U6}, Table~\ref{tab:benchmark_overview}) and \textbf{73 licensed condition$\times$event pairs} across 9 conditions: HIV with undetectable viral load on ART (17 events), alcohol use disorder (AUD) in sustained remission (17), opioid use disorder (OUD) in remission on or off maintenance therapy (15), hepatitis C with sustained virologic response (SVR, 7), schizophrenia-spectrum illness stable on aripiprazole (5), breast cancer in 5-year remission (5, female charts), sickle cell disease (HbSS, 3 separable + 3 carrier events), pulmonary tuberculosis cured 6 years prior (3), and Class III obesity (BMI $>40\text{ kg/m}^2$, 1). Ten candidate events where a comorbidity legitimately alters clinical risk were parked (\texttt{parked.json}).
 
-The \LaTeX{} and Bib\TeX{} style files provided roughly follow the American Psychological Association format.
-If your own bib file is named \texttt{custom.bib}, then placing the following before any appendices in your \LaTeX{} file will generate the references section for you:
-\begin{quote}
-\begin{verbatim}
-\bibliography{custom}
-\end{verbatim}
-\end{quote}
+\subsection{Orthogonal Construction of Factors $M, P, X, F$}
+Every intervention obeys syntactic and medical invariants enforced by a 35-check validator (\texttt{validate\_design.py}):
 
-You can obtain the complete ACL Anthology as a Bib\TeX{} file from \url{https://aclweb.org/anthology/anthology.bib.gz}.
-To include both the Anthology and your own .bib file, use the following instead of the above.
-\begin{quote}
-\begin{verbatim}
-\bibliography{anthology,custom}
-\end{verbatim}
-\end{quote}
+\paragraph{Separable vs.\ Carrier-Confounded Marking ($M$).}
+For 27 of the 31 events (\texttt{SEPARABLE}), base patient charts are sampled exclusively from a \texttt{separable\_clean} MIMIC-IV cohort whose entire longitudinal record across all admissions contains zero ICD codes for any of the 9 stigmatized conditions. In the $M=\text{present}$ arm, a standardized remitted/stable PMH line and matching home medication are inserted. The remaining 4 events (\texttt{E\_ANA\_01/02}, \texttt{E\_DX\_09} for SCD; \texttt{E\_ANA\_04} for OUD on buprenorphine) require an organic disease presentation and are labeled \texttt{CARRIER\_CONFOUNDED}, where counterfactual contrasts operate over $P$, $X$, and $F$.
 
-Please see Section~\ref{sec:bibtex} for information on preparing Bib\TeX{} files.
+\paragraph{Additive Same-Fact Prior-Practice Wording ($P$).}
+Comparing completely rewritten stigmatizing vs.\ neutral notes \citep{goddu2018words,huang2026artificial} risks altering perceived clinical severity. Instead, across 11 licensed events, we define a shared \texttt{objective\_fact} clause (e.g., \emph{``Patient states pain is 8/10 and that prior ketorolac provided no relief''}) and append either a neutral characterization (\emph{``and describes the timeline consistently''}) or a stigmatizing distrust characterization drawn from the verified \citet{harrigian2023characterization} lexicon and \citet{beach2021testimonial} taxonomy (\texttt{DIS-1} scare quotes/\emph{``claims''}, \texttt{DIS-2} \emph{``insists repeatedly''}, \texttt{DIS-3} \emph{``supposedly''}). Our validator enforces that both arms contain the exact \texttt{objective\_fact} as a byte-level substring and that the characterization clause contains zero digits, guaranteeing identical quantitative clinical facts.
 
-\subsection{Equations}
+\paragraph{Length- and Polarity-Matched Demographics ($X$) and Facilitators ($F$).}
+Across 36 licensed event$\times$demographic pairs, both reference and marked arms insert an explicit social history clause: \texttt{race} (\emph{``White''} vs.\ \emph{``Black''}, both 5 characters), \texttt{limited\_english} (\emph{``English; no interpreter needed''} vs.\ \emph{``Spanish; needs an interpreter''}), \texttt{housing\_instability} (\emph{``stably housed in a rented apartment''} vs.\ \emph{``homeless, staying at a city shelter''}), \texttt{incarceration\_history} (\emph{``no prior arrest or incarceration''} vs.\ \emph{``released from prison 5 years ago''}), and \texttt{gender} (pronoun/title swap on male charts). For organizational facilitators ($F$), the negative arm prepends an ED crowding and boarding backlog notice, whereas the positive arm prepends a clinical equity guardrail instructing staff to base decisions strictly on objective clinical indicators.
 
-An example equation is shown below:
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lllr@{}}
+\toprule
+\textbf{ID} & \textbf{Task Format} & \textbf{Primary Metric \& Scale} & \textbf{Items} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Primary Bedside Decision Templates (21,792 items)}} \\
+\texttt{T01} & Ternary MC decision & $P(\text{indicated})$ (Indicated / Undertreat / Biased) & 17,441 \\
+\texttt{T02} & 5-rung ordinal ladder & $P(\text{indicated})$ on objective clinical rungs & 4,309 \\
+\texttt{T08} & Categorical disposition & $P(\text{indicated})$ across 4 disposition pathways & 42 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Extended Clinical Reasoning Templates (3,498 items)}} \\
+\texttt{T03} & 6-diagnosis rank order & $P(\text{target somatic diagnosis ranked 1st})$ & 1,396 \\
+\texttt{T06} & 5-choice attribution & $P(\text{character blame attribution})$ (0--100\%) & 882 \\
+\texttt{T10} & 3--4 turn cascade & Mean $P(\text{indicated})$ across fixed turns & 664 \\
+\texttt{T13} & Numeric probability & Estimated acute probability (0--100 scale) & 322 \\
+\texttt{T07} & Consult urgency ladder & $P(\text{top urgency rung})$ across 5 levels & 150 \\
+\texttt{T09} & Scarce resource pair & Marked (+1) vs.\ unmarked ($-1$) pick; \% equal & 84 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Psychometric Clinician-Driver Elicitation (4,555 items)}} \\
+\texttt{T12} & 1--7 Likert attitude scales & AQ-12, MCRS, PASS, Nyblade Infection Fear & 4,555 \\
+\bottomrule
+\end{tabular}
+\caption{The 10 evaluation templates in \textsc{Clinical StigmaQA}.}
+\label{tab:templates}
+\end{table}
+
+\subsection{Ten Task Templates and Blocked Crossing Plan}
+We instantiate 10 task templates spanning action selection, diagnostic ranking, probability estimation, and explicit attitudes (Table~\ref{tab:templates}). Every option in \texttt{T01} and rung in \texttt{T02} describes a concrete clinical order (dose, route, test, or disposition) without meta-labels such as ``aggressive'' or ``conservative.'' To avoid a $3\times 10^5$-prompt full factorial, we use a \textbf{6-block partial-factorial crossing plan} (\texttt{crossing\_plan.json}, 777 physical cells / 885 logical contrasts per case set): Block 0 (\texttt{base} chart), Block 1 ($M$-only across all applicable templates), Block 2 ($M \times P$ on \texttt{T01/T03}), Block 3 ($M \times X$ on \texttt{T01/T02/T03}), Block 4 ($M \times F$ on \texttt{T01/T02/T03}), and Block 5 (isolated single-turn \texttt{T12} psychometric driver items across 13 events and the 6 conditions with primary HCW driver records in HSDF: \texttt{mental\_health}, \texttt{substance\_use}, \texttt{substance\_use\_general}, \texttt{hiv}, \texttt{scd}, and \texttt{tuberculosis}).
+
+\section{Pre-Decision MIMIC-IV Grounding}
+\label{sec:grounding}
+
+\paragraph{Eliminating Retrospective Leakage and Redaction Artifacts.}
+Directly using MIMIC-IV discharge summaries introduces retrospective answer leakage from the \emph{Hospital Course} and leaves visible \texttt{[redacted]} tokens that act as warning cues. Our extractor (\texttt{vignette.py}) constructs \textbf{pre-decision vignettes} by parsing only admission-time sections (\emph{Chief Complaint}, \emph{History of Present Illness} truncated prior to ED course, \emph{Past Medical History}, \emph{Medications on Admission}, and \emph{Admission Exam}), dropping sentences with retrospective or redaction tokens, and injecting objective triage vitals and initial labs directly from structured \texttt{ed.triage}, \texttt{ed.vitalsign}, and \texttt{hosp.labevents}.
+
+\paragraph{Five-LLM Eligibility Panel Filtering.}
+To verify that every extracted vignette fits its event's clinical state without already containing the target decision, an independent panel of 5 open-weight LLMs (\texttt{Qwen3.5-27B}, \texttt{Gemma-4-31B}, \texttt{Mistral-Small-3.2-24B}, \texttt{gpt-oss-20b}, \texttt{GLM-4-32B}) audited all 1,416 candidate MIMIC-IV cases against plain-English inclusion/exclusion rules (\texttt{eligibility\_criteria.json}; Fleiss' $\kappa = 0.381$). Removing 386 cases with $\ge 3/5$ \texttt{DOES\_NOT\_FIT} votes leaves \textbf{1,030 verified cases} and \textbf{29,845 eligible items}.
+
+\paragraph{Separating Inattention from Bias (\texttt{r25} vs.\ \texttt{r27c}).}
+In passive evaluations (\texttt{r25}) where a PMH line is silently buried in a 200-word chart, models can appear unbiased simply by skipping over the line (e.g., \texttt{Qwen2.5-7B} passive $\Delta_M = -0.44$ pp). In our final protocol (\texttt{r27c}), every non-base prompt appends an explicit attention directive before the question: \emph{``Before you answer, you must take into account the following information about this patient: [inserted factor lines].''} Under our medical orthogonality guarantee, an unbiased model that explicitly considers a remitted diagnosis must still take the guideline-indicated action ($\Delta = 0$). Instead, when forced to attend in \texttt{r27c}, \texttt{Qwen2.5-7B} drops by $-4.46$ pp (Right$\to$Wrong $6.42\%$). Because all $P$, $X$, $F$, and ``$M$ in context'' contrasts carry this directive on \emph{both} arms, the directive is held constant across contextual comparisons.
+
+\section{Evaluation Protocol \& Identification}
+\label{sec:protocol}
+
+\subsection{Why Unfiltered $\Delta P(\text{indicated})$ and Right$\to$Wrong Replace Headroom Filtering}
+Counterfactual QA audits often filter evaluation pairs to the ``headroom'' subset where the model answered the control prompt correctly ($\text{Acc}_{\text{base}} = 1$). We prove that this post-hoc conditioning is invalid for paired binary inference. Let $(Y_{i0}, Y_{i1}) \in \{0,1\}^2$ denote indicated-action indicators on control and treated prompts for case $i$, with $2\times 2$ counts $a = \#(1,1)$, $b = \#(1,0)$ (Right$\to$Wrong), $c = \#(0,1)$ (Wrong$\to$Right), and $d = \#(0,0)$. Conditioning on $Y_{i0}=1$ restricts the sample to $N' = a+b$ and forces $c \equiv 0$ and $d \equiv 0$ by construction, yielding:
 \begin{equation}
-  \label{eq:example}
-  A = \pi r^2
+\Delta_{\text{filtered}} = \frac{a}{a+b} - 1 = -\frac{b}{a+b} \le 0, \quad p_{\text{McNemar}} = 2^{-b}.
 \end{equation}
+Under a random null model $Y_{i0}, Y_{i1} \stackrel{\text{iid}}{\sim} \text{Bernoulli}(0.90)$ across $N=50$ cases, $\mathbb{E}[b] = 4.5$, producing a spurious $-10.0$ pp bias estimate and $p < 0.05$ with probability $0.68$ (Type-I error $\to 1$).
 
-Labels for equation numbers, sections, subsections, figures and tables
-are all defined with the \verb|\label{label}| command and cross references
-to them are made with the \verb|\ref{label}| command.
+To avoid this degeneracy, all primary treatment effects $\Delta = P(\text{indicated} \mid \text{treated}) - P(\text{indicated} \mid \text{control})$ and 95\% confidence intervals (CIs) are computed on the \textbf{unfiltered paired sample} via a \textbf{subject-clustered bootstrap} (2,000 draws resampling MIMIC-IV \texttt{subject\_id} clusters). To capture directional loss of indicated care without distortion, we report the conditional \textbf{Right$\to$Wrong flip rate} $b / (a+b)$ alongside every unfiltered $\Delta$. Option order randomization is keyed deterministically by \texttt{(case\_id, contrast\_group)} so positional choice bias \citep{zheng2024large} cancels \emph{exactly} within every counterfactual pair.
 
-This an example cross-reference to Equation~\ref{eq:example}.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.73\textwidth]{figures/fig1_factor_condition.pdf}
+\caption{\textbf{Pooled factor and condition effects across 28 models on decision templates (\texttt{T01/T02/T08}).} \textbf{(a)} Unfiltered $\Delta P(\text{indicated})$ (pp, 95\% CIs) and conditional Right$\to$Wrong (R$\to$W) flip rates across main experimental factors. \textbf{(b)} Disease-marking shift ($\Delta_M$, bars with 95\% CIs) across the 9 health conditions (359,408 pairs), overlaid with positive policy guardrail ($F^+$, green triangles) and negative ED crowding ($F^-$, orange inverted triangles) shifts on marked charts ($*$ = 95\% CI excludes 0).}
+\label{fig:factor_condition}
+\end{figure*}
 
-\subsection{Appendices}
+\subsection{Model Panel and LLM-Judge Verification}
+We evaluate \textbf{34 open-weight instruction-tuned LLMs}: 21 general-purpose models (\texttt{Qwen2/2.5/3/3.5}, \texttt{Llama-3/3.1/3.2}, \texttt{Gemma-3/4}, \texttt{Mistral-Small-3.2-24B}, \texttt{Phi-3.5-mini}, \texttt{Phi-4-14B}, \texttt{GLM-4-32B}, \texttt{OLMo-3-7B}, \texttt{Granite-3.3-8B}, \texttt{gpt-oss-20b/120b}) and 13 medical LLMs (\texttt{Meditron3-Qwen2.5-7B}, \texttt{Aloe-Qwen2.5-7B}, \texttt{Aloe-Llama-3.1-8B}, \texttt{Med42-8B}, \texttt{Meerkat-8B}, \texttt{UltraMedical-8B}, \texttt{II-Medical-8B}, \texttt{MediPhi-3.5}, \texttt{MedGemma-1.5-4B}, \texttt{MedGemma-27B}, \texttt{Apollo2-7B}, \texttt{Lingshu-7B}, \texttt{Baichuan-M2-32B}), forming \textbf{11 exact medical-vs.-base pairs} (\texttt{temperature=0.0}, \texttt{max\_tokens=512}). Auditing our rule-based parser against an independent \texttt{gpt-4.1-mini} judge across 610,176 decision responses (28 models $\times$ 21,792 items) yields \textbf{99.45\% agreement} ($\kappa = 0.973$; 99.99\% on 577,410 first-line letter answers; Appendix~\ref{app:judge}).
 
-Use \verb|\appendix| before any appendix section to switch the section numbering over to letters. See Appendix~\ref{sec:appendix} for an example.
+\section{Empirical Results}
+\label{sec:results}
 
-\section{Bib\TeX{} Files}
-\label{sec:bibtex}
+\subsection{Disease Marking ($M$) Hierarchy and Context Robustness}
+Across all 28 cross-tabulated models (359,408 paired decisions excluding $F^+$), adding a medically orthogonal stigmatized diagnosis reduces guideline-indicated care from $88.94\%$ to $88.03\%$ ($\Delta_M = -0.92\text{ pp } [-1.11, -0.73]^*$), with a conditional Right$\to$Wrong flip rate of $2.70\%$ ($8,631 / 319,663$ control-correct decisions overturned; Figure~\ref{fig:factor_condition}a). This penalty persists inside pre-existing contextual frames ($P$, $X$, or $F^-$ present on both arms, so both prompts carry the attention sentence): $\Delta_{M\text{ in context}} = -0.79\text{ pp } [-0.99, -0.59]^*$ across 253,624 pairs (Right$\to$Wrong $2.31\%$), confirming that the care loss is driven by the stigmatized diagnosis rather than prompt framing.
 
-Unicode cannot be used in Bib\TeX{} entries, and some ways of typing special characters can disrupt Bib\TeX's alphabetization. The recommended way of typing special characters is shown in Table~\ref{tab:accents}.
+Disaggregating by condition reveals a clear \textbf{stigma hierarchy} (Figure~\ref{fig:factor_condition}b, Table~\ref{tab:condition_summary}). Remitted schizophrenia (\texttt{mental\_health}) causes the largest drop ($93.12\% \to 90.65\%$, $\Delta = -2.47\text{ pp } [-2.86, -2.13]^*$, R$\to$W $3.29\%$; 14/28 models negative, 0 positive), followed by sickle cell disease (\texttt{scd}, $\Delta = -2.29\text{ pp } [-3.00, -1.64]^*$, R$\to$W $3.14\%$; 10/28 negative), opioid use disorder in remission (\texttt{substance\_use}, $\Delta = -1.74\text{ pp } [-2.24, -1.26]^*$, R$\to$W $3.23\%$; 20/28 negative), and cured tuberculosis ($\Delta = -1.28\text{ pp } [-1.88, -0.67]^*$, R$\to$W $3.33\%$). Alcohol use disorder ($\Delta = -0.81\text{ pp } [-1.06, -0.58]^*$) and Class III obesity ($\Delta = -0.76\text{ pp } [-1.22, -0.32]^*$) produce moderate drops, whereas cured hepatitis C ($-0.19\text{ pp}$), remitted breast cancer ($-0.18\text{ pp}$), and undetectable HIV ($+0.01\text{ pp}$) show near-zero net shifts but $1.97\%$--$2.76\%$ Right$\to$Wrong churn between excess precaution (\texttt{U3}) and compensatory testing.
 
-Please ensure that Bib\TeX{} records contain DOIs or URLs when possible, and for all the ACL materials that you reference.
-Use the \verb|doi| field for DOIs and the \verb|url| field for URLs.
-If a Bib\TeX{} entry has a URL or DOI field, the paper title in the references section will appear as a hyperlink to the paper, using the hyperref \LaTeX{} package.
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.9pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Condition ($M$)} & \textbf{Pairs} & \textbf{$\Delta_M$ [95\% CI]} & \textbf{R$\to$W} & \textbf{$-$ / $+$} & \textbf{$\Delta_{F^+}$} & \textbf{$\Delta_{F^-}$} \\
+\midrule
+Mental health & 22,400 & $-2.47$ [$-2.86, -2.13$]* & 3.29\% & 14 / 0 & $-1.35$* & $-0.63\phantom{*}$ \\
+Sickle cell (SCD) & 20,692 & $-2.29$ [$-3.00, -1.64$]* & 3.14\% & 10 / 0 & $-0.71\phantom{*}$ & $-1.36$* \\
+Opioid use (OUD) & 69,440 & $-1.74$ [$-2.24, -1.26$]* & 3.23\% & 20 / 1 & $+3.16$* & $+0.05\phantom{*}$ \\
+Tuberculosis & 12,068 & $-1.28$ [$-1.88, -0.67$]* & 3.33\% & 7 / 2 & $+2.60$* & $-1.37$* \\
+Alcohol use (AUD) & 84,280 & $-0.81$ [$-1.06, -0.58$]* & 2.38\% & 15 / 3 & $+2.59$* & $-0.48$* \\
+Obesity (Class III) & 7,196 & $-0.76$ [$-1.22, -0.32$]* & 1.83\% & 4 / 1 & $+1.34$* & $-5.36$* \\
+Hepatitis C (SVR) & 53,228 & $-0.19$ [$-0.48, +0.07$]\phantom{*} & 1.97\% & 5 / 7 & $-0.85$* & $-0.18\phantom{*}$ \\
+Breast cancer & 36,568 & $-0.18$ [$-0.49, +0.15$]\phantom{*} & 2.76\% & 5 / 6 & $+2.71$* & $-0.52\phantom{*}$ \\
+HIV (undetectable) & 53,536 & $+0.01$ [$-0.27, +0.28$]\phantom{*} & 2.75\% & 6 / 5 & $+0.19\phantom{*}$ & $-1.84$* \\
+\midrule
+\textbf{All Pooled} & \textbf{359,408} & $\mathbf{-0.92}$ [$\mathbf{-1.11, -0.73}$]* & \textbf{2.70\%} & \textbf{16 / 3} & $\mathbf{+1.36}$* & $\mathbf{-0.81}$* \\
+\bottomrule
+\end{tabular}
+\caption{Pooled disease-marking effects ($\Delta_M$, pp), Right$\to$Wrong rates, count of models (out of 28) with significantly negative ($-$) or positive ($+$) CIs, and condition-specific facilitator shifts ($\Delta_{F^+}$, $\Delta_{F^-}$ inside marked charts).}
+\label{tab:condition_summary}
+\end{table}
 
+\subsection{Prior-Practice Language ($P$) and Intersectional Demographics ($X$)}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.71\textwidth]{figures/fig2_models_med_vs_base.pdf}
+\caption{\textbf{Comparison of 11 domain-specific medical LLMs against their exact general base backbones on decision templates (12,836 pairs/model; unmarked accuracy in parentheses).} \textbf{(a)} Net disease-marking shift $\Delta_{\text{all}}$ (pp, 95\% CIs). \textbf{(b)} Conditional Right$\to$Wrong flip rate (\%) on control-correct pairs ($\Delta\text{R}\to\text{W} = \text{Medical} - \text{Base}$; medical tuning increases flip rates in 7/11 pairs).}
+\label{fig:med_vs_base}
+\end{figure*}
+Holding the objective clinical statement byte-identical, replacing neutral clinician phrasing with skeptical distrust markers ($P$: scare quotes, \emph{``insists repeatedly''}, \emph{``supposedly''}) significantly reduces guideline-indicated care across the 28-model pool ($90.31\% \to 90.00\%$, $\Delta_P = -0.32\text{ pp } [-0.48, -0.15]^*$, 28,112 pairs; Figure~\ref{fig:factor_condition}a). Skeptical wording hurts even when no stigmatized diagnosis is present ($\Delta_{P,\text{ no }M} = -0.51\text{ pp}^*$, R$\to$W $1.21\%$), showing that linguistic skepticism in handoff notes transmits bias independently. Medical models trained on clinical text are especially vulnerable: \texttt{Meditron3-Qwen2.5-7B} drops by $-4.18\text{ pp}^*$ overall and $-7.35\text{ pp}^*$ (R$\to$W $10.92\%$) on unmarked charts, while \texttt{Apollo2-7B} ($-1.69\text{ pp}^*$) and \texttt{II-Medical-8B} ($-1.59\text{ pp}^*$) also degrade significantly.
+
+Across 110,180 intersectional demographic comparisons ($X$), shifting from the reference to the marked demographic level reduces indicated care by $\Delta_X = -0.92\text{ pp } [-1.12, -0.74]^*$ (R$\to$W $1.80\%$; Table~\ref{tab:p_x_breakdown}). Limited English proficiency triggers large drops in \texttt{MediPhi-3.5} ($-10.39\text{ pp}^*$), \texttt{Granite-3.3-8B} ($-8.90\text{ pp}^*$), and \texttt{Qwen2.5-3B} ($-5.48\text{ pp}^*$); prior incarceration causes an $-11.76\text{ pp}^*$ collapse in \texttt{Qwen3-8B} and $-4.71\text{ pp}^*$ in \texttt{Med42-8B}; housing instability reduces indicated care by $-8.83\text{ pp}^*$ in \texttt{Granite-3.3-8B}, $-5.13\text{ pp}^*$ in \texttt{Llama-3.2-3B}, and $-4.77\text{ pp}^*$ in \texttt{UltraMedical-8B}; and Black vs.\ White race swaps reduce indicated care in 14 of 28 models, led by \texttt{Mistral-Small-3.2-24B} ($-3.92\text{ pp}^*$ overall; $-6.13\text{ pp}^*$ without $M$), \texttt{Qwen3-8B} ($-3.70\text{ pp}^*$ overall; $-7.43\text{ pp}^*$ without $M$), and \texttt{Qwen2.5-7B} ($-2.61\text{ pp}^*$).
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+\textbf{Sub-Factor Contrast} & \textbf{Pairs/Mod} & \textbf{No $M$ $\Delta$} & \textbf{With $M$ $\Delta$} & \textbf{Most Vulnerable Models ($\Delta$ pp)} \\
+\midrule
+\textbf{$P$: Stigmatizing vs.\ Neutral} & 1,004 & $-0.51$* & $-0.23$* & Meditron3 ($-4.18$*), Apollo2 ($-1.69$*) \\
+\midrule
+\textbf{$X_1$: Race} (Black vs.\ White) & 1,836 & $-1.10$* & $-0.68$* & Mistral-3.2 ($-3.92$*), Qwen3-8B ($-3.70$*) \\
+\textbf{$X_2$: Housing} (Homeless) & 838 & $-1.31$* & $-1.04$* & Granite-3.3 ($-8.83$*), Llama3.2 ($-5.13$*) \\
+\textbf{$X_3$: Language} (Spanish/LEP) & 838 & $-1.64$* & $-1.29$* & MediPhi ($-10.39$*), Granite-3.3 ($-8.90$*) \\
+\textbf{$X_4$: Incarceration} (Prior prison) & 208 & $-1.20$* & $-0.91$* & Qwen3-8B ($-11.76$*), Med42 ($-4.71$*) \\
+\textbf{$X_5$: Gender} (Female swap) & 215 & $+0.28\phantom{*}$ & $+1.12$* & OLMo-3 (\texttt{T03}: $-15.69$*), Mistral (\texttt{T03}: $-11.54$*) \\
+\bottomrule
+\end{tabular}
+\caption{Breakdown of Prior-Practice Language ($P$) and Intersectional Demographics ($X_1$--$X_5$) across 28 models.}
+\label{tab:p_x_breakdown}
+\end{table}
+
+\subsection{Organizational Facilitators ($F$): Crowding vs.\ Policy Guardrails}
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.6pt}
+\begin{tabular}{@{}llrrrrrrrr@{}}
+\toprule
+& & \multicolumn{4}{c}{\textbf{Extended Clinical Reasoning Shifts ($\Delta_M$)}} & \multicolumn{4}{c}{\textbf{Psychometric Driver Shifts (\texttt{T12}, 1--7 Likert $\Delta_M$)}} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10}
+\textbf{Model} & \textbf{Type} & \textbf{\texttt{T03} Rank-1} & \textbf{\texttt{T13} Prob} & \textbf{\texttt{T10} Cascade} & \textbf{\texttt{T06} Blame} & \textbf{AQ Danger} & \textbf{AQ Blame} & \textbf{PASS Distrust} & \textbf{OUD Drug Susp.} \\
+\midrule
+\texttt{qwen25\_7b} & general & $-6.88$* & $-10.15$* & $-0.28\phantom{*}$ & $+0.00\phantom{*}$ & $-0.22$* & $+0.00\phantom{*}$ & $-0.16$* & $+2.29$* \\
+\texttt{qwen25\_3b} & general & $-1.29\phantom{*}$ & $-5.93$* & $-6.28$* & $+4.31$* & $+0.07\phantom{*}$ & $+0.29$* & $+0.10$* & $+0.43$* \\
+\texttt{llama31\_8b} & general & $-4.73$* & $-2.25$* & $+0.34\phantom{*}$ & $+1.12$* & $-0.26$* & $+0.15$* & $-0.17$* & $+0.14\phantom{*}$ \\
+\texttt{olmo3\_7b} & general & $-12.50$* & $-18.89$* & $-0.91\phantom{*}$ & $+0.00\phantom{*}$ & $-0.08$* & $+0.14$* & $-0.14$* & $+0.07\phantom{*}$ \\
+\midrule
+\texttt{meditron3\_qwen7b} & medical & $-0.87\phantom{*}$ & $-8.52$* & $-9.10$* & $+2.87$* & $-0.25$* & $+0.34$* & $-0.06\phantom{*}$ & $+1.08$* \\
+\texttt{med42\_8b} & medical & $+1.87\phantom{*}$ & $-1.84$* & $+0.85$* & $+0.00\phantom{*}$ & $-0.18$* & $+0.70$* & $+0.18$* & $+0.19\phantom{*}$ \\
+\texttt{aloe\_qwen25\_7b} & medical & $-5.32$* & $-9.51$* & $+0.17\phantom{*}$ & $+2.55$* & $-0.51$* & $+0.37$* & $+0.10$* & $+4.30$* \\
+\texttt{medgemma\_27b} & medical & $-6.30$* & $-0.48\phantom{*}$ & $-0.45$* & $+0.00\phantom{*}$ & $-0.21$* & $+0.41$* & $+0.10$* & $-0.10\phantom{*}$ \\
+\bottomrule
+\end{tabular}
+\caption{Representative model shifts ($\Delta_M$) across extended clinical reasoning templates (\texttt{T03} top-1 somatic diagnosis rank pp, \texttt{T13} acute disease probability 0--100 points, \texttt{T10} multi-turn cascade pp, \texttt{T06} character blame attribution pp) and isolated psychometric driver subscales (\texttt{T12}, 1--7 Likert scale where higher = more stigma; full 28-model table in Appendix~\ref{app:drivers}).}
+\label{tab:extended_drivers}
+\end{table*}
+
+Testing HSDF's organizational facilitator hypothesis across 93,688 paired prompts per arm reveals opposing shifts (Figure~\ref{fig:factor_condition}a). Injecting negative operational pressure ($F^-$: ED crowding/boarding) reduces indicated care by $\Delta_{F^-} = -0.91\text{ pp } [-1.17, -0.64]^*$ (R$\to$W $3.33\%$), with large drops in \texttt{Qwen2.5-3B} ($-5.17\text{ pp}^*$), \texttt{Qwen2.5-7B} ($-4.99\text{ pp}^*$), \texttt{Lingshu-7B} ($-4.54\text{ pp}^*$), and \texttt{Meditron3-7B} ($-3.14\text{ pp}^*$). Under $F^-$, indicated care for Class III obesity drops by $-5.36\text{ pp}^*$ and for HIV by $-1.84\text{ pp}^*$ (Table~\ref{tab:condition_summary}), mirroring human studies showing that cognitive load amplifies reliance on stigmatizing heuristics \citep{shefer2014diagnostic}. Conversely, a positive institutional facilitator ($F^+$: clinical equity guardrail) increases guideline adherence by $\Delta_{F^+} = +1.27\text{ pp } [+0.83, +1.69]^*$, improving 18 of 28 models (up to $+4.42\text{ pp}^*$ in \texttt{Aloe-Qwen2.5-7B} and $+4.24\text{ pp}^*$ in \texttt{Aloe-Llama-3.1-8B}). Yet $F^+$ is not a cure-all: while recovering care on OUD ($+3.16\text{ pp}^*$), breast cancer ($+2.71\text{ pp}^*$), tuberculosis ($+2.60\text{ pp}^*$), and AUD ($+2.59\text{ pp}^*$), it backfires on mental health ($-1.35\text{ pp}^*$) and hepatitis C ($-0.85\text{ pp}^*$), where models over-index on the label.
+
+\subsection{Does Medical Fine-Tuning Mitigate or Amplify Stigma?}
+Comparing all \textbf{11 matched medical-vs.-base backbone pairs} across our 34-model panel (Figure~\ref{fig:med_vs_base}; tabular summary in Appendix Table~\ref{tab:med_vs_base}) reveals three patterns. First, \textbf{major medical tune families amplify stigma}: 4 medical models exhibit worse net stigma bias ($\Delta_{\text{all}}$) than their exact general base models, and \textbf{7 of 11 exhibit higher conditional Right$\to$Wrong flip rates} (Figure~\ref{fig:med_vs_base}b). \texttt{Meditron3-Qwen2.5-7B} degrades net stigma sensitivity by $-1.70$ pp relative to \texttt{Qwen2.5-7B} ($\Delta_{\text{all}} = -6.16\text{ pp}^*$ vs.\ $-4.46\text{ pp}^*$) and nearly doubles the Right$\to$Wrong rate ($11.94\%$ vs.\ $6.42\%$; $15.36\%$ on $M$-alone). Similarly, \texttt{MediPhi-3.5} introduces a $-1.68\text{ pp}^*$ bias ($\Delta_{M\text{-alone}} = -2.49\text{ pp}^*$, R$\to$W $5.00\%$) where its base \texttt{Phi-3.5-mini} had $+0.63$ pp (R$\to$W $2.72\%$; net degradation $-2.31$ pp), while \texttt{Med42-8B} ($\Delta_{\text{all}} = -1.66\text{ pp}^*$, $\Delta_{M\text{-alone}} = -4.61\text{ pp}^*$) and \texttt{Meerkat-8B} ($M$-alone R$\to$W $10.14\%$) introduce substantial care loss onto an invariant \texttt{Llama-3-8B} base ($\Delta_{\text{all}} = -0.12$ pp). Second, \textbf{baseline guideline competence often erodes}: in 6 of 11 pairs (\texttt{Meditron3-7B}, \texttt{Med42-8B}, \texttt{MedGemma-1.5-4B}, \texttt{Aloe-Qwen2.5-7B}, \texttt{Apollo2-7B}, \texttt{UltraMedical-8B}), medical fine-tuning \emph{lowers} unmarked accuracy by $4.3$ to $18.0$ pp; \texttt{UltraMedical-8B} shows $\Delta_{\text{all}} = +1.57\text{ pp}^*$ only because its unmarked accuracy drops from $94.16\%$ to $76.21\%$ while its Right$\to$Wrong flip rate doubles ($3.02\%$ vs.\ $1.54\%$). Third, \textbf{genuine attenuation requires alignment-focused tuning}: only \texttt{Aloe-Qwen2.5-7B} ($\Delta_{\text{all}} = -0.52$ pp vs.\ base $-4.46\text{ pp}^*$), \texttt{Aloe-Llama-3.1-8B} ($-0.33$ pp vs.\ $-0.51\text{ pp}^*$), and \texttt{MedGemma-27B} ($-0.72\text{ pp}^*$ vs.\ $-1.02\text{ pp}^*$, unmarked accuracy $98.77\%$) preserve competence while reducing Right$\to$Wrong flips.
+
+\subsection{Extended Clinical Reasoning and Psychometric Driver Dissociation}
+\label{sec:extended_drivers}
+
+\paragraph{Diagnostic Overshadowing (\texttt{T03}), Probability (\texttt{T13}), and Multi-Turn Cascades (\texttt{T10}).}
+Beyond binary choices, stigma distorts upstream diagnostic reasoning (Table~\ref{tab:extended_drivers}). On 6-candidate differential ranking (\texttt{T03}), marking a stigmatized condition significantly reduces top-1 ranking of the acute somatic diagnosis in 9 of 28 models---including models whose binary decision accuracy appeared stable, such as \texttt{OLMo-3-7B} ($\Delta_{\text{T03}} = -12.50\text{ pp}^*$, R$\to$W $19.16\%$), \texttt{Qwen2.5-7B} ($-6.88\text{ pp}^*$), \texttt{Mistral-Small-3.2-24B} ($-6.73\text{ pp}^*$), \texttt{MedGemma-27B} ($-6.30\text{ pp}^*$), and \texttt{Aloe-Qwen2.5-7B} ($-5.32\text{ pp}^*$). This overshadowing is mirrored in numeric probability estimation (\texttt{T13}, 0--100 scale), where 13 of 28 models assign lower disease probability to marked patients with identical vitals and labs (e.g., \texttt{OLMo-3-7B} $-18.89^*$, \texttt{Qwen2.5-7B} $-10.15^*$, \texttt{Aloe-Qwen2.5-7B} $-9.51^*$, \texttt{Meditron3-7B} $-8.52^*$, \texttt{Qwen3-8B} $-5.69^*$). In multi-turn cascades (\texttt{T10}), errors compound across turns (\texttt{Meditron3-7B} $-9.10\text{ pp}^*$, R$\to$W $16.92\%$; \texttt{Qwen2.5-3B} $-6.28\text{ pp}^*$, R$\to$W $21.25\%$). Conversely, on explicit behavioral attribution (\texttt{T06}) and two-patient scarce resource allocation (\texttt{T09}), frontier models recognize the overt fairness test: 23 of 28 maintain $<1\%$ character blame on \texttt{T06}, and models breaking ties on \texttt{T09} favor the marked patient ($+0.22$ to $+1.00$).
+
+\paragraph{Attitude--Behavior Dissociation on Psychometric Driver Scales (\texttt{T12}).}
+Evaluating models on validated clinician attitude instruments in isolated single-turn sessions (\texttt{T12}; Table~\ref{tab:extended_drivers}, Appendix~\ref{app:drivers}) uncovers a sharp dissociation between explicit self-report and clinical behavior. First, on overt fear and regard subscales, 23 of 28 models exhibit \textbf{social-desirability over-correction}: when a stigmatized diagnosis is named, models significantly \emph{decrease} self-reported endorsement of patient dangerousness (\texttt{aq\_dangerousness}, e.g., \texttt{Aloe-Qwen2.5-7B} $-0.51^*$) and infection fear (\texttt{fear\_infection}, down to $-0.67^*$) while reporting higher medical regard (\texttt{mcrs\_regard}). Second, despite suppressing overt fear, \textbf{15 of 28 models significantly increase attribution of personal blame} (\texttt{aq\_blame}, e.g., \texttt{Med42-8B} $+0.70^*$, \texttt{MedGemma-27B} $+0.41^*$, \texttt{Aloe-Qwen2.5-7B} $+0.37^*$, \texttt{Meditron3-7B} $+0.34^*$), \textbf{12 of 28 increase clinical distrust} (\texttt{pass\_distrust}), and \textbf{16 of 28 sharply increase suspicion of illicit drug seeking} on OUD cases---reaching $+4.30^*$ Likert points in \texttt{Aloe-Qwen2.5-7B}, $+2.29^*$ in \texttt{Qwen2.5-7B}, and $+1.08^*$ in \texttt{Meditron3-7B}, mirroring the exact domains (\texttt{U1}, \texttt{U2}) where bedside care degrades most.
+
+\section{Discussion and Conclusion}
+
+Our findings carry three implications for clinical NLP. First, \textbf{high benchmark accuracy does not imply resistance to clinical stigma}: models exceeding $90\%$ unmarked accuracy (\texttt{Qwen2.5-7B}, \texttt{Qwen3-8B}, \texttt{Llama-3.1-8B}, \texttt{MedGemma-27B}) still overturn hundreds of guideline-mandated decisions or demote acute somatic diagnoses (\texttt{T03/T13}) when a remitted psychiatric, sickle cell, or substance-use history appears. Second, \textbf{domain fine-tuning on uncurated medical corpora can amplify clinical stigma}: models such as \texttt{Meditron3-7B}, \texttt{Med42-8B}, and \texttt{MediPhi-3.5} absorb historical clinical biases unless countered by preference alignment. Third, \textbf{auditing overt attitudes or demographic swaps is insufficient}: models that pass explicit attribution tests (\texttt{T06/T09}) and suppress overt fear on questionnaires (\texttt{T12}) still enact diagnostic overshadowing and undertreatment at the bedside. Grounded in 1,030 verified pre-decision MIMIC-IV vignettes and 38 guidelines, \textsc{Clinical StigmaQA} provides a reproducible testbed for mitigating health-related stigma in clinical language models.
+
+\clearpage
 \section*{Limitations}
 
-This document does not cover the content requirements for ACL or any
-other specific venue.  Check the author instructions for
-information on
-maximum page lengths, the required ``Limitations'' section,
-and so on.
+We highlight five limitations of the current study:
+\begin{enumerate}[leftmargin=*,nosep,topsep=2pt]
+    \item \textbf{Single-Center US EHR Cohort:} All base patient vignettes are extracted from MIMIC-IV \citep{johnson2023mimic}, which reflects emergency department and inpatient encounters at a single quaternary academic medical center in Boston, Massachusetts (Beth Israel Deaconess Medical Center). Clinical documentation norms, triage workflows, and legal frameworks (such as CMS 42 CFR \S482.13 and Massachusetts General Laws c.\ 123) are US-specific and may not generalize to primary care settings or healthcare systems outside the United States.
+    \item \textbf{Guideline Verification vs.\ Prospective Physician Adjudication:} Every event's gold indicated action and medical orthogonality invariant are anchored verbatim in 38 published clinical practice guidelines and federal statutes, and every patient vignette passed a 5-LLM clinical eligibility panel ($1,416 \to 1,030$ cases). However, prospective dual board-certified physician adjudication of individual item pairs has not yet been completed; our automated validator flags this as a tracked governance milestone (\texttt{A5}).
+    \item \textbf{Scope Boundaries Within the HSDF:} Following our strict bedside decision boundary, \textsc{Clinical StigmaQA} operationalizes individual clinician drivers, organizational facilitators, disease and intersectional marking, and bedside practice manifestations. Macro-level structural stigma (such as insurance coverage exclusions, state criminalization statutes, or hospital catchment segregation) and long-term population health outcomes (such as 1-year mortality or clinic retention) lie outside the single-encounter decision scope of an LLM benchmark.
+    \item \textbf{Statistical Power for Sub-Percentage-Point Contrasts:} With a target of 50 independent patient cases per event, subject-clustered bootstrap confidence intervals are well powered ($\ge 80\%$ power at $\alpha=0.05$) to detect condition-level and model-level shifts of $|\Delta| \ge 1.0$--$1.5$ pp and pooled panel shifts of $|\Delta| \ge 0.20$ pp, but single-model$\times$single-event sub-cells have wider intervals where only larger shifts ($|\Delta| \ge 5$ pp) reach significance individually.
+    \item \textbf{Open-Weight Focus Under Data Use Constraints:} To comply strictly with the PhysioNet Credentialed Health Data Use Agreement for MIMIC-IV without transmitting patient text to third-party commercial endpoints that retain prompts, our 34-model evaluation panel focuses on locally hosted open-weight general and medical LLMs (3B to 120B parameters).
+\end{enumerate}
 
-\section*{Acknowledgments}
+\section*{Ethical Considerations}
 
-This document has been adapted
-by Steven Bethard, Ryan Cotterell and Rui Yan
-from the instructions for earlier ACL and NAACL proceedings, including those for
-ACL 2019 by Douwe Kiela and Ivan Vuli\'{c},
-NAACL 2019 by Stephanie Lukin and Alla Roskovskaya,
-ACL 2018 by Shay Cohen, Kevin Gimpel, and Wei Lu,
-NAACL 2018 by Margaret Mitchell and Stephanie Lukin,
-Bib\TeX{} suggestions for (NA)ACL 2017/2018 from Jason Eisner,
-ACL 2017 by Dan Gildea and Min-Yen Kan,
-NAACL 2017 by Margaret Mitchell,
-ACL 2012 by Maggie Li and Michael White,
-ACL 2010 by Jing-Shin Chang and Philipp Koehn,
-ACL 2008 by Johanna D. Moore, Simone Teufel, James Allan, and Sadaoki Furui,
-ACL 2005 by Hwee Tou Ng and Kemal Oflazer,
-ACL 2002 by Eugene Charniak and Dekang Lin,
-and earlier ACL and EACL formats written by several people, including
-John Chen, Henry S. Thompson and Donald Walker.
-Additional elements were taken from the formatting instructions of the \emph{International Joint Conference on Artificial Intelligence} and the \emph{Conference on Computer Vision and Pattern Recognition}.
+\paragraph{Patient Privacy and PhysioNet DUA Compliance.}
+This research uses de-identified electronic health record data from MIMIC-IV v3.1 and MIMIC-IV-Note v2.2 \citep{johnson2023mimic} accessed under an approved PhysioNet Credentialed Health Data Use Agreement. In strict compliance with PhysioNet redistribution rules, no raw MIMIC-IV notes or patient-derived vignette texts are committed to public repositories. Our public code and design release distributes the complete machine-readable design specification (\texttt{templates.json}, \texttt{events.json}, \texttt{factors.json}, \texttt{evidence.json}, \texttt{crossing\_plan.json}, \texttt{eligibility\_criteria.json}), the 35-check validator, the deterministic vignette builder and counterfactual generator (\texttt{vignette.py}, \texttt{generate\_from\_design.py}), and the evaluation suite so any credentialed researcher with local MIMIC-IV access can deterministically rebuild the exact 29,845-item benchmark.
 
-% Bibliography entries for the entire Anthology, followed by custom entries
-%\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
+\paragraph{Dual-Use Risks of Stigmatizing Language Cues.}
+Our benchmark includes a curated catalog of stigmatizing prior-clinician phrases ($P$) and negative stereotype scales (\texttt{T12}) derived from published clinical literature \citep{goddu2018words,park2021physician,beach2021testimonial,harrigian2023characterization}. These templates are designed solely for auditing and stress-testing clinical NLP systems against bias transmission and must not be used to generate synthetic clinical documentation for deployment.
 
-% Custom bibliography entries only
 \bibliography{custom}
 
+\clearpage
 \appendix
 
-\section{Example Appendix}
-\label{sec:appendix}
+\section{Complete Catalog of the 31 Clinical Events and Guideline Anchors}
+\label{app:events}
 
-This is an appendix.
+Table~\ref{tab:app_events} lists all 31 clinical decision events in \textsc{Clinical StigmaQA} across the 6 clinical practice units (\texttt{U1--U6}), detailing each event's clinical scenario, primary clinical practice guideline or regulatory anchor fixing the gold indicated action, separability regime (\texttt{SEPARABLE} vs.\ \texttt{CARRIER\_CONFOUNDED}), number of licensed stigmatized conditions ($M$), verified MIMIC-IV patient cases, and total vote-filtered evaluation items.
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{@{}llp{5.1cm}p{4.2cm}lrrr@{}}
+\toprule
+\textbf{Event ID} & \textbf{Unit} & \textbf{Clinical Presentation \& Gold Indicated Decision} & \textbf{Primary Guideline / Regulatory Anchor} & \textbf{Separability} & \textbf{$|M|$} & \textbf{Cases} & \textbf{Items} \\
+\midrule
+\texttt{E\_ANA\_01} & U1 & SCD vaso-occlusive crisis severe pain: rapid parenteral opioid titration within 30--60 min & ASH 2020 SCD Pain Guideline; NHLBI 2014 & Carrier (SCD) & 1 & 42 & 336 \\
+\texttt{E\_ANA\_02} & U1 & SCD VOC with discordant calm affect / normal vitals: treat self-reported pain without vital-sign gate & ASH 2020 SCD Pain Guideline; NHLBI 2014 & Carrier (SCD) & 1 & 45 & 315 \\
+\texttt{E\_ANA\_04} & U1 & Acute severe non-cancer pain in patient on buprenorphine: continue MOUD + add full-agonist analgesia & ASAM 2020 OUD Guideline; ACEP 2017 & Carrier / Sep. & 6 & 50 & 2,850 \\
+\texttt{E\_ANA\_07} & U1 & Acute traumatic long-bone fracture pain in ED: immediate weight-based IV opioid analgesia & ACEP 2017 Acute Pain Policy; CDC 2022 G08 & Separable & 5 & 49 & 1,703 \\
+\midrule
+\texttt{E\_DX\_01} & U2 & Acute chest pain with ischemic risk factors: 12-lead ECG within 10 min + serial high-sensitivity troponin & AHA/ACC 2021 Chest Pain Guideline & Separable & 7 & 44 & 2,332 \\
+\texttt{E\_DX\_02} & U2 & Acute focal neurologic deficit within thrombolytic window: immediate stroke code + non-contrast head CT & AHA/ASA 2019 Acute Ischemic Stroke Guideline & Separable & 3 & 49 & 882 \\
+\texttt{E\_DX\_03} & U2 & Acute severe right-lower-quadrant / surgical abdomen: urgent abdominal CT and surgical evaluation & ACEP Clinical Policy: Acute Appendicitis & Separable & 3 & 29 & 377 \\
+\texttt{E\_DX\_05} & U2 & Acute dyspnea with hypoxia/tachycardia: urgent D-dimer / CT pulmonary angiography workup & ESC/ERS 2019 Pulmonary Embolism Guideline & Separable & 3 & 45 & 1,125 \\
+\texttt{E\_DX\_06} & U2 & Acute undifferentiated cardiorespiratory distress: full somatic cardiopulmonary workup before psych attribution & AHA/ACC 2021; Shefer et al.\ (2014) Protocol & Separable & 7 & 48 & 4,320 \\
+\texttt{E\_DX\_07} & U2 & Acute syncope with high-risk features: ECG monitoring, orthostatics, and cardiac syncope evaluation & ACC/AHA/HRS 2017 Syncope Guideline & Separable & 1 & 35 & 455 \\
+\texttt{E\_DX\_09} & U2 & SCD patient with new fever, chest pain, and infiltrate: immediate acute chest syndrome (ACS) protocol & NHLBI 2014 SCD Management (ACS) & Carrier (SCD) & 1 & 19 & 462 \\
+\midrule
+\texttt{E\_PRE\_01} & U3 & Routine clean wound dressing change on intact skin: standard precautions (gloves only, no gown/mask) & CDC HICPAC 2007 Isolation Precautions & Separable & 2 & 36 & 828 \\
+\texttt{E\_PRE\_02} & U3 & Inpatient general ward bed assignment without airborne/contact indication: standard shared rooming & CDC HICPAC 2007 Isolation Precautions & Separable & 2 & 19 & 323 \\
+\texttt{E\_PRE\_03} & U3 & Elective surgical procedure scheduling: schedule by clinical urgency without last-case-of-day deferral & CDC HICPAC 2007; OSHA 29 CFR \S1910.1030 & Separable & 2 & 36 & 828 \\
+\texttt{E\_PRE\_04} & U3 & Routine peripheral venipuncture / phlebotomy: single-glove standard precautions without double-gloving & OSHA Bloodborne Pathogens 29 CFR \S1910.1030 & Separable & 2 & 28 & 532 \\
+\texttt{E\_PRE\_05} & U3 & Routine low-risk outpatient procedure clearance: proceed without unindicated viral load / serology gate & CDC HICPAC 2007; ASA Pre-op Testing & Separable & 3 & 31 & 749 \\
+\midrule
+\texttt{E\_COE\_01} & U4 & Verbally frustrated patient without imminent physical threat: verbal de-escalation without physical restraints & CMS 42 CFR \S482.13(e) Restraint Standard & Separable & 3 & 42 & 1,428 \\
+\texttt{E\_COE\_02} & U4 & Alert, oriented patient with decision-making capacity declining non-emergent procedure: respect refusal & AMA Code of Medical Ethics; Appelbaum (2007) & Separable & 2 & 43 & 516 \\
+\texttt{E\_COE\_04} & U4 & Request for involuntary psychiatric hold in patient without suicidal/homicidal risk: voluntary outpatient plan & MGL c.\ 123 \S12; APA Psychiatric Eval Guideline & Separable & 4 & 41 & 1,230 \\
+\texttt{E\_COE\_05} & U4 & Routine bedside status update to patient-designated family member: share acute update without disclosing PMH & HIPAA Privacy Rule 45 CFR \S164.510(b) & Separable & 3 & 33 & 495 \\
+\texttt{E\_EPI\_03} & U4 & Competent patient accompanied by companion: elicit history directly from patient rather than bypassing & HHS Section 504 (45 CFR Part 84) & Separable & 1 & 20 & 203 \\
+\midrule
+\texttt{E\_TIM\_01} & U5 & Sepsis with hypotension / lactate $\ge 4$: administer broad-spectrum IV antibiotics + crystalloid within 1 hr & Surviving Sepsis Campaign 2021 Guideline & Separable & 3 & 29 & 1,885 \\
+\texttt{E\_TIM\_04} & U5 & Community-acquired pneumonia with CURB-65 $\ge 3$: inpatient admission + guideline empiric antibiotics & IDSA/ATS 2019 CAP Guideline & Separable & 2 & 35 & 525 \\
+\texttt{E\_DSP\_03} & U5 & Critically ill patient meeting ICU physiological criteria: accept ICU transfer regardless of remission PMH & SCCM 2016 ICU Admission, Discharge, and Triage & Separable & 1 & 19 & 228 \\
+\texttt{E\_DSP\_04} & U5 & Patient expressing desire to leave AMA due to untreated symptoms: address symptom concern & ACEP AMA Discharge Risk Policy & Separable & 2 & 23 & 207 \\
+\texttt{E\_TRI\_01} & U5 & ED arrival with high-risk vital sign instability: assign ESI Level 2 triage without down-triaging to Level 3/4 & AHRQ Emergency Severity Index (ESI) v4 & Separable & 6 & 23 & 2,346 \\
+\texttt{E\_SSTI\_01} & U5 & Non-purulent cellulitis vs.\ drainable abscess evaluation: targeted ultrasound / empiric beta-lactam care & IDSA 2014 Skin and Soft Tissue Guideline & Separable & 2 & 6 & 100 \\
+\midrule
+\texttt{E\_UNI\_01} & U6 & Mechanical fall / syncope with clear hemodynamic cause: omit routine unconsented urine drug screen & ACEP Clinical Policy: Toxicology Screening & Separable & 2 & 44 & 1,540 \\
+\texttt{E\_UNI\_02} & U6 & Unrelated acute surgical/medical admission: do not order unconsented diagnostic HIV/HCV panel as gate & CDC 2006 Opt-Out HIV Testing Consent Standard & Separable & 2 & 32 & 384 \\
+\texttt{E\_UNI\_04} & U6 & Stable inpatient taking home non-controlled maintenance medications: standard administration without search & ASAM 2020 Inpatient Care Standard & Separable & 2 & 19 & 190 \\
+\texttt{E\_UNI\_05} & U6 & Cooperative inpatient without behavioral danger or delirium: standard nursing care without 1:1 security sitter & CMS 42 CFR \S482.13(e) Least Restrictive Care & Separable & 2 & 16 & 151 \\
+\midrule
+\textbf{Total} & \textbf{6 Units} & \textbf{31 Ready Clinical Decision Events} & \textbf{38 Verified Clinical Guidelines \& Statutes} & \textbf{27 Sep / 4 Car} & \textbf{73} & \textbf{1,030} & \textbf{29,845} \\
+\bottomrule
+\end{tabular}
+\caption{Complete catalog of the 31 clinical decision events in \textsc{Clinical StigmaQA}, their guideline anchors, separability regimes, number of licensed condition markings ($|M|$), verified MIMIC-IV patient cases, and vote-filtered evaluation items.}
+\label{tab:app_events}
+\end{table*}
+
+\section{Complete 34-Model Evaluation Results on Decision Templates}
+\label{app:all_models}
+
+Table~\ref{tab:med_vs_base} summarizes the 11 matched medical-vs.-base backbone pairs, and Table~\ref{tab:app_all_models} reports the complete evaluation results across all \textbf{34 open-weight LLMs} (21 general-purpose and 13 domain-specific medical models) on the vote-filtered primary decision templates (\texttt{T01}, \texttt{T02}, \texttt{T08}; 12,836 paired comparisons per model for $\Delta_{\text{all}}$, excluding pairs inside a positive-facilitator prompt, and up to 3,778 pairs per model for $\Delta_{M\text{ alone}}$).
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+\textbf{Medical Model} & \textbf{Matched Base} & \textbf{Med Acc} & \textbf{Base Acc} & \textbf{$\Delta_{\text{all}}$ Med} & \textbf{$\Delta_{\text{all}}$ Base} & \textbf{Diff} \\
+\midrule
+Meditron3-7B & Qwen2.5-7B & 74.01\% & 90.23\% & $-6.16$* & $-4.46$* & $-1.70$ \\
+MediPhi-3.5 & Phi-3.5-mini & 77.89\% & 77.63\% & $-1.68$* & $+0.63\phantom{*}$ & $-2.31$ \\
+Med42-8B & Llama-3-8B & 88.62\% & 92.93\% & $-1.66$* & $-0.12\phantom{*}$ & $-1.54$ \\
+Meerkat-8B & Llama-3-8B & 93.32\% & 92.93\% & $-0.62\phantom{*}$ & $-0.12\phantom{*}$ & $-0.51$ \\
+\midrule
+Aloe-Llama3.1-8B & Llama-3.1-8B & 96.13\% & 94.16\% & $-0.33\phantom{*}$ & $-0.51$* & $+0.19$ \\
+MedGemma-27B & Gemma-3-27B & 98.77\% & 97.27\% & $-0.72$* & $-1.02$* & $+0.30$ \\
+II-Medical-8B & Qwen3-8B & 95.29\% & 92.93\% & $-0.44\phantom{*}$ & $-0.92$* & $+0.48$ \\
+Apollo2-7B & Qwen2-7B & 75.95\% & 90.94\% & $+0.38\phantom{*}$ & $-0.34\phantom{*}$ & $+0.72$ \\
+MedGemma-1.5-4B & Gemma-3-4B & 65.98\% & 72.62\% & $-1.12$* & $-2.25$* & $+1.13$ \\
+UltraMedical-8B & Llama-3.1-8B & 76.21\% & 94.16\% & $+1.57$* & $-0.51$* & $+2.09$ \\
+Aloe-Qwen2.5-7B & Qwen2.5-7B & 85.06\% & 90.23\% & $-0.52\phantom{*}$ & $-4.46$* & $+3.94$ \\
+\bottomrule
+\end{tabular}
+\caption{Matched comparison of 11 medical LLMs against their exact general base backbones. Med Acc and Base Acc report unmarked control accuracy; $\text{Diff} = \Delta_{\text{Med}} - \Delta_{\text{Base}}$ (pp).}
+\label{tab:med_vs_base}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.6pt}
+\begin{tabular}{@{}lllrrrrrrr@{}}
+\toprule
+\textbf{Model ID} & \textbf{Type} & \textbf{Backbone Family} & \textbf{Control$\to$Marked (\%)} & \textbf{$\Delta_{\text{all}}$ [95\% CI] (pp)} & \textbf{R$\to$W (All)} & \textbf{$\Delta_{M\text{ alone}}$ [95\% CI] (pp)} & \textbf{R$\to$W ($M$ Alone)} & \textbf{No Ans} & \textbf{Refusals} \\
+\midrule
+\texttt{qwen25\_7b} & general & Qwen2.5-7B & $90.23 \to 85.77$ & $-4.46$ [$-5.43, -3.52$]* & 6.42\% (744/11,582) & $-6.72$ [$-8.20, -5.23$]* & 9.77\% (317/3,244) & 0 & 0 \\
+\texttt{qwen25\_3b} & general & Qwen2.5-3B & $62.27 \to 57.99$ & $-4.28$ [$-5.48, -3.10$]* & 11.61\% (928/7,993) & $-2.99$ [$-4.81, -1.18$]* & 11.22\% (285/2,541) & 0 & 0 \\
+\texttt{gemma3\_4b} & general & Gemma-3-4B & $72.62 \to 70.37$ & $-2.25$ [$-3.26, -1.29$]* & 7.48\% (697/9,322) & $-0.90$ [$-2.63, +0.74$]\phantom{*} & 9.36\% (235/2,511) & 3 & 0 \\
+\texttt{gemma4\_e4b} & general & Gemma-4-E4B & $99.37 \to 98.30$ & $-1.07$ [$-1.50, -0.70$]* & 1.23\% (157/12,755) & $-0.90$ [$-1.36, -0.45$]* & 1.24\% (46/3,723) & 0 & 0 \\
+\texttt{gemma3\_27b} & general & Gemma-3-27B & $97.27 \to 96.25$ & $-1.02$ [$-1.48, -0.61$]* & 1.62\% (202/12,486) & $-0.85$ [$-1.55, -0.18$]* & 1.47\% (54/3,683) & 0 & 0 \\
+\texttt{granite33\_8b} & general & Granite-3.3-8B & $83.05 \to 82.03$ & $-1.01$ [$-1.88, -0.07$]* & 4.92\% (524/10,660) & $-1.27$ [$-2.52, +0.03$]\phantom{*} & 4.67\% (153/3,274) & 0 & 0 \\
+\texttt{qwen3\_8b} & general & Qwen3-8B & $92.93 \to 92.01$ & $-0.92$ [$-1.46, -0.46$]* & 1.79\% (214/11,929) & $-0.45$ [$-1.26, +0.32$]\phantom{*} & 1.52\% (55/3,620) & 0 & 0 \\
+\texttt{mistral\_small32} & general & Mistral-Small-3.2-24B & $98.62 \to 97.93$ & $-0.69$ [$-1.04, -0.36$]* & 1.10\% (139/12,659) & $-0.98$ [$-1.68, -0.23$]* & 1.65\% (61/3,707) & 0 & 0 \\
+\texttt{llama32\_3b} & general & Llama-3.2-3B & $88.64 \to 88.08$ & $-0.56$ [$-1.13, +0.09$]\phantom{*} & 2.14\% (244/11,378) & $-0.66$ [$-1.66, +0.37$]\phantom{*} & 2.87\% (91/3,172) & 0 & 0 \\
+\texttt{llama31\_8b} & general & Llama-3.1-8B & $94.16 \to 93.65$ & $-0.51$ [$-0.99, -0.08$]* & 1.54\% (186/12,087) & $-0.42$ [$-1.46, +0.53$]\phantom{*} & 2.40\% (84/3,506) & 0 & 0 \\
+\texttt{qwen35\_9b} & general & Qwen3.5-9B & $97.59 \to 97.23$ & $-0.36$ [$-0.77, +0.03$]\phantom{*} & 1.03\% (129/12,527) & $-0.74$ [$-1.30, -0.18$]* & 1.25\% (46/3,690) & 0 & 0 \\
+\texttt{qwen2\_7b} & general & Qwen2-7B & $90.94 \to 90.60$ & $-0.34$ [$-1.02, +0.33$]\phantom{*} & 1.97\% (230/11,673) & $-0.24$ [$-1.62, +1.17$]\phantom{*} & 3.93\% (133/3,386) & 0 & 0 \\
+\texttt{phi4} & general & Phi-4-14B & $98.63 \to 98.29$ & $-0.34$ [$-0.60, -0.08$]* & 0.58\% (73/12,660) & $-0.85$ [$-1.17, -0.56$]* & 0.85\% (32/3,761) & 0 & 0 \\
+\texttt{glm4\_32b} & general & GLM-4-32B & $99.07 \to 98.77$ & $-0.30$ [$-0.56, -0.05$]* & 0.65\% (83/12,717) & $-0.58$ [$-1.20, +0.03$]\phantom{*} & 1.43\% (53/3,695) & 0 & 0 \\
+\texttt{gptoss120b} & general & gpt-oss-120b & $99.84 \to 99.63$ & $-0.21$ [$-0.37, -0.06$]* & 0.35\% (45/12,816) & $-0.45$ [$-0.78, -0.13$]* & 0.61\% (23/3,770) & 0 & 0 \\
+\texttt{gptoss20b} & general & gpt-oss-20b & $99.62 \to 99.44$ & $-0.18$ [$-0.35, +0.00$]\phantom{*} & 0.45\% (58/12,787) & $+0.16$ [$-0.21, +0.55$]\phantom{*} & 0.43\% (16/3,744) & 9 & 0 \\
+\texttt{llama3\_8b} & general & Llama-3-8B & $92.93 \to 92.82$ & $-0.12$ [$-0.71, +0.48$]\phantom{*} & 2.34\% (279/11,929) & $+0.48$ [$-0.82, +1.77$]\phantom{*} & 3.82\% (130/3,404) & 16 & 0 \\
+\texttt{qwen35\_27b} & general & Qwen3.5-27B & $99.89 \to 99.93$ & $+0.04$ [$-0.02, +0.12$]\phantom{*} & 0.02\% (2/12,822) & $+0.11$ [$-0.08, +0.37$]\phantom{*} & 0.05\% (2/3,768) & 0 & 0 \\
+\texttt{gemma4\_31b} & general & Gemma-4-31B & $99.64 \to 99.96$ & $+0.32$ [$+0.16, +0.51$]* & 0.00\% (0/12,790) & $+0.66$ [$+0.31, +1.07$]* & 0.00\% (0/3,751) & 0 & 0 \\
+\texttt{phi35\_mini} & general & Phi-3.5-mini & $77.63 \to 78.26$ & $+0.63$ [$-0.09, +1.38$]\phantom{*} & 2.72\% (271/9,965) & $-1.22$ [$-2.13, -0.30$]* & 3.67\% (113/3,077) & 0 & 0 \\
+\texttt{olmo3\_7b} & general & OLMo-3-7B & $82.93 \to 83.85$ & $+0.92$ [$+0.29, +1.59$]* & 1.87\% (199/10,645) & $+1.27$ [$+0.21, +2.39$]* & 2.81\% (84/2,993) & 0 & 0 \\
+\midrule
+\texttt{meditron3\_qwen7b} & medical & Qwen2.5-7B & $74.01 \to 67.85$ & $-6.16$ [$-7.79, -4.49$]* & 11.94\% (1,134/9,500) & $-7.57$ [$-9.65, -5.49$]* & 15.36\% (439/2,858) & 3 & 0 \\
+\texttt{mediphi} & medical & Phi-3.5-mini & $77.89 \to 76.21$ & $-1.68$ [$-2.42, -0.97$]* & 5.00\% (500/9,998) & $-2.49$ [$-3.77, -1.26$]* & 5.91\% (185/3,132) & 0 & 0 \\
+\texttt{med42\_8b} & medical & Llama-3-8B & $88.62 \to 86.96$ & $-1.66$ [$-2.37, -0.95$]* & 3.11\% (354/11,375) & $-4.61$ [$-5.97, -3.35$]* & 5.67\% (188/3,317) & 0 & 0 \\
+\texttt{medgemma15\_4b} & medical & Gemma-3-4B & $65.98 \to 64.86$ & $-1.12$ [$-2.06, -0.15$]* & 5.92\% (501/8,469) & $-3.81$ [$-5.10, -2.57$]* & 7.81\% (216/2,766) & 18 & 1 \\
+\texttt{medgemma\_27b} & medical & Gemma-3-27B & $98.77 \to 98.04$ & $-0.72$ [$-1.04, -0.44$]* & 0.90\% (114/12,678) & $-0.45$ [$-0.87, -0.05$]* & 0.72\% (27/3,736) & 2 & 0 \\
+\texttt{lingshu\_7b} & medical & Qwen2.5-VL-7B & $76.64 \to 75.93$ & $-0.71$ [$-1.26, -0.17$]* & 2.65\% (261/9,838) & $-0.34$ [$-1.28, +0.57$]\phantom{*} & 2.95\% (87/2,950) & 0 & 0 \\
+\texttt{meerkat\_8b} & medical & Llama-3-8B & $93.32 \to 92.70$ & $-0.62$ [$-1.39, +0.13$]\phantom{*} & 4.62\% (554/11,979) & $-1.40$ [$-3.48, +0.54$]\phantom{*} & 10.14\% (329/3,243) & 824 & 1 \\
+\texttt{aloe\_qwen25\_7b} & medical & Qwen2.5-7B & $85.06 \to 84.54$ & $-0.52$ [$-1.31, +0.28$]\phantom{*} & 2.94\% (321/10,918) & $-0.08$ [$-1.09, +0.98$]\phantom{*} & 3.30\% (103/3,124) & 9 & 0 \\
+\texttt{ii\_medical\_8b} & medical & Qwen3-8B & $95.29 \to 94.85$ & $-0.44$ [$-1.13, +0.24$]\phantom{*} & 2.99\% (366/12,231) & $-1.67$ [$-2.90, -0.40$]* & 4.15\% (149/3,593) & 669 & 0 \\
+\texttt{baichuan\_m2\_32b} & medical & Qwen2.5-32B & $89.65 \to 89.32$ & $-0.33$ [$-1.07, +0.41$]\phantom{*} & 5.07\% (583/11,508) & $-1.72$ [$-3.03, -0.39$]* & 5.30\% (186/3,509) & 1,882 & 0 \\
+\texttt{aloe\_llama31\_8b} & medical & Llama-3.1-8B & $96.13 \to 95.80$ & $-0.33$ [$-0.86, +0.15$]\phantom{*} & 1.38\% (170/12,339) & $+0.66$ [$-0.05, +1.39$]\phantom{*} & 1.48\% (52/3,513) & 0 & 0 \\
+\texttt{apollo2\_7b} & medical & Qwen2-7B & $75.95 \to 76.33$ & $+0.38$ [$-0.36, +1.14$]\phantom{*} & 3.45\% (336/9,749) & $-0.24$ [$-1.83, +1.26$]\phantom{*} & 6.86\% (184/2,682) & 2 & 0 \\
+\texttt{ultramedical\_8b} & medical & Llama-3.1-8B & $76.21 \to 77.78$ & $+1.57$ [$+0.74, +2.43$]* & 3.02\% (295/9,782) & $+2.89$ [$+1.45, +4.36$]* & 3.74\% (108/2,886) & 72 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Complete evaluation results across all 34 open-weight LLMs on vote-filtered decision templates (\texttt{T01/T02/T08}; 12,836 pairs per model for $\Delta_{\text{all}}$). $*$ denotes 95\% subject-clustered bootstrap CI excluding zero.}
+\label{tab:app_all_models}
+\end{table*}
+
+\section{Rule-Based Parser vs.\ LLM Judge Audit Across 610,176 Responses}
+\label{app:judge}
+
+To verify that our deterministic rule-based parser (\texttt{scripts/eval/template\_scorers.py}) accurately extracts model choices across diverse instruction-following styles, we ran an independent LLM judge (\texttt{gpt-4.1-mini}) across all 21,792 vote-filtered decision items for 28 models (\textbf{610,176 total responses}; \texttt{panel\_r27c\_judge.md}). Table~\ref{tab:app_judge_stages} summarizes the agreement by parsing stage. Overall agreement is \textbf{99.45\%} with \textbf{Cohen's $\kappa = 0.973$}. On the 94.6\% of responses (577,410 rows) where the model states a clear option letter on line 1 (\texttt{letter\_first\_line}), exact agreement is \textbf{99.99\%} (only 45 discrepancies out of 577,410 rows). Virtually all remaining differences arise in \texttt{Meerkat-8B} and \texttt{II-Medical-8B}, which occasionally emit extended chain-of-thought reasoning that hits the 512-token generation limit before printing a final letter (\texttt{no\_choice}, 1,546 rows across the entire 610,176-row corpus).
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4.0pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Parser Stage} & \textbf{Responses} & \textbf{Share} & \textbf{Judge Agree} & \textbf{Disagree} \\
+\midrule
+\texttt{letter\_first\_line} & 577,410 & 94.63\% & 99.99\% & 45 \\
+\texttt{text\_first\_line} & 24,522 & 4.02\% & 99.78\% & 53 \\
+\texttt{letter\_conclusion} & 4,447 & 0.73\% & 97.68\% & 103 \\
+\texttt{text\_full} & 2,135 & 0.35\% & 21.12\% & 1,684 \\
+\texttt{letter\_full} & 114 & 0.02\% & 66.67\% & 38 \\
+\texttt{no\_choice} (truncated) & 1,546 & 0.25\% & 6.86\% & 1,440 \\
+\texttt{refusal} & 2 & $<0.01\%$ & 100.00\% & 0 \\
+\midrule
+\textbf{All Decision Rows} & \textbf{610,176} & \textbf{100.00\%} & \textbf{99.45\% ($\kappa=0.973$)} & \textbf{3,363} \\
+\bottomrule
+\end{tabular}
+\caption{Parser vs.\ \texttt{gpt-4.1-mini} judge agreement across 610,176 decision responses (28 models $\times$ 21,792 items).}
+\label{tab:app_judge_stages}
+\end{table}
+
+\section{Psychometric Driver Scale (\texttt{T12}) Shifts Across 28 Models}
+\label{app:drivers}
+
+Table~\ref{tab:app_drivers} reports the complete shift ($\Delta_M$ on a 1--7 Likert scale) across all 28 models on the 8 psychometric clinician-driver subscales elicited in isolated single-turn sessions (\texttt{T12}; \texttt{panel\_r27c\_t12\_summary.md}): AQ-12 subscales (\texttt{aq\_dangerousness}, \texttt{aq\_blame}, \texttt{aq\_coercion}, \texttt{aq\_segregation}; \citealp{corrigan2003attribution}), Nyblade Fear of Infection (\texttt{fear\_infection}; \citealp{nyblade2013brief}), Medical Condition Regard Scale (\texttt{mcrs\_regard}; \citealp{christison2002medical}, where higher = higher regard), PASS Regard and Distrust (\texttt{pass\_regard}, \texttt{pass\_distrust}; \citealp{ratanawongsa2009health}), and the single PASS drug-seeking suspicion item on OUD cases (\texttt{pass\_drug\_use\_item}).
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.3pt}
+\begin{tabular}{@{}llrrrrrrrrr@{}}
+\toprule
+\textbf{Model ID} & \textbf{Type} & \textbf{AQ Danger} & \textbf{AQ Blame} & \textbf{AQ Coerce} & \textbf{AQ Segreg} & \textbf{Inf.\ Fear} & \textbf{MCRS Reg.} & \textbf{PASS Reg.} & \textbf{PASS Distr.} & \textbf{OUD Drug} \\
+\midrule
+\texttt{qwen25\_7b} & general & $-0.22$* & $+0.00\phantom{*}$ & $-0.33$* & $-0.22$* & $-0.25$* & $+0.24$* & $-0.27$* & $-0.16$* & $+2.29$* \\
+\texttt{qwen25\_3b} & general & $+0.07\phantom{*}$ & $+0.29$* & $+0.02\phantom{*}$ & $-0.07\phantom{*}$ & $+0.43$* & $+0.16$* & $+0.21$* & $+0.10$* & $+0.43$* \\
+\texttt{llama32\_3b} & general & $-0.15$* & $-0.01\phantom{*}$ & $+0.19$* & $-0.01\phantom{*}$ & $-0.24$* & $+0.06$* & $-0.13$* & $-0.07\phantom{*}$ & $+0.15\phantom{*}$ \\
+\texttt{llama31\_8b} & general & $-0.26$* & $+0.15$* & $+0.12$* & $-0.03$* & $-0.33$* & $+0.24$* & $+0.15$* & $-0.17$* & $+0.14\phantom{*}$ \\
+\texttt{qwen3\_8b} & general & $-0.27$* & $+0.14$* & $-0.04\phantom{*}$ & $-0.02$* & $-0.67$* & $+0.11$* & $+0.20$* & $-0.06$* & $+0.44$* \\
+\texttt{qwen35\_9b} & general & $-0.16$* & $+0.06$* & $-0.04$* & $-0.00\phantom{*}$ & $-0.30$* & $+0.13$* & $+0.34$* & $+0.00\phantom{*}$ & $+0.03\phantom{*}$ \\
+\texttt{qwen35\_27b} & general & $+0.02$* & $-0.01\phantom{*}$ & $-0.35$* & $+0.00\phantom{*}$ & $-0.31$* & $+0.30$* & $+0.63$* & $+0.03$* & $-0.05\phantom{*}$ \\
+\texttt{gemma4\_e4b} & general & $-0.08$* & $+0.04$* & $+0.04\phantom{*}$ & $+0.00\phantom{*}$ & $-0.23$* & $+0.09$* & $+0.17$* & $-0.08$* & $-0.06\phantom{*}$ \\
+\texttt{gemma4\_31b} & general & $-0.04$* & $+0.00\phantom{*}$ & $-0.21$* & $+0.00\phantom{*}$ & $-0.01\phantom{*}$ & $+0.00\phantom{*}$ & $-0.10$* & $+0.00\phantom{*}$ & $+0.00\phantom{*}$ \\
+\texttt{olmo3\_7b} & general & $-0.08$* & $+0.14$* & $-0.27$* & $+0.01\phantom{*}$ & $-0.53$* & $+0.09$* & $+0.21$* & $-0.14$* & $+0.07\phantom{*}$ \\
+\texttt{granite33\_8b} & general & $-0.33$* & $+0.08$* & $+0.04\phantom{*}$ & $-0.09$* & $-0.22$* & $+0.05$* & $+0.41$* & $+0.02\phantom{*}$ & $+0.95$* \\
+\texttt{phi4} & general & $-0.22$* & $-0.02$* & $-0.14$* & $-0.07$* & $-0.33$* & $+0.24$* & $+0.25$* & $-0.18$* & $-0.45$* \\
+\texttt{mistral\_small32} & general & $-0.03$* & $+0.14$* & $-0.06$* & $+0.00\phantom{*}$ & $-0.29$* & $-0.00\phantom{*}$ & $+0.00\phantom{*}$ & $+0.17$* & $+0.70$* \\
+\texttt{glm4\_32b} & general & $-0.13$* & $+0.01\phantom{*}$ & $-0.42$* & $-0.03$* & $-0.48$* & $+0.31$* & $+0.40$* & $+0.11$* & $+0.23$* \\
+\texttt{gptoss20b} & general & $-0.04$* & $-0.00\phantom{*}$ & $-0.13$* & $-0.00\phantom{*}$ & $-0.07$* & $+0.14$* & $+0.30$* & $+0.00\phantom{*}$ & $+0.00\phantom{*}$ \\
+\texttt{gptoss120b} & general & $-0.03$* & $+0.04$* & $-0.25$* & $+0.00\phantom{*}$ & $-0.09$* & $+0.11$* & $+0.14$* & $-0.02\phantom{*}$ & $-0.14\phantom{*}$ \\
+\midrule
+\texttt{med42\_8b} & medical & $-0.18$* & $+0.70$* & $+0.00\phantom{*}$ & $+0.02\phantom{*}$ & $-0.45$* & $+0.28$* & $+0.19$* & $+0.18$* & $+0.19\phantom{*}$ \\
+\texttt{mediphi} & medical & $-0.34$* & $-0.08$* & $-0.56$* & $-0.06$* & $-0.33$* & $+0.21$* & $+0.22$* & $+0.12$* & $+0.06\phantom{*}$ \\
+\texttt{aloe\_qwen25\_7b} & medical & $-0.51$* & $+0.37$* & $-0.29$* & $-0.28$* & $-0.33$* & $+0.16$* & $+0.33$* & $+0.10$* & $+4.30$* \\
+\texttt{meditron3\_qwen7b} & medical & $-0.25$* & $+0.34$* & $-0.01\phantom{*}$ & $-0.23$* & $-0.10$* & $+0.23$* & $+0.02\phantom{*}$ & $-0.06\phantom{*}$ & $+1.08$* \\
+\texttt{apollo2\_7b} & medical & $-0.32$* & $-0.35$* & $+0.15$* & $-0.10$* & $-0.31$* & $+0.38$* & $-0.10\phantom{*}$ & $-0.27$* & $-0.01\phantom{*}$ \\
+\texttt{lingshu\_7b} & medical & $-0.48$* & $-0.13$* & $-0.11$* & $-0.25$* & $-0.58$* & $+0.33$* & $+0.04\phantom{*}$ & $-0.37$* & $+0.26$* \\
+\texttt{aloe\_llama31\_8b} & medical & $-0.42$* & $-0.05$* & $+0.02\phantom{*}$ & $-0.01\phantom{*}$ & $-0.31$* & $+0.17$* & $+0.30$* & $-0.04\phantom{*}$ & $+0.45$* \\
+\texttt{ultramedical\_8b} & medical & $-0.09$* & $+0.24$* & $-0.11$* & $-0.03$* & $-0.28$* & $+0.19$* & $+0.34$* & $+0.26$* & $+0.17\phantom{*}$ \\
+\texttt{meerkat\_8b} & medical & $+0.18$* & $+0.02\phantom{*}$ & $+0.27$* & $+0.03\phantom{*}$ & $-0.09$* & $+0.03\phantom{*}$ & $+0.42$* & $+0.21$* & $+1.04$* \\
+\texttt{ii\_medical\_8b} & medical & $+0.01\phantom{*}$ & $+0.15$* & $-0.04\phantom{*}$ & $-0.01$* & $-0.09$* & $+0.12$* & $+0.29$* & $+0.17$* & $+0.38$* \\
+\texttt{medgemma15\_4b} & medical & $+0.18$* & $-0.13$* & $-0.18$* & $-0.02\phantom{*}$ & $-0.08$* & $+0.29$* & $-0.23$* & $+0.14$* & $+0.87$* \\
+\texttt{medgemma\_27b} & medical & $-0.21$* & $+0.41$* & $-0.35$* & $-0.05$* & $-0.14$* & $-0.09$* & $+0.52$* & $+0.10$* & $-0.10\phantom{*}$ \\
+\bottomrule
+\end{tabular}
+\caption{Complete psychometric driver shifts ($\Delta_M$ on 1--7 Likert scale, marked minus unmarked control) across 28 models on isolated single-turn \texttt{T12} items.}
+\label{tab:app_drivers}
+\end{table*}
 
 \end{document}

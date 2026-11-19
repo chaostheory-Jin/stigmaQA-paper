@@ -1,19 +1,13 @@
-# Clinical StigmaQA — Paper Manuscript (ACL Template)
+# Clinical StigmaQA — ACL Submission Manuscript (Overleaf Sync Repository)
 
-Overleaf-ready *ACL manuscript repository initialized from the official [`acl-org/acl-style-files`](https://github.com/acl-org/acl-style-files) template (commit `d5adc82`, 2026-06-29).
+This repository contains the ACL LaTeX source (`main.tex`), bibliography (`custom.bib`), vector figures (`figures/`), and official ACL style files (`acl.sty`, `acl_natbib.bst`) for:
 
-## Structure
+> **Clinical StigmaQA: Grounding the Health Stigma and Discrimination Framework in Electronic Health Records to Audit Large Language Model Decision-Making**
 
-- `main.tex` — Main entry file (from official `acl_latex.tex`, configured for `pdfLaTeX` in `[review]` mode)
-- `acl.sty` — Official unmodified *ACL style file
-- `acl_natbib.bst` — Official *ACL BibTeX style file
-- `custom.bib` — Paper bibliography
-- `figures/` — Figures directory
+## Overleaf Configuration
+- **Compiler:** `pdfLaTeX`
+- **Main document:** `main.tex`
+- **Review vs. Camera-Ready:** Toggle `\usepackage[review]{acl}` / `\usepackage[final]{acl}` in `main.tex`.
 
-## Overleaf Sync
-
-1. In Overleaf, click **New Project → Import from GitHub** and select `chaostheory-Jin/stigmaQA-paper`.
-2. Ensure **Main document** is set to `main.tex` and **Compiler** is set to `pdfLaTeX`.
-3. Use Overleaf's **Menu → GitHub** panel to pull/push updates with this repository.
-
-> **Data notice:** This repository contains manuscript LaTeX sources and aggregate figures/tables only—never commit MIMIC-IV patient records or derived item JSONLs.
+## Data License & Privacy Compliance
+In compliance with the PhysioNet Credentialed Health Data Use Agreement for MIMIC-IV, this repository contains **only** the manuscript LaTeX source, bibliography, aggregate statistical tables, and vector PDF plots. No raw MIMIC-IV notes or patient-level vignette files are stored in this repository.
