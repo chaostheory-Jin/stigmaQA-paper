@@ -11,27 +11,29 @@
 \usepackage{multirow}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{pifont}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{caption}
 
-\captionsetup{font=small,skip=2pt}
-\setlength{\textfloatsep}{5pt plus 1pt minus 1pt}
-\setlength{\dbltextfloatsep}{5pt plus 1pt minus 1pt}
-\setlength{\intextsep}{4pt plus 1pt minus 1pt}
-\setlength{\abovecaptionskip}{2pt}
-\setlength{\belowcaptionskip}{0pt}
-\renewcommand{\arraystretch}{0.88}
-\setcounter{dbltopnumber}{2}
-\renewcommand{\dbltopfraction}{0.9}
-\renewcommand{\textfraction}{0.07}
-\renewcommand{\floatpagefraction}{0.85}
-\renewcommand{\dblfloatpagefraction}{0.85}
-\makeatletter
-\renewcommand\section{\@startsection{section}{1}{\z@}{-1.2ex plus -0.2ex minus -0.2ex}{0.6ex plus 0.1ex}{\large\bfseries}}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-0.9ex plus -0.2ex minus -0.1ex}{0.4ex plus 0.1ex}{\normalsize\bfseries}}
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{0.45ex plus 0.1ex minus 0.1ex}{-0.8em}{\normalsize\bfseries}}
-\makeatother
+% Top-conference Okabe-Ito color definitions
+\definecolor{OIblue}{HTML}{0072B2}
+\definecolor{OIskyblue}{HTML}{56B4E9}
+\definecolor{OIteal}{HTML}{009E73}
+\definecolor{OIorange}{HTML}{E69F00}
+\definecolor{OIvermilion}{HTML}{D55E00}
+\definecolor{OIpurple}{HTML}{CC79A7}
+\definecolor{OInavy}{HTML}{1B365D}
+\definecolor{OIgray}{HTML}{94A3B8}
+
+\newcommand{\cmark}{\textcolor{OIteal}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{OIgray}{\ding{55}}}
+\newcommand{\pmark}{\textcolor{OIorange}{\textbf{($\sim$)}}}
+
+\captionsetup{font=footnotesize,skip=2pt}
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}
 
 \title{\textsc{Clinical StigmaQA}: Grounding the Health Stigma and Discrimination Framework in Electronic Health Records to Audit Large Language Model Decision-Making}
 
@@ -41,200 +43,174 @@
 \maketitle
 
 \begin{abstract}
-Large language models (LLMs) score near the ceiling on medical licensing exams, yet real-world electronic health records (EHRs) carry social and clinical cues---past psychiatric or substance-use diagnoses, skeptical wording from prior notes, and emergency department crowding---that routinely distort human clinical judgment. Existing medical fairness benchmarks focus almost exclusively on demographic name or race swaps and lack both a theoretical model of health-related stigma and an objective standard for when a cue is medically irrelevant. We introduce \textsc{Clinical StigmaQA}, a controlled counterfactual benchmark that operationalizes the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}) for bedside clinical decision-making. By cross-referencing 435 clinician-side records extracted from 145 HSDF studies against 38 clinical practice guidelines and federal regulations, we construct 31 clinical decision events across 6 practice domains, 9 stigmatized health conditions (73 licensed condition$\times$event pairs), 4 orthogonal experimental factors, and 10 task templates. Grounded in 1,030 pre-decision MIMIC-IV patient vignettes verified by a 5-LLM eligibility panel (29,845 eligible items), we evaluate 34 open-weight general and medical LLMs (validated against an independent LLM judge across 610,176 responses; 99.45\% agreement, $\kappa=0.973$). We find a consistent hierarchy of indicated-care loss led by remitted schizophrenia ($\Delta = -2.47$ percentage points [pp]), sickle cell disease ($-2.29$ pp), and opioid use disorder ($-1.74$ pp); demonstrate that skeptical prior-clinician wording and emergency department crowding independently degrade care while policy guardrails partially recover it ($+1.27$ pp); and show across 11 matched backbone pairs that medical fine-tuning frequently amplifies stigma rather than mitigating it. Finally, pairing bedside decisions with isolated psychometric driver scales reveals a sharp dissociation between socially desirable self-reported attitudes and biased clinical actions.
+Large language models (LLMs) achieve near-ceiling accuracy on medical licensing examinations, yet real-world electronic health records (EHRs) contain social and clinical cues---past psychiatric or substance-use diagnoses, skeptical wording from prior notes, and emergency department crowding---that routinely distort human clinical judgment. Existing medical fairness benchmarks rely primarily on demographic name or race swaps and lack both a theoretical model of health-related stigma and a clinical standard for when a comorbid diagnosis is medically irrelevant. We introduce \textsc{Clinical StigmaQA}, a controlled counterfactual benchmark that operationalizes the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}) for bedside clinical decision-making. By cross-referencing 435 clinician-side stigma records from 145 empirical HSDF studies against 38 clinical practice guidelines and federal statutes, we construct 31 decision events across 6 clinical practice domains, 9 stigmatized health conditions (73 licensed condition$\times$event pairs), 4 orthogonal experimental factors, and 10 evaluation templates. Grounded in 1,030 pre-decision MIMIC-IV patient vignettes verified by a five-model clinical eligibility panel (29,845 evaluation items), we audit 34 open-weight general and medical LLMs, validated against an independent LLM judge across 610,176 responses (99.45\% agreement, $\kappa=0.973$). We uncover a consistent hierarchy of indicated-care loss led by remitted schizophrenia ($\Delta = -2.47$ percentage points [pp]), sickle cell disease ($-2.29$ pp), and opioid use disorder ($-1.74$ pp); show that skeptical prior-clinician wording and emergency department crowding independently degrade care while equity guardrails partially recover it ($+1.27$ pp); demonstrate across 11 matched backbone pairs that domain-specific medical fine-tuning frequently amplifies stigma; and reveal a sharp dissociation between self-reported psychometric attitudes and bedside clinical actions.
 \end{abstract}
 
 \section{Introduction}
 
-Consider a 48-year-old patient arriving at the emergency department (ED) with acute substernal chest pressure, diaphoresis, and a triage heart rate of 108 bpm. Under the 2021 AHA/ACC Chest Pain Guideline \citep{gulati2021aha}, a 12-lead ECG and serial troponin must be ordered within 10 minutes regardless of psychiatric history. In practice, however, a past medical history line noting \textit{schizophrenia, in remission on maintenance aripiprazole} frequently triggers diagnostic overshadowing: clinicians attribute somatic pain to anxiety or psychosis, withhold cardiac workup, and discharge prematurely \citep{druss2000mental,shefer2014diagnostic,fleetwood2026mental}. When large language models (LLMs) draft triage orders or suggest diagnostic pathways, do they reproduce this clinical failure?
+When a 48-year-old patient arrives at the emergency department (ED) with acute substernal chest pressure, diaphoresis, and a triage heart rate of 108 bpm, the 2021 AHA/ACC Chest Pain Guideline mandates a 12-lead ECG and serial troponin measurement within 10 minutes regardless of psychiatric history \citep{gulati2021aha}. In hospital practice, however, a past medical history entry noting \textit{schizophrenia, in remission on maintenance aripiprazole} frequently triggers diagnostic overshadowing: clinicians attribute somatic pain to anxiety or psychosis, withhold cardiac testing, and discharge the patient prematurely \citep{druss2000mental,shefer2014diagnostic,fleetwood2026mental}. As large language models (LLMs) are integrated into clinical workflows to draft triage orders, summarize handoffs, and recommend diagnostic pathways, we must determine whether they reproduce these systematic clinical failures.
 
-Answering this question requires moving beyond two paradigms that dominate medical NLP evaluation. The first equates clinical competence with multiple-choice accuracy on static exams such as MedQA \citep{jin2021disease,singhal2023large}, where textbook vignettes omit the social friction of hospital notes \citep{wang2026medcheck,hou2026clinicalmc}. The second audits fairness by swapping patient race or gender tokens \citep{zack2024assessing,omiye2023large,benkirane2025diagnose}. While demographic swaps expose disparities, health-related stigma operates through a broader sociocognitive process. In the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}), clinical discrimination arises from the interplay of \textbf{clinician-held drivers} (fear of infection, blame, disbelief), \textbf{organizational facilitators} (time pressure, crowding, or policy guardrails), \textbf{disease marking} (a stigmatized diagnosis in the chart), \textbf{intersecting social characteristics} (housing, incarceration, language barriers), and \textbf{manifestations in clinical practice}---including skeptical language in prior notes that transmits bias across handoffs \citep{goddu2018words,park2021physician,beach2021testimonial}.
+\begin{table*}[t]
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccccccccr@{}}
+\toprule
+\textbf{Benchmark / Study} & \textbf{Pre-Decision EHRs} & \textbf{Stigma Theory (HSDF)} & \textbf{Guideline Orthogonality} & \textbf{Disease Marking ($M$)} & \textbf{Same-Fact Wording ($P$)} & \textbf{Intersectional Social ($X$)} & \textbf{Org.\ Context ($F^-/F^+$)} & \textbf{Psychometric Drivers ($D$)} & \textbf{Scale (Items)} \\
+\midrule
+MedQA \citep{jin2021disease} & \xmark & \xmark & \xmark & \xmark & \xmark & \xmark & \xmark & \xmark & 12,723 \\
+MedCheck \citep{wang2026medcheck} & \xmark & \xmark & \cmark & \xmark & \xmark & \xmark & \xmark & \xmark & 1,840 \\
+ClinicalMC \citep{hou2026clinicalmc} & \cmark & \xmark & \cmark & \xmark & \xmark & \xmark & \xmark & \xmark & 2,150 \\
+\citet{zack2024assessing} & \xmark & \xmark & \xmark & \xmark & \xmark & \pmark & \xmark & \xmark & 396 \\
+CPV \citep{benkirane2025diagnose} & \xmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark & \xmark & 3,600 \\
+StigMAD \citep{harrigian2023characterization,dahal2026stigmad} & \cmark & \xmark & \xmark & \xmark & \pmark & \xmark & \xmark & \xmark & 1,978 \\
+Artificial Intolerance \citep{huang2026artificial} & \cmark & \xmark & \xmark & \xmark & \pmark & \pmark & \xmark & \xmark & 2,400 \\
+\midrule
+\textbf{\textsc{Clinical StigmaQA} (Ours)} & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \textbf{29,845} \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Comparison of \textsc{Clinical StigmaQA} against existing clinical question-answering, decision-making, and fairness benchmarks. \cmark\ denotes full controlled support; \pmark\ denotes partial or observational coverage without orthogonal counterfactual control (e.g., race/gender only, or span detection without decision evaluation); \xmark\ denotes absent.}
+\label{tab:benchmark_comparison}
+\end{table*}
 
-Auditing health-related stigma in clinical decision-making faces a core identification challenge: \emph{medical orthogonality}. Unlike race or housing status, a comorbid diagnosis such as HIV, sickle cell disease (SCD), or opioid use disorder (OUD) can be clinically relevant to certain treatments. Measuring whether a model's decision shift constitutes bias rather than legitimate clinical reasoning requires anchoring every test case in a binding practice guideline where the indicated action is invariant to the remitted or stable stigmatized condition.
+Current medical NLP evaluations fall short of answering this question for two reasons. First, standard clinical benchmarks measure knowledge recall on textbook licensing exams such as MedQA \citep{jin2021disease,singhal2023large} or multi-turn diagnostic updates in idealized encounters \citep{wang2026medcheck,hou2026clinicalmc}, omitting the social friction embedded in hospital charts. Second, existing clinical fairness audits focus on swapping demographic tokens such as race or gender \citep{omiye2023large,zack2024assessing,benkirane2025diagnose}. While demographic counterfactuals expose disparities, health-related stigma operates through a broader sociocognitive mechanism. In the Health Stigma and Discrimination Framework (HSDF; \citealp{stangl2019health}), discriminatory care emerges from the interaction of \textbf{clinician-held drivers} (fear of infection, blame, disbelief), \textbf{organizational facilitators} (workload pressure, crowding, or institutional guardrails), \textbf{disease marking} (a stigmatized diagnosis in the chart), \textbf{intersectional social characteristics} (housing instability, incarceration history, language barriers), and \textbf{practice manifestations}---including skeptical phrasing written in prior notes that transmits bias across clinical handoffs \citep{goddu2018words,park2021physician,beach2021testimonial}.
 
-We present \textsc{Clinical StigmaQA}, a theory- and guideline-grounded counterfactual benchmark built on real MIMIC-IV records \citep{johnson2023mimic}:
+Auditing health-related stigma in clinical decision-making introduces a fundamental identification requirement: \emph{medical orthogonality}. Unlike race or housing status, a comorbid diagnosis such as HIV, sickle cell disease (SCD), or opioid use disorder (OUD) legitimately alters clinical risk in certain treatments. Identifying whether a model's decision shift constitutes bias rather than appropriate clinical reasoning requires anchoring every test scenario in an authoritative practice guideline where the indicated action is strictly invariant to the remitted or stable stigmatized condition.
+
+We present \textsc{Clinical StigmaQA}, a theory- and guideline-grounded counterfactual benchmark built on real MIMIC-IV patient records \citep{johnson2023mimic}. Our work makes three contributions:
 \begin{enumerate}[leftmargin=*,nosep,topsep=1pt]
-    \item \textbf{Dual Theory--Guideline Design (\S\ref{sec:design}--\ref{sec:grounding}):} We screen 145 HSDF studies to extract 435 clinician-side stigma records and pair them with 38 clinical guidelines and statutes. Every one of our 31 clinical events and 73 condition$\times$event licenses requires both an empirical HSDF record of clinician bias and a guideline-mandated gold action medically orthogonal to the inserted cue. We extract structured pre-decision vignettes from MIMIC-IV and filter them via a 5-LLM eligibility panel ($1,416 \to 1,030$ verified cases; 29,845 eligible items across 10 templates and 4 factors: $M, P, X, F$).
-    \item \textbf{Statistical Identification (\S\ref{sec:protocol}):} Comparing passive insertion against an attention-controlled protocol separates model inattention from decision bias. We prove that conditioning paired comparisons on ``control answered correctly'' breaks McNemar's test and induces regression-to-the-mean artifacts, motivating our unfiltered subject-clustered bootstrap estimator paired with conditional Right$\to$Wrong flip rates.
-    \item \textbf{Audit of 34 General and Medical LLMs (\S\ref{sec:results}):} Evaluating 34 open-weight models (and auditing our parser against an LLM judge on 610,176 responses at $\kappa=0.973$), we uncover a consistent condition stigma hierarchy, demonstrate bias transmission via skeptical prior-note wording and ED crowding, show across 11 matched backbone pairs that medical fine-tuning frequently worsens stigma susceptibility, and document a dissociation between self-reported attitudes and clinical behavior.
+    \item \textbf{Theory- and Guideline-Grounded Benchmark (\S\ref{sec:design}):} We synthesize 435 clinician-side stigma records from 145 empirical HSDF studies and cross-reference them against 38 clinical practice guidelines and statutes, yielding 31 decision events across 6 practice domains and 73 medically orthogonal condition$\times$event licenses across 9 conditions. From MIMIC-IV admission records, we construct 1,030 pre-decision vignettes verified by a 5-LLM eligibility panel (29,845 items across 4 factors $M, P, X, F$ and 10 templates).
+    \item \textbf{Identification of Decision Bias vs.\ Inattention (\S\ref{sec:protocol}):} We contrast passive cue insertion against an attention-controlled prompting protocol to separate reading inattention from clinical decision bias, pairing unfiltered patient-clustered bootstrap inference ($\Delta P(\text{indicated})$) with conditional Right$\to$Wrong flip rates.
+    \item \textbf{Large-Scale Audit Across 34 LLMs (\S\ref{sec:results}):} Evaluating 34 open-weight models (11 matched medical-vs.-base pairs; 99.45\% parser--judge agreement, $\kappa=0.973$ over 610,176 responses), we quantify a condition stigma hierarchy, trace bias transmission via skeptical handoff wording and ED crowding, show that medical fine-tuning often amplifies stigma, and expose an attitude--behavior dissociation on psychometric driver scales.
 \end{enumerate}
 
 \section{Related Work}
 
 \paragraph{Clinical Decision-Making Benchmarks.}
-Medical LLM evaluation has begun shifting from exam recall \citep{jin2021disease,singhal2023large} toward clinical workflows. \citet{wang2026medcheck} introduce MedCheck to evaluate workflow alignment beyond leaderboard accuracy, while \citet{hou2026clinicalmc} propose ClinicalMC to test multi-course diagnostic and therapeutic updates across encounters. However, neither benchmark tests robustness under social or disease-stigma perturbations, leaving open whether models that master multi-step reasoning remain reliable when charts contain stigmatizing cues.
+Recent medical NLP benchmarks move beyond exam recall \citep{jin2021disease,singhal2023large} to evaluate workflow alignment (MedCheck; \citealp{wang2026medcheck}) and multi-course updates (ClinicalMC; \citealp{hou2026clinicalmc}). Yet as shown in Table~\ref{tab:benchmark_comparison}, they assume socially neutral charts and do not test guideline adherence under stigmatizing diagnoses, skeptical handoff notes, or organizational pressures.
 
-\paragraph{Counterfactual Bias Audits in Clinical LLMs.}
-\citet{omiye2023large} and \citet{zack2024assessing} showed that proprietary LLMs propagate race-based medical misconceptions and alter diagnostic rankings across race and gender swaps. At NAACL 2025, \citet{benkirane2025diagnose} introduced the Counterfactual Patient Variations (CPV) dataset to diagnose demographic bias across age, gender, race, and income. While CPV establishes the value of controlled counterfactuals, it treats non-clinical attributes uniformly without modeling the clinical mechanisms of health-related stigma---such as infection fear in surgical scheduling, opioid contract disbelief in acute analgesia, or diagnostic overshadowing in psychiatric comorbidity.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_pipeline.pdf}
+\caption{\textbf{Overall four-stage construction and audit pipeline of \textsc{Clinical StigmaQA}.} Stage 1 cross-references 435 clinician-side records from 145 HSDF studies against 38 clinical guidelines to design 31 medically orthogonal decision events and 73 condition licenses. Stage 2 extracts temporally truncated pre-decision vignettes from MIMIC-IV and filters them through a 5-LLM clinical eligibility panel ($1,416 \to 1,030$ cases). Stage 3 synthesizes counterfactual contrasts across factors $M, P, X, F$ and 10 templates, verified by a 35-check invariance validator (29,845 items). Stage 4 audits 34 LLMs (11 matched medical--base pairs) validated by an independent LLM judge across 610,176 responses ($\kappa=0.973$).}
+\label{fig:pipeline}
+\end{figure*}
+
+\paragraph{Counterfactual Fairness in Clinical LLMs.}
+\citet{omiye2023large} and \citet{zack2024assessing} showed that LLMs propagate race-based misconceptions and shift diagnostic priors under race and gender swaps. \citet{benkirane2025diagnose} introduced Counterfactual Patient Variations (CPV) to audit demographic sensitivity across age, gender, race, and income. However, demographic swaps alone do not model health-related stigma mechanisms---such as infection fear in surgical scheduling, opioid contract disbelief in analgesia, or diagnostic overshadowing in psychiatric illness.
 
 \paragraph{Stigmatizing Language in Electronic Health Records.}
-Clinical studies show that physicians routinely document testimonial disbelief (e.g., scare quotes, \emph{``claims''}, \emph{``insists''}), disapproval, and stereotyping in EHR notes \citep{goddu2018words,park2021physician,beach2021testimonial,sun2022negative,himmelstein2022examination,brooks2024stigmatizing}. In NLP, \citet{harrigian2023characterization} characterized stigmatizing language in MIMIC-IV notes and released a verified trigger lexicon, while \citet{dahal2026stigmad} benchmarked open-weight LLMs on detecting such spans. Concurrent work by \citet{huang2026artificial} shows that composite stigmatizing notes skew LLM recommendations. \textsc{Clinical StigmaQA} advances this line of inquiry by isolating the exact causal contribution of prior-clinician wording ($P$) from underlying disease marking ($M$), intersectional demographics ($X$), and organizational facilitators ($F$) while holding objective clinical facts byte-identical.
+Physicians frequently use language signaling testimonial disbelief (scare quotes, \emph{``claims''}, \emph{``insists''}), disapproval, and stereotyping in EHR notes \citep{goddu2018words,park2021physician,beach2021testimonial,sun2022negative,himmelstein2022examination,brooks2024stigmatizing}. \citet{harrigian2023characterization} and \citet{dahal2026stigmad} trained classifiers to detect stigmatizing spans, while \citet{huang2026artificial} observed that composite stigmatizing notes alter LLM recommendations. \textsc{Clinical StigmaQA} decouples prior-clinician wording ($P$) from disease marking ($M$), intersectional demographics ($X$), and organizational facilitators ($F$) while holding objective clinical facts byte-identical.
 
-\begin{table*}[t]
-\centering
-\scriptsize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}llp{5.5cm}p{4.5cm}rr@{}}
-\toprule
-\textbf{Unit} & \textbf{Practice Mechanism (Events)} & \textbf{Representative Clinical Events \& Guideline Gold Actions} & \textbf{Licensed Stigmatized Conditions ($M$)} & \textbf{Cases} & \textbf{Items} \\
-\midrule
-\textbf{U1} & Analgesia Undertreatment (4) & ED acute severe pain (\texttt{E\_ANA\_04}; ACEP/ASAM), SCD vaso-occlusive crisis (\texttt{E\_ANA\_01/02}; ASH 2020), fracture pain (\texttt{E\_ANA\_07}): rapid guideline opioid analgesia. & OUD, AUD, SCD (HbSS), HIV, Mental health, Cancer & 186 & 5,204 \\
-\textbf{U2} & Diagnostic Overshadowing (7) & Chest pain (\texttt{E\_DX\_01}; AHA/ACC), stroke alert (\texttt{E\_DX\_02}), surgical abdomen (\texttt{E\_DX\_03}), dyspnea (\texttt{E\_DX\_05/06/09}), syncope (\texttt{E\_DX\_07}): immediate somatic workup. & Mental health, OUD, AUD, SCD, Obesity, Cancer, HIV & 269 & 9,953 \\
-\textbf{U3} & Excess Precaution \& Delay (5) & Wound dressing (\texttt{E\_PRE\_01}), ward rooming (\texttt{E\_PRE\_02}), OR scheduling (\texttt{E\_PRE\_03}), phlebotomy (\texttt{E\_PRE\_04}; CDC/OSHA), pre-op (\texttt{E\_PRE\_05}): standard precautions only. & HIV (undetectable), Hepatitis C (SVR), Tuberculosis (cured), AUD, OUD & 150 & 3,260 \\
-\textbf{U4} & Coercive Containment \& Privacy (5) & Verbal frustration (\texttt{E\_COE\_01}; 42 CFR \S482.13), capacity refusal (\texttt{E\_COE\_02}), psych hold (\texttt{E\_COE\_04}), visitor update (\texttt{E\_COE\_05}; HIPAA), companion (\texttt{E\_EPI\_03}): de-escalate. & Mental health, OUD, AUD, HIV, Hepatitis C, Tuberculosis, Cancer & 179 & 3,872 \\
-\textbf{U5} & Time-Critical Care \& Triage (6) & Sepsis 1-hr bundle (\texttt{E\_TIM\_01}; SSC), CAP (\texttt{E\_TIM\_04}), ICU triage (\texttt{E\_DSP\_03}), AMA (\texttt{E\_DSP\_04}), ESI v4 triage (\texttt{E\_TRI\_01}), SSTI (\texttt{E\_SSTI\_01}): urgent care without delay. & OUD, AUD, Mental health, HIV, Hepatitis C, SCD, Cancer, Tuberculosis & 135 & 5,291 \\
-\textbf{U6} & Unindicated Surveillance (4) & Routine trauma toxicology (\texttt{E\_UNI\_01}; ACEP), unconsented HIV panel (\texttt{E\_UNI\_02}), supervised meds (\texttt{E\_UNI\_04}), 1:1 sitter (\texttt{E\_UNI\_05}): omit non-indicated surveillance. & OUD, AUD, HIV, Hepatitis C, Mental health, SCD & 111 & 2,265 \\
-\midrule
-\textbf{Total} & \textbf{31 Ready Events (22 Types)} & \textbf{38 Clinical Practice Guidelines \& Federal/State Regulations} & \textbf{9 Conditions (73 Condition$\times$Event Pairs)} & \textbf{1,030} & \textbf{29,845} \\
-\bottomrule
-\end{tabular}
-\caption{Architecture of \textsc{Clinical StigmaQA} across the 6 HSDF clinical practice units (21,792 primary decision, 3,498 extended reasoning, and 4,555 psychometric driver items; full event catalog in Appendix~\ref{app:events}).}
-\label{tab:benchmark_overview}
-\end{table*}
-
-\section{Theoretical Foundation \& Design}
+\section{Benchmark Design and Construction}
 \label{sec:design}
 
+Figure~\ref{fig:pipeline} illustrates the four-stage pipeline used to construct \textsc{Clinical StigmaQA}, detailing the data sources, verification panels, and formal design artifacts at each step.
+
 \subsection{Operationalizing the HSDF at the Bedside}
-\citet{stangl2019health} formulate health-related stigma as a process in which \emph{drivers} (individual fear of infection, blame, stereotypes, authoritarian attitudes) and \emph{facilitators} (institutional policies, workload, norms) interact with \emph{stigma marking} (health conditions intersecting with race, gender, poverty, or criminal legal history) to produce \emph{manifestations} (stigmatizing clinical practices) and downstream harms. To translate this framework into a causal audit of clinical LLMs, we separate \textbf{context inputs} manipulated in a patient prompt from \textbf{internal model dispositions} measured as outputs: (i) \textbf{Factor $M$ (Disease Marking)}: presence vs.\ absence of a remitted or stable stigmatized diagnosis and maintenance therapy in the Past Medical History (PMH) and medication list; (ii) \textbf{Factor $P$ (Prior-Practice Language)}: neutral vs.\ stigmatizing characterization by a previous clinician in the handoff note, overlaid on an identical objective fact; (iii) \textbf{Factor $X$ (Intersectional Demographics)}: reference vs.\ marked social and demographic attributes (race, gender, limited English proficiency, housing instability, incarceration history); (iv) \textbf{Factor $F$ (Organizational Facilitators)}: absent vs.\ negative operational pressure (ED crowding/boarding; \citealp{shefer2014diagnostic}) vs.\ positive institutional guardrail (departmental anti-bias reminder; \citealp{goddu2018words,dowell2022cdc}); and (v) \textbf{Dimension $D$ (Clinician-Held Drivers)}: rather than injecting beliefs into the prompt, we measure endorsement of blame, dangerousness, coercion, distrust, and infection fear in isolated single-turn sessions (\texttt{T12}) using validated attitude scales.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_dataset_overview.pdf}
+\caption{\textbf{Dataset overview of \textsc{Clinical StigmaQA} (29,845 verified items across 1,030 MIMIC-IV patient cases).} \textbf{(a)} Distribution of primary bedside decision items (21,792), extended clinical reasoning items (3,498), and psychometric driver items (4,555) across the 6 clinical practice domains. \textbf{(b)} Number of licensed decision events and paired decision contrasts per model across the 9 stigmatized health conditions (73 condition$\times$event licenses). \textbf{(c)} Paired contrasts per model across the orthogonal experimental factor blocks.}
+\label{fig:dataset_overview}
+\end{figure*}
+
+\citet{stangl2019health} model health-related stigma as a causal chain in which individual \emph{drivers} (fear of infection, blame, stereotypes, authoritarianism) and organizational \emph{facilitators} (workload, institutional norms, policy guardrails) interact with \emph{stigma marking} (health conditions intersecting with social axes) to produce discriminatory \emph{practice manifestations}. We operationalize this framework by separating four experimental \textbf{context factors} manipulated in the clinical prompt from internal \textbf{model dispositions} measured as outputs: (i) \textbf{Disease Marking ($M$)}, the presence vs.\ absence of a remitted or stable stigmatized diagnosis and maintenance therapy in the Past Medical History (PMH) and home medication list; (ii) \textbf{Prior-Clinician Wording ($P$)}, neutral vs.\ skeptical handoff phrasing written by a prior clinician overlaid on an identical objective clinical statement; (iii) \textbf{Intersectional Demographics ($X$)}, reference vs.\ marked social determinants (race, gender, limited English proficiency, housing instability, incarceration history); (iv) \textbf{Organizational Facilitators ($F$)}, absent vs.\ negative operational strain ($F^-$: ED crowding/boarding; \citealp{shefer2014diagnostic}) vs.\ positive institutional guardrail ($F^+$: departmental clinical equity directive; \citealp{goddu2018words,dowell2022cdc}); and (v) \textbf{Clinician-Held Drivers ($D$)}, endorsement of dangerousness, blame, coercion, segregation, distrust, and infection fear measured in isolated single-turn sessions (\texttt{T12}) via validated psychometric instruments.
 
 \subsection{Dual Literature and Guideline Grounding}
-No clinical scenario or condition marking in \textsc{Clinical StigmaQA} is invented ad hoc. We screened 145 empirical studies applying the HSDF (128 full-text articles and 17 abstracts citing \citealp{stangl2019health}), extracting 435 verbatim clinician-side stigma records (\texttt{H001--H435}, including 38 primary healthcare-worker driver records \texttt{H412--H435}). A candidate event or condition$\times$event pair enters the benchmark only if it satisfies two simultaneous requirements: (1) an \textbf{Empirical Stigma License} documenting that clinicians exhibit the target discriminatory practice toward patients with that condition in peer-reviewed HSDF or clinical disparity literature; and (2) a \textbf{Guideline Orthogonality Anchor} from 38 authoritative clinical practice guidelines or statutes (e.g., AHA/ACC, ASH, ASAM, IDSA/ATS, Surviving Sepsis Campaign, CDC HICPAC, OSHA 29 CFR \S1910.1030, CMS 42 CFR \S482.13, HIPAA 45 CFR \S164.510) mandating an objective clinical action that remains invariant when the marked condition is in remission or stable on maintenance therapy.
+We derive both the clinical decision scenarios and the disease-marking licenses from a systematic synthesis of empirical stigma literature and binding practice guidelines (Figure~\ref{fig:pipeline}, Stage 1). Screening 145 empirical HSDF studies (128 full-text articles and 17 abstracts citing \citealp{stangl2019health}) yielded 435 verbatim clinician-side stigma records (including 38 primary healthcare-worker driver records). A clinical event or condition$\times$event pair enters the benchmark only when it satisfies two criteria: (1) \textbf{Empirical Stigma Documentation}, requiring peer-reviewed evidence that clinicians exhibit the target discriminatory practice toward patients with that condition; and (2) \textbf{Guideline Medical Orthogonality}, requiring an authoritative clinical practice guideline or statute (38 verified sources, including AHA/ACC, ASH, ASAM, IDSA/ATS, Surviving Sepsis Campaign, CDC HICPAC, OSHA 29 CFR \S1910.1030, CMS 42 CFR \S482.13, and HIPAA 45 CFR \S164.510) that mandates an objective clinical action invariant to the remitted or stable stigmatized condition.
 
-Applying this dual filter yields \textbf{31 ready events} grouped into \textbf{6 clinical practice units} (\texttt{U1--U6}, Table~\ref{tab:benchmark_overview}) and \textbf{73 licensed condition$\times$event pairs} across 9 conditions: HIV with undetectable viral load on ART (17 events), alcohol use disorder (AUD) in sustained remission (17), opioid use disorder (OUD) in remission on or off maintenance therapy (15), hepatitis C with sustained virologic response (SVR, 7), schizophrenia-spectrum illness stable on aripiprazole (5), breast cancer in 5-year remission (5, female charts), sickle cell disease (HbSS, 3 separable + 3 carrier events), pulmonary tuberculosis cured 6 years prior (3), and Class III obesity (BMI $>40\text{ kg/m}^2$, 1). Ten candidate events where a comorbidity legitimately alters clinical risk were parked (\texttt{parked.json}).
+This synthesis yields \textbf{31 clinical decision events} organized into \textbf{6 clinical practice domains} (Figure~\ref{fig:dataset_overview}a; complete event catalog in Appendix Table~\ref{tab:app_events}): \textbf{Analgesia Undertreatment} (\texttt{U1}, 4 events: withholding or delaying guideline-mandated opioid analgesia in acute severe pain, fracture, or SCD vaso-occlusive crisis; \citealp{brandow2020ash,asam2020national}); \textbf{Diagnostic Overshadowing} (\texttt{U2}, 7 events: attributing acute chest pain, stroke symptoms, surgical abdomen, dyspnea, or syncope to psychiatric illness or withdrawal rather than ordering immediate somatic workup; \citealp{gulati2021aha,shefer2014diagnostic}); \textbf{Excess Infection Precaution} (\texttt{U3}, 5 events: double-gloving for phlebotomy, gowning for intact-skin care, isolating ward beds, or deferring elective surgery to the last case of the day despite standard precautions; \citealp{siegel2007guideline}); \textbf{Coercive Containment \& Privacy} (\texttt{U4}, 5 events: physical restraints for verbal frustration, overriding competent refusal, unindicated psychiatric holds, or HIPAA breaches); \textbf{Time-Critical Triage \& Deferral} (\texttt{U5}, 6 events: delaying 1-hour sepsis bundles, down-triaging high-risk ED arrivals, or denying ICU transfers); and \textbf{Unindicated Surveillance} (\texttt{U6}, 4 events: unconsented toxicology or HIV panels, searching belongings, or 1:1 security sitters for cooperative patients). Across these 31 events, dual grounding licenses \textbf{73 condition$\times$event pairs} spanning \textbf{9 stigmatized health conditions} (Figure~\ref{fig:dataset_overview}b): undetectable HIV on ART (17 events), AUD in remission (17), OUD in remission (15), cured hepatitis C (SVR, 7), remitted schizophrenia on maintenance aripiprazole (5), breast cancer in 5-year remission (5, female patients), sickle cell disease (HbSS, 6), cured tuberculosis (3), and Class III obesity (1).
 
-\subsection{Orthogonal Construction of Factors $M, P, X, F$}
-Every intervention obeys syntactic and medical invariants enforced by a 35-check validator (\texttt{validate\_design.py}):
+\subsection{Pre-Decision EHR Grounding and Five-Model Eligibility Panel}
+Raw discharge summaries in MIMIC-IV \citep{johnson2023mimic} contain retrospective hospital courses that leak final diagnoses, while naive keyword scrubbing leaves visible \texttt{[redacted]} placeholders that act as artificial warning cues. In Stage 2 (Figure~\ref{fig:pipeline}), we construct \textbf{pre-decision clinical vignettes} by extracting only admission-time chart sections (\emph{Chief Complaint}, \emph{History of Present Illness} truncated prior to ED interventions or floor transfer, \emph{Past Medical History}, \emph{Home Medications}, and \emph{Admission Physical Exam}), removing sentences with retrospective outcome terms, and anchoring physiological states directly from structured ED triage vitals and initial laboratory tables. To ensure every vignette matches the clinical inclusion state required by its guideline gold action without pre-empting the decision, an independent panel of five open-weight LLMs (\texttt{Qwen3.5-27B}, \texttt{Gemma-4-31B}, \texttt{Mistral-Small-3.2-24B}, \texttt{GLM-4-32B}, \texttt{gpt-oss-20b}) audited all 1,416 candidate charts against event-specific eligibility criteria (Fleiss' $\kappa = 0.381$; 5/5 unanimity on 57.6\%). Filtering 386 charts flagged as ineligible by $\ge 3/5$ models yields \textbf{1,030 verified patient cases}.
 
-\paragraph{Separable vs.\ Carrier-Confounded Marking ($M$).}
-For 27 of the 31 events (\texttt{SEPARABLE}), base patient charts are sampled exclusively from a \texttt{separable\_clean} MIMIC-IV cohort whose entire longitudinal record across all admissions contains zero ICD codes for any of the 9 stigmatized conditions. In the $M=\text{present}$ arm, a standardized remitted/stable PMH line and matching home medication are inserted. The remaining 4 events (\texttt{E\_ANA\_01/02}, \texttt{E\_DX\_09} for SCD; \texttt{E\_ANA\_04} for OUD on buprenorphine) require an organic disease presentation and are labeled \texttt{CARRIER\_CONFOUNDED}, where counterfactual contrasts operate over $P$, $X$, and $F$.
-
-\paragraph{Additive Same-Fact Prior-Practice Wording ($P$).}
-Comparing completely rewritten stigmatizing vs.\ neutral notes \citep{goddu2018words,huang2026artificial} risks altering perceived clinical severity. Instead, across 11 licensed events, we define a shared \texttt{objective\_fact} clause (e.g., \emph{``Patient states pain is 8/10 and that prior ketorolac provided no relief''}) and append either a neutral characterization (\emph{``and describes the timeline consistently''}) or a stigmatizing distrust characterization drawn from the verified \citet{harrigian2023characterization} lexicon and \citet{beach2021testimonial} taxonomy (\texttt{DIS-1} scare quotes/\emph{``claims''}, \texttt{DIS-2} \emph{``insists repeatedly''}, \texttt{DIS-3} \emph{``supposedly''}). Our validator enforces that both arms contain the exact \texttt{objective\_fact} as a byte-level substring and that the characterization clause contains zero digits, guaranteeing identical quantitative clinical facts.
-
-\paragraph{Length- and Polarity-Matched Demographics ($X$) and Facilitators ($F$).}
-Across 36 licensed event$\times$demographic pairs, both reference and marked arms insert an explicit social history clause: \texttt{race} (\emph{``White''} vs.\ \emph{``Black''}, both 5 characters), \texttt{limited\_english} (\emph{``English; no interpreter needed''} vs.\ \emph{``Spanish; needs an interpreter''}), \texttt{housing\_instability} (\emph{``stably housed in a rented apartment''} vs.\ \emph{``homeless, staying at a city shelter''}), \texttt{incarceration\_history} (\emph{``no prior arrest or incarceration''} vs.\ \emph{``released from prison 5 years ago''}), and \texttt{gender} (pronoun/title swap on male charts). For organizational facilitators ($F$), the negative arm prepends an ED crowding and boarding backlog notice, whereas the positive arm prepends a clinical equity guardrail instructing staff to base decisions strictly on objective clinical indicators.
+\subsection{Orthogonal Factor Synthesis and Task Templates}
+In Stage 3 (Figure~\ref{fig:pipeline}), we synthesize controlled counterfactuals governed by a 35-check invariance validator: (i) \textbf{Baseline Cohort Cleanliness ($M$)}: for 27 separable events, base charts are drawn from a MIMIC-IV cohort with zero ICD codes for any of the 9 stigmatized conditions across all longitudinal admissions, and the marked arm inserts a standardized remitted/stable PMH entry and maintenance medication (the remaining 4 disease-specific events evaluate $P$, $X$, and $F$ on organic carrier charts); (ii) \textbf{Byte-Identical Objective Facts ($P$)}: across 11 licensed events, neutral and skeptical arms share an exact \texttt{objective\_fact} clause (e.g., \emph{``Patient states pain is 8/10 and that prior ketorolac provided no relief''}) and append either a neutral clause (\emph{``and describes the timeline consistently''}) or a verified distrust marker from \citet{harrigian2023characterization} and \citet{beach2021testimonial} (scare quotes/\emph{``claims''}, \emph{``insists repeatedly''}, \emph{``supposedly''}) containing zero numerical digits; and (iii) \textbf{Balanced Social Axes ($X$) and Facilitators ($F$)}: across 36 licensed event$\times$demographic pairs, reference and marked arms insert length-balanced social history clauses for race (\emph{``White''} vs.\ \emph{``Black''}), language (\emph{``English; no interpreter needed''} vs.\ \emph{``Spanish; needs an interpreter''}), housing (\emph{``stably housed in a rented apartment''} vs.\ \emph{``homeless, staying at a city shelter''}), incarceration (\emph{``no prior arrest or incarceration''} vs.\ \emph{``released from prison 5 years ago''}), and gender, while organizational facilitators prepend either an ED crowding/boarding notice ($F^-$) or a clinical equity reminder ($F^+$).
 
 \begin{table}[t]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3.5pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lllr@{}}
 \toprule
-\textbf{ID} & \textbf{Task Format} & \textbf{Primary Metric \& Scale} & \textbf{Items} \\
+\textbf{ID} & \textbf{Evaluation Format} & \textbf{Primary Metric \& Scale} & \textbf{Items} \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Primary Bedside Decision Templates (21,792 items)}} \\
-\texttt{T01} & Ternary MC decision & $P(\text{indicated})$ (Indicated / Undertreat / Biased) & 17,441 \\
-\texttt{T02} & 5-rung ordinal ladder & $P(\text{indicated})$ on objective clinical rungs & 4,309 \\
-\texttt{T08} & Categorical disposition & $P(\text{indicated})$ across 4 disposition pathways & 42 \\
+\multicolumn{4}{@{}l}{\textit{Family 1: Primary Bedside Decisions (21,792 items)}} \\
+\texttt{T01} & Ternary action choice & $P(\text{indicated})$ (Indicated / Undertreat / Biased) & 17,441 \\
+\texttt{T02} & 5-rung intensity ladder & $P(\text{indicated})$ on concrete clinical orders & 4,309 \\
+\texttt{T08} & Disposition pathway & $P(\text{indicated})$ across 4 care pathways & 42 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Extended Clinical Reasoning Templates (3,498 items)}} \\
-\texttt{T03} & 6-diagnosis rank order & $P(\text{target somatic diagnosis ranked 1st})$ & 1,396 \\
-\texttt{T06} & 5-choice attribution & $P(\text{character blame attribution})$ (0--100\%) & 882 \\
-\texttt{T10} & 3--4 turn cascade & Mean $P(\text{indicated})$ across fixed turns & 664 \\
-\texttt{T13} & Numeric probability & Estimated acute probability (0--100 scale) & 322 \\
-\texttt{T07} & Consult urgency ladder & $P(\text{top urgency rung})$ across 5 levels & 150 \\
-\texttt{T09} & Scarce resource pair & Marked (+1) vs.\ unmarked ($-1$) pick; \% equal & 84 \\
+\multicolumn{4}{@{}l}{\textit{Family 2: Extended Clinical Reasoning (3,498 items)}} \\
+\texttt{T03} & 6-diagnosis ranking & $P(\text{target somatic diagnosis ranked 1st})$ & 1,396 \\
+\texttt{T06} & Behavior attribution & $P(\text{character blame attribution})$ (0--100\%) & 882 \\
+\texttt{T10} & 3--4 turn cascade & Mean $P(\text{indicated})$ across sequential turns & 664 \\
+\texttt{T13} & Probability estimation & Estimated acute probability (0--100 scale) & 322 \\
+\texttt{T07} & Consult urgency & $P(\text{top urgency rung})$ across 5 levels & 150 \\
+\texttt{T09} & Scarce resource pair & Marked ($+1$) vs.\ unmarked ($-1$) pick; \% equal & 84 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Psychometric Clinician-Driver Elicitation (4,555 items)}} \\
-\texttt{T12} & 1--7 Likert attitude scales & AQ-12, MCRS, PASS, Nyblade Infection Fear & 4,555 \\
+\multicolumn{4}{@{}l}{\textit{Family 3: Psychometric Clinician-Driver Scales (4,555 items)}} \\
+\texttt{T12} & 1--7 Likert subscales & AQ-12, MCRS, PASS, Nyblade Infection Fear & 4,555 \\
 \bottomrule
-\end{tabular}
-\caption{The 10 evaluation templates in \textsc{Clinical StigmaQA}.}
+\end{tabular}%
+}
+\caption{The 10 task templates in \textsc{Clinical StigmaQA} across three clinical evaluation families.}
 \label{tab:templates}
 \end{table}
 
-\subsection{Ten Task Templates and Blocked Crossing Plan}
-We instantiate 10 task templates spanning action selection, diagnostic ranking, probability estimation, and explicit attitudes (Table~\ref{tab:templates}). Every option in \texttt{T01} and rung in \texttt{T02} describes a concrete clinical order (dose, route, test, or disposition) without meta-labels such as ``aggressive'' or ``conservative.'' To avoid a $3\times 10^5$-prompt full factorial, we use a \textbf{6-block partial-factorial crossing plan} (\texttt{crossing\_plan.json}, 777 physical cells / 885 logical contrasts per case set): Block 0 (\texttt{base} chart), Block 1 ($M$-only across all applicable templates), Block 2 ($M \times P$ on \texttt{T01/T03}), Block 3 ($M \times X$ on \texttt{T01/T02/T03}), Block 4 ($M \times F$ on \texttt{T01/T02/T03}), and Block 5 (isolated single-turn \texttt{T12} psychometric driver items across 13 events and the 6 conditions with primary HCW driver records in HSDF: \texttt{mental\_health}, \texttt{substance\_use}, \texttt{substance\_use\_general}, \texttt{hiv}, \texttt{scd}, and \texttt{tuberculosis}).
+We instantiate \textbf{10 task templates} grouped into three evaluation families (Table~\ref{tab:templates}): \textbf{Primary Bedside Decisions} (\texttt{T01}, \texttt{T02}, \texttt{T08}; 21,792 items), \textbf{Extended Clinical Reasoning} (\texttt{T03}, \texttt{T06}, \texttt{T07}, \texttt{T09}, \texttt{T10}, \texttt{T13}; 3,498 items), and \textbf{Psychometric Clinician-Driver Scales} (\texttt{T12}; 4,555 items across 4 validated attitude scales: AQ-12 [\citealp{corrigan2003attribution}], MCRS [\citealp{christison2002medical}], PASS [\citealp{ratanawongsa2009health}], and Nyblade Infection Fear [\citealp{nyblade2013brief}]). Counterfactuals are organized into a blocked partial-factorial design (Figure~\ref{fig:dataset_overview}c) comprising unmarked baseline charts, $M$-only contrasts, $M\times P$, $M\times X$, $M\times F$, and isolated single-turn \texttt{T12} sessions, totaling \textbf{29,845 verified items}.
 
-\section{Pre-Decision MIMIC-IV Grounding}
-\label{sec:grounding}
-
-\paragraph{Eliminating Retrospective Leakage and Redaction Artifacts.}
-Directly using MIMIC-IV discharge summaries introduces retrospective answer leakage from the \emph{Hospital Course} and leaves visible \texttt{[redacted]} tokens that act as warning cues. Our extractor (\texttt{vignette.py}) constructs \textbf{pre-decision vignettes} by parsing only admission-time sections (\emph{Chief Complaint}, \emph{History of Present Illness} truncated prior to ED course, \emph{Past Medical History}, \emph{Medications on Admission}, and \emph{Admission Exam}), dropping sentences with retrospective or redaction tokens, and injecting objective triage vitals and initial labs directly from structured \texttt{ed.triage}, \texttt{ed.vitalsign}, and \texttt{hosp.labevents}.
-
-\paragraph{Five-LLM Eligibility Panel Filtering.}
-To verify that every extracted vignette fits its event's clinical state without already containing the target decision, an independent panel of 5 open-weight LLMs (\texttt{Qwen3.5-27B}, \texttt{Gemma-4-31B}, \texttt{Mistral-Small-3.2-24B}, \texttt{gpt-oss-20b}, \texttt{GLM-4-32B}) audited all 1,416 candidate MIMIC-IV cases against plain-English inclusion/exclusion rules (\texttt{eligibility\_criteria.json}; Fleiss' $\kappa = 0.381$). Removing 386 cases with $\ge 3/5$ \texttt{DOES\_NOT\_FIT} votes leaves \textbf{1,030 verified cases} and \textbf{29,845 eligible items}.
-
-\paragraph{Separating Inattention from Bias (\texttt{r25} vs.\ \texttt{r27c}).}
-In passive evaluations (\texttt{r25}) where a PMH line is silently buried in a 200-word chart, models can appear unbiased simply by skipping over the line (e.g., \texttt{Qwen2.5-7B} passive $\Delta_M = -0.44$ pp). In our final protocol (\texttt{r27c}), every non-base prompt appends an explicit attention directive before the question: \emph{``Before you answer, you must take into account the following information about this patient: [inserted factor lines].''} Under our medical orthogonality guarantee, an unbiased model that explicitly considers a remitted diagnosis must still take the guideline-indicated action ($\Delta = 0$). Instead, when forced to attend in \texttt{r27c}, \texttt{Qwen2.5-7B} drops by $-4.46$ pp (Right$\to$Wrong $6.42\%$). Because all $P$, $X$, $F$, and ``$M$ in context'' contrasts carry this directive on \emph{both} arms, the directive is held constant across contextual comparisons.
-
-\section{Evaluation Protocol \& Identification}
+\section{Evaluation Protocol and Identification}
 \label{sec:protocol}
-
-\subsection{Why Unfiltered $\Delta P(\text{indicated})$ and Right$\to$Wrong Replace Headroom Filtering}
-Counterfactual QA audits often filter evaluation pairs to the ``headroom'' subset where the model answered the control prompt correctly ($\text{Acc}_{\text{base}} = 1$). We prove that this post-hoc conditioning is invalid for paired binary inference. Let $(Y_{i0}, Y_{i1}) \in \{0,1\}^2$ denote indicated-action indicators on control and treated prompts for case $i$, with $2\times 2$ counts $a = \#(1,1)$, $b = \#(1,0)$ (Right$\to$Wrong), $c = \#(0,1)$ (Wrong$\to$Right), and $d = \#(0,0)$. Conditioning on $Y_{i0}=1$ restricts the sample to $N' = a+b$ and forces $c \equiv 0$ and $d \equiv 0$ by construction, yielding:
-\begin{equation}
-\Delta_{\text{filtered}} = \frac{a}{a+b} - 1 = -\frac{b}{a+b} \le 0, \quad p_{\text{McNemar}} = 2^{-b}.
-\end{equation}
-Under a random null model $Y_{i0}, Y_{i1} \stackrel{\text{iid}}{\sim} \text{Bernoulli}(0.90)$ across $N=50$ cases, $\mathbb{E}[b] = 4.5$, producing a spurious $-10.0$ pp bias estimate and $p < 0.05$ with probability $0.68$ (Type-I error $\to 1$).
-
-To avoid this degeneracy, all primary treatment effects $\Delta = P(\text{indicated} \mid \text{treated}) - P(\text{indicated} \mid \text{control})$ and 95\% confidence intervals (CIs) are computed on the \textbf{unfiltered paired sample} via a \textbf{subject-clustered bootstrap} (2,000 draws resampling MIMIC-IV \texttt{subject\_id} clusters). To capture directional loss of indicated care without distortion, we report the conditional \textbf{Right$\to$Wrong flip rate} $b / (a+b)$ alongside every unfiltered $\Delta$. Option order randomization is keyed deterministically by \texttt{(case\_id, contrast\_group)} so positional choice bias \citep{zheng2024large} cancels \emph{exactly} within every counterfactual pair.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.73\textwidth]{figures/fig1_factor_condition.pdf}
-\caption{\textbf{Pooled factor and condition effects across 28 models on decision templates (\texttt{T01/T02/T08}).} \textbf{(a)} Unfiltered $\Delta P(\text{indicated})$ (pp, 95\% CIs) and conditional Right$\to$Wrong (R$\to$W) flip rates across main experimental factors. \textbf{(b)} Disease-marking shift ($\Delta_M$, bars with 95\% CIs) across the 9 health conditions (359,408 pairs), overlaid with positive policy guardrail ($F^+$, green triangles) and negative ED crowding ($F^-$, orange inverted triangles) shifts on marked charts ($*$ = 95\% CI excludes 0).}
+\includegraphics[width=\textwidth]{figures/fig1_factor_condition.pdf}
+\caption{\textbf{Pooled factor and condition effects across 28 fully cross-tabulated models on primary bedside decision templates (\texttt{T01/T02/T08}).} \textbf{(a)} Unfiltered net shift $\Delta P(\text{indicated})$ (pp, 95\% patient-clustered bootstrap CIs) and conditional Right$\to$Wrong (R$\to$W) flip rates across main experimental factors. \textbf{(b)} Disease-marking shift ($\Delta_M$, bars with 95\% CIs) across the 9 stigmatized health conditions (359,408 pairs), overlaid with positive equity guardrail ($F^+$, green triangles) and negative ED crowding ($F^-$, orange inverted triangles) shifts on marked charts ($*$ = 95\% CI excludes 0).}
 \label{fig:factor_condition}
 \end{figure*}
 
-\subsection{Model Panel and LLM-Judge Verification}
-We evaluate \textbf{34 open-weight instruction-tuned LLMs}: 21 general-purpose models (\texttt{Qwen2/2.5/3/3.5}, \texttt{Llama-3/3.1/3.2}, \texttt{Gemma-3/4}, \texttt{Mistral-Small-3.2-24B}, \texttt{Phi-3.5-mini}, \texttt{Phi-4-14B}, \texttt{GLM-4-32B}, \texttt{OLMo-3-7B}, \texttt{Granite-3.3-8B}, \texttt{gpt-oss-20b/120b}) and 13 medical LLMs (\texttt{Meditron3-Qwen2.5-7B}, \texttt{Aloe-Qwen2.5-7B}, \texttt{Aloe-Llama-3.1-8B}, \texttt{Med42-8B}, \texttt{Meerkat-8B}, \texttt{UltraMedical-8B}, \texttt{II-Medical-8B}, \texttt{MediPhi-3.5}, \texttt{MedGemma-1.5-4B}, \texttt{MedGemma-27B}, \texttt{Apollo2-7B}, \texttt{Lingshu-7B}, \texttt{Baichuan-M2-32B}), forming \textbf{11 exact medical-vs.-base pairs} (\texttt{temperature=0.0}, \texttt{max\_tokens=512}). Auditing our rule-based parser against an independent \texttt{gpt-4.1-mini} judge across 610,176 decision responses (28 models $\times$ 21,792 items) yields \textbf{99.45\% agreement} ($\kappa = 0.973$; 99.99\% on 577,410 first-line letter answers; Appendix~\ref{app:judge}).
+\paragraph{Attention-Controlled Prompting vs.\ Passive Insertion.}
+When a single PMH line is passively embedded inside a 200-word admission chart, a model can produce identical outputs either because it recognized that the remitted diagnosis is medically irrelevant (clinical fairness) or because it failed to attend to the line during long-context reading (inattention). In our pilot comparison on \texttt{Qwen2.5-7B}, passive in-chart insertion yielded a net shift of only $\Delta_M = -0.44$ pp across 20,704 pairs. To isolate clinical decision bias from reading inattention, our primary evaluation protocol appends a standardized attention directive before the prompt question on all non-baseline cells: \emph{``Before you answer, you must take into account the following information about this patient: [inserted factor clauses].''} Because every event is anchored in a clinical guideline where the gold action is invariant to the inserted factor, an unbiased decision-maker that explicitly considers the cue still satisfies $\Delta P(\text{indicated}) = 0$. When required to attend to the cue, \texttt{Qwen2.5-7B}'s indicated-care rate drops by $-4.46$ pp (Right$\to$Wrong flip rate $6.42\%$). Moreover, in all $P$, $X$, $F$, and contextual $M$ contrasts ($M$ evaluated inside $P$, $X$, or $F^-$ frames), both the control and treated prompts carry this directive, holding prompt framing constant.
+
+\paragraph{Paired Counterfactual Estimation.}
+For each contrast, let $(Y_{i0}, Y_{i1}) \in \{0,1\}^2$ denote whether the model selects the guideline-indicated action on the control and treated prompts of pair $i$, with $2\times 2$ counts $a=\#(1,1)$, $b=\#(1,0)$ (Right$\to$Wrong), $c=\#(0,1)$ (Wrong$\to$Right), and $d=\#(0,0)$. We report two metrics: (1) \textbf{Unfiltered Net Stigma Shift} $\Delta P(\text{indicated}) = \frac{b-c}{a+b+c+d}$ (pp), with 95\% confidence intervals (CIs) estimated via a \textbf{patient-clustered bootstrap} (2,000 resamples over MIMIC-IV patient clusters; computing $\Delta$ on the unfiltered sample avoids the McNemar degeneracy $c \equiv 0, p = 2^{-b}$ and negative regression-to-the-mean bias $-\frac{b}{a+b} < 0$ induced by post-hoc filtering to control-correct pairs $Y_{i0}=1$); and (2) \textbf{Conditional Indicated-Care Loss Rate (Right$\to$Wrong \%)} $= \frac{b}{a+b}$, quantifying the share of accurate baseline decisions overturned by the stigma cue. Option ordering is randomized deterministically by \texttt{(case\_id, contrast\_group)} so option positions are identical within every pair \citep{zheng2024large}.
+
+\paragraph{Model Panel and Independent LLM-Judge Audit.}
+We evaluate \textbf{34 open-weight instruction-tuned LLMs} (\texttt{temperature=0.0}, \texttt{max\_tokens=512}) comprising 21 general-purpose models across the Qwen (2/2.5/3/3.5), Llama (3/3.1/3.2), Gemma (3/4), Mistral-Small-3.2, Phi (3.5/4), GLM-4, OLMo-3, Granite-3.3, and gpt-oss (20B/120B) families, alongside 13 domain-specific medical LLMs (Meditron3-7B, Aloe-Qwen2.5-7B, Aloe-Llama-3.1-8B, Med42-8B, Meerkat-8B, UltraMedical-8B, II-Medical-8B, MediPhi-3.5, MedGemma-4B/27B, Apollo2-7B, Lingshu-7B, and Baichuan-M2-32B; full list in Appendix Table~\ref{tab:app_all_models}). Together, these models provide \textbf{11 exact medical-vs.-base backbone pairs} (Figure~\ref{fig:med_vs_base}). Across 28 fully cross-tabulated models $\times$ 21,792 primary decision items (\textbf{610,176 responses}), our deterministic rule-based answer parser achieves \textbf{99.45\% exact agreement} (\textbf{Cohen's $\kappa = 0.973$}; 99.99\% on the 577,410 first-line letter answers) with an independent \texttt{gpt-4.1-mini} judge (Appendix~\ref{app:judge}).
 
 \section{Empirical Results}
 \label{sec:results}
 
-\subsection{Disease Marking ($M$) Hierarchy and Context Robustness}
-Across all 28 cross-tabulated models (359,408 paired decisions excluding $F^+$), adding a medically orthogonal stigmatized diagnosis reduces guideline-indicated care from $88.94\%$ to $88.03\%$ ($\Delta_M = -0.92\text{ pp } [-1.11, -0.73]^*$), with a conditional Right$\to$Wrong flip rate of $2.70\%$ ($8,631 / 319,663$ control-correct decisions overturned; Figure~\ref{fig:factor_condition}a). This penalty persists inside pre-existing contextual frames ($P$, $X$, or $F^-$ present on both arms, so both prompts carry the attention sentence): $\Delta_{M\text{ in context}} = -0.79\text{ pp } [-0.99, -0.59]^*$ across 253,624 pairs (Right$\to$Wrong $2.31\%$), confirming that the care loss is driven by the stigmatized diagnosis rather than prompt framing.
-
-Disaggregating by condition reveals a clear \textbf{stigma hierarchy} (Figure~\ref{fig:factor_condition}b, Table~\ref{tab:condition_summary}). Remitted schizophrenia (\texttt{mental\_health}) causes the largest drop ($93.12\% \to 90.65\%$, $\Delta = -2.47\text{ pp } [-2.86, -2.13]^*$, R$\to$W $3.29\%$; 14/28 models negative, 0 positive), followed by sickle cell disease (\texttt{scd}, $\Delta = -2.29\text{ pp } [-3.00, -1.64]^*$, R$\to$W $3.14\%$; 10/28 negative), opioid use disorder in remission (\texttt{substance\_use}, $\Delta = -1.74\text{ pp } [-2.24, -1.26]^*$, R$\to$W $3.23\%$; 20/28 negative), and cured tuberculosis ($\Delta = -1.28\text{ pp } [-1.88, -0.67]^*$, R$\to$W $3.33\%$). Alcohol use disorder ($\Delta = -0.81\text{ pp } [-1.06, -0.58]^*$) and Class III obesity ($\Delta = -0.76\text{ pp } [-1.22, -0.32]^*$) produce moderate drops, whereas cured hepatitis C ($-0.19\text{ pp}$), remitted breast cancer ($-0.18\text{ pp}$), and undetectable HIV ($+0.01\text{ pp}$) show near-zero net shifts but $1.97\%$--$2.76\%$ Right$\to$Wrong churn between excess precaution (\texttt{U3}) and compensatory testing.
-
-\begin{table}[t]
-\centering
-\scriptsize
-\setlength{\tabcolsep}{2.9pt}
-\begin{tabular}{@{}lrrrrrr@{}}
-\toprule
-\textbf{Condition ($M$)} & \textbf{Pairs} & \textbf{$\Delta_M$ [95\% CI]} & \textbf{R$\to$W} & \textbf{$-$ / $+$} & \textbf{$\Delta_{F^+}$} & \textbf{$\Delta_{F^-}$} \\
-\midrule
-Mental health & 22,400 & $-2.47$ [$-2.86, -2.13$]* & 3.29\% & 14 / 0 & $-1.35$* & $-0.63\phantom{*}$ \\
-Sickle cell (SCD) & 20,692 & $-2.29$ [$-3.00, -1.64$]* & 3.14\% & 10 / 0 & $-0.71\phantom{*}$ & $-1.36$* \\
-Opioid use (OUD) & 69,440 & $-1.74$ [$-2.24, -1.26$]* & 3.23\% & 20 / 1 & $+3.16$* & $+0.05\phantom{*}$ \\
-Tuberculosis & 12,068 & $-1.28$ [$-1.88, -0.67$]* & 3.33\% & 7 / 2 & $+2.60$* & $-1.37$* \\
-Alcohol use (AUD) & 84,280 & $-0.81$ [$-1.06, -0.58$]* & 2.38\% & 15 / 3 & $+2.59$* & $-0.48$* \\
-Obesity (Class III) & 7,196 & $-0.76$ [$-1.22, -0.32$]* & 1.83\% & 4 / 1 & $+1.34$* & $-5.36$* \\
-Hepatitis C (SVR) & 53,228 & $-0.19$ [$-0.48, +0.07$]\phantom{*} & 1.97\% & 5 / 7 & $-0.85$* & $-0.18\phantom{*}$ \\
-Breast cancer & 36,568 & $-0.18$ [$-0.49, +0.15$]\phantom{*} & 2.76\% & 5 / 6 & $+2.71$* & $-0.52\phantom{*}$ \\
-HIV (undetectable) & 53,536 & $+0.01$ [$-0.27, +0.28$]\phantom{*} & 2.75\% & 6 / 5 & $+0.19\phantom{*}$ & $-1.84$* \\
-\midrule
-\textbf{All Pooled} & \textbf{359,408} & $\mathbf{-0.92}$ [$\mathbf{-1.11, -0.73}$]* & \textbf{2.70\%} & \textbf{16 / 3} & $\mathbf{+1.36}$* & $\mathbf{-0.81}$* \\
-\bottomrule
-\end{tabular}
-\caption{Pooled disease-marking effects ($\Delta_M$, pp), Right$\to$Wrong rates, count of models (out of 28) with significantly negative ($-$) or positive ($+$) CIs, and condition-specific facilitator shifts ($\Delta_{F^+}$, $\Delta_{F^-}$ inside marked charts).}
-\label{tab:condition_summary}
-\end{table}
-
-\subsection{Prior-Practice Language ($P$) and Intersectional Demographics ($X$)}
+\subsection{Disease Marking ($M$) Hierarchy and Contextual Invariance}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.71\textwidth]{figures/fig2_models_med_vs_base.pdf}
-\caption{\textbf{Comparison of 11 domain-specific medical LLMs against their exact general base backbones on decision templates (12,836 pairs/model; unmarked accuracy in parentheses).} \textbf{(a)} Net disease-marking shift $\Delta_{\text{all}}$ (pp, 95\% CIs). \textbf{(b)} Conditional Right$\to$Wrong flip rate (\%) on control-correct pairs ($\Delta\text{R}\to\text{W} = \text{Medical} - \text{Base}$; medical tuning increases flip rates in 7/11 pairs).}
+\includegraphics[width=\textwidth]{figures/fig2_models_med_vs_base.pdf}
+\caption{\textbf{Comparison of 11 domain-specific medical LLMs against their exact general-purpose base backbones on primary bedside decision templates (12,836 pairs per model; unmarked control accuracy shown in parentheses).} \textbf{(a)} Net disease-marking shift $\Delta_{\text{all}}$ (pp) with 95\% patient-clustered bootstrap CIs. \textbf{(b)} Conditional Indicated-Care Loss Rate (Right$\to$Wrong \%) on control-correct pairs ($\Delta\text{R}\to\text{W} = \text{Medical} - \text{Base}$). Domain medical fine-tuning increases Right$\to$Wrong flip rates in 7 of 11 pairs.}
 \label{fig:med_vs_base}
 \end{figure*}
-Holding the objective clinical statement byte-identical, replacing neutral clinician phrasing with skeptical distrust markers ($P$: scare quotes, \emph{``insists repeatedly''}, \emph{``supposedly''}) significantly reduces guideline-indicated care across the 28-model pool ($90.31\% \to 90.00\%$, $\Delta_P = -0.32\text{ pp } [-0.48, -0.15]^*$, 28,112 pairs; Figure~\ref{fig:factor_condition}a). Skeptical wording hurts even when no stigmatized diagnosis is present ($\Delta_{P,\text{ no }M} = -0.51\text{ pp}^*$, R$\to$W $1.21\%$), showing that linguistic skepticism in handoff notes transmits bias independently. Medical models trained on clinical text are especially vulnerable: \texttt{Meditron3-Qwen2.5-7B} drops by $-4.18\text{ pp}^*$ overall and $-7.35\text{ pp}^*$ (R$\to$W $10.92\%$) on unmarked charts, while \texttt{Apollo2-7B} ($-1.69\text{ pp}^*$) and \texttt{II-Medical-8B} ($-1.59\text{ pp}^*$) also degrade significantly.
 
-Across 110,180 intersectional demographic comparisons ($X$), shifting from the reference to the marked demographic level reduces indicated care by $\Delta_X = -0.92\text{ pp } [-1.12, -0.74]^*$ (R$\to$W $1.80\%$; Table~\ref{tab:p_x_breakdown}). Limited English proficiency triggers large drops in \texttt{MediPhi-3.5} ($-10.39\text{ pp}^*$), \texttt{Granite-3.3-8B} ($-8.90\text{ pp}^*$), and \texttt{Qwen2.5-3B} ($-5.48\text{ pp}^*$); prior incarceration causes an $-11.76\text{ pp}^*$ collapse in \texttt{Qwen3-8B} and $-4.71\text{ pp}^*$ in \texttt{Med42-8B}; housing instability reduces indicated care by $-8.83\text{ pp}^*$ in \texttt{Granite-3.3-8B}, $-5.13\text{ pp}^*$ in \texttt{Llama-3.2-3B}, and $-4.77\text{ pp}^*$ in \texttt{UltraMedical-8B}; and Black vs.\ White race swaps reduce indicated care in 14 of 28 models, led by \texttt{Mistral-Small-3.2-24B} ($-3.92\text{ pp}^*$ overall; $-6.13\text{ pp}^*$ without $M$), \texttt{Qwen3-8B} ($-3.70\text{ pp}^*$ overall; $-7.43\text{ pp}^*$ without $M$), and \texttt{Qwen2.5-7B} ($-2.61\text{ pp}^*$).
+Across the 28 cross-tabulated models (359,408 paired decision comparisons excluding $F^+$), introducing a medically orthogonal stigmatized diagnosis reduces guideline-indicated care from $88.94\%$ to $88.03\%$ ($\Delta_M = -0.92\text{ pp } [-1.11, -0.73]^*$), overturning $2.70\%$ of all accurate baseline decisions ($8,631 / 319,663$ Right$\to$Wrong flips; Figure~\ref{fig:factor_condition}a). When $M$ is evaluated strictly inside existing contextual frames ($P$, $X$, or $F^-$ present on both control and treated prompts), indicated care drops by $\Delta_{M\text{ in context}} = -0.79\text{ pp } [-0.99, -0.59]^*$ across 253,624 pairs (Right$\to$Wrong $2.31\%$).
+
+Stratifying by health condition reveals a pronounced \textbf{condition stigma hierarchy} (Figure~\ref{fig:factor_condition}b; tabular details in Appendix Table~\ref{tab:condition_summary}):
+\begin{itemize}[leftmargin=*,nosep,topsep=1pt]
+    \item \textbf{Severe Indicated-Care Loss:} Remitted schizophrenia (\texttt{mental\_health}) induces the largest reduction in indicated care ($93.12\% \to 90.65\%$, $\Delta = -2.47\text{ pp } [-2.86, -2.13]^*$, R$\to$W $3.29\%$), degrading 14 of 28 models and improving none. Sickle cell disease (\texttt{scd}) follows at $\Delta = -2.29\text{ pp } [-3.00, -1.64]^*$ (R$\to$W $3.14\%$; 10/28 negative, 0 positive), opioid use disorder in remission (\texttt{substance\_use}) at $\Delta = -1.74\text{ pp } [-2.24, -1.26]^*$ (R$\to$W $3.23\%$; 20/28 negative), and cured tuberculosis at $\Delta = -1.28\text{ pp } [-1.88, -0.67]^*$ (R$\to$W $3.33\%$).
+    \item \textbf{Moderate Care Loss:} Remitted alcohol use disorder ($\Delta = -0.81\text{ pp } [-1.06, -0.58]^*$; 15/28 negative) and Class III obesity ($\Delta = -0.76\text{ pp } [-1.22, -0.32]^*$) cause moderate, statistically significant reductions.
+    \item \textbf{Bidirectional Churn:} Cured hepatitis C ($\Delta = -0.19\text{ pp}$), remitted breast cancer ($-0.18\text{ pp}$), and undetectable HIV ($+0.01\text{ pp}$) exhibit near-zero net shifts but experience $1.97\%$--$2.76\%$ Right$\to$Wrong flip rates as models split between unnecessary infection precautions (\texttt{U3}) and compensatory over-testing.
+\end{itemize}
 
 \begin{table}[t]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3.0pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lrrrl@{}}
 \toprule
-\textbf{Sub-Factor Contrast} & \textbf{Pairs/Mod} & \textbf{No $M$ $\Delta$} & \textbf{With $M$ $\Delta$} & \textbf{Most Vulnerable Models ($\Delta$ pp)} \\
+\textbf{Factor / Axis Contrast} & \textbf{Pairs/Mod} & \textbf{No $M$ $\Delta$} & \textbf{With $M$ $\Delta$} & \textbf{Most Affected Models ($\Delta$ pp)} \\
 \midrule
-\textbf{$P$: Stigmatizing vs.\ Neutral} & 1,004 & $-0.51$* & $-0.23$* & Meditron3 ($-4.18$*), Apollo2 ($-1.69$*) \\
+\textbf{$P$: Skeptical vs.\ Neutral} & 1,004 & $-0.51$* & $-0.23$* & Meditron3 ($-4.18$*), Apollo2 ($-1.69$*) \\
 \midrule
 \textbf{$X_1$: Race} (Black vs.\ White) & 1,836 & $-1.10$* & $-0.68$* & Mistral-3.2 ($-3.92$*), Qwen3-8B ($-3.70$*) \\
 \textbf{$X_2$: Housing} (Homeless) & 838 & $-1.31$* & $-1.04$* & Granite-3.3 ($-8.83$*), Llama3.2 ($-5.13$*) \\
@@ -242,17 +218,24 @@ Across 110,180 intersectional demographic comparisons ($X$), shifting from the r
 \textbf{$X_4$: Incarceration} (Prior prison) & 208 & $-1.20$* & $-0.91$* & Qwen3-8B ($-11.76$*), Med42 ($-4.71$*) \\
 \textbf{$X_5$: Gender} (Female swap) & 215 & $+0.28\phantom{*}$ & $+1.12$* & OLMo-3 (\texttt{T03}: $-15.69$*), Mistral (\texttt{T03}: $-11.54$*) \\
 \bottomrule
-\end{tabular}
-\caption{Breakdown of Prior-Practice Language ($P$) and Intersectional Demographics ($X_1$--$X_5$) across 28 models.}
+\end{tabular}%
+}
+\caption{Decision shifts ($\Delta$ pp) for Prior-Clinician Wording ($P$) and Intersectional Demographics ($X_1$--$X_5$) across 28 models.}
 \label{tab:p_x_breakdown}
 \end{table}
 
-\subsection{Organizational Facilitators ($F$): Crowding vs.\ Policy Guardrails}
+\subsection{Prior-Clinician Wording ($P$) and Intersectional Demographics ($X$)}
+
+Holding the objective clinical fact byte-identical, replacing neutral handoff phrasing with skeptical distrust markers ($P$: scare quotes, \emph{``insists repeatedly''}, \emph{``supposedly''}) reduces guideline-indicated care across the 28-model pool ($90.31\% \to 90.00\%$, $\Delta_P = -0.32\text{ pp } [-0.48, -0.15]^*$, 28,112 pairs; Figure~\ref{fig:factor_condition}a). Skeptical phrasing degrades care even on unmarked charts without any stigmatized diagnosis ($\Delta_{P,\text{ no }M} = -0.51\text{ pp}^*$, R$\to$W $1.21\%$; Table~\ref{tab:p_x_breakdown}), confirming that epistemic skepticism in handoff notes transmits bias independently. Medical models trained heavily on clinical corpora are particularly susceptible: \texttt{Meditron3-Qwen2.5-7B} drops by $-4.18\text{ pp}^*$ overall and $-7.35\text{ pp}^*$ (R$\to$W $10.92\%$) on unmarked charts, followed by \texttt{Apollo2-7B} ($-1.69\text{ pp}^*$) and \texttt{II-Medical-8B} ($-1.59\text{ pp}^*$).
+
+Across 110,180 intersectional demographic comparisons ($X$), shifting from the reference to the marked social level reduces indicated care by $\Delta_X = -0.92\text{ pp } [-1.12, -0.74]^*$ (R$\to$W $1.80\%$; Table~\ref{tab:p_x_breakdown}). Limited English proficiency causes sharp drops in \texttt{MediPhi-3.5} ($-10.39\text{ pp}^*$), \texttt{Granite-3.3-8B} ($-8.90\text{ pp}^*$), and \texttt{Qwen2.5-3B} ($-5.48\text{ pp}^*$); prior incarceration triggers an $-11.76\text{ pp}^*$ drop in \texttt{Qwen3-8B} and $-4.71\text{ pp}^*$ in \texttt{Med42-8B}; housing instability reduces indicated care by $-8.83\text{ pp}^*$ in \texttt{Granite-3.3-8B}, $-5.13\text{ pp}^*$ in \texttt{Llama-3.2-3B}, and $-4.77\text{ pp}^*$ in \texttt{UltraMedical-8B}; and Black vs.\ White race swaps reduce indicated care in 14 of 28 models, led by \texttt{Mistral-Small-3.2-24B} ($-3.92\text{ pp}^*$ overall; $-6.13\text{ pp}^*$ without $M$), \texttt{Qwen3-8B} ($-3.70\text{ pp}^*$ overall; $-7.43\text{ pp}^*$ without $M$), and \texttt{Qwen2.5-7B} ($-2.61\text{ pp}^*$).
+
+\subsection{Organizational Facilitators ($F$): ED Crowding vs.\ Equity Guardrails}
 
 \begin{table*}[t]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3.6pt}
+\setlength{\tabcolsep}{3.8pt}
 \begin{tabular}{@{}llrrrrrrrr@{}}
 \toprule
 & & \multicolumn{4}{c}{\textbf{Extended Clinical Reasoning Shifts ($\Delta_M$)}} & \multicolumn{4}{c}{\textbf{Psychometric Driver Shifts (\texttt{T12}, 1--7 Likert $\Delta_M$)}} \\
@@ -273,54 +256,80 @@ Across 110,180 intersectional demographic comparisons ($X$), shifting from the r
 \caption{Representative model shifts ($\Delta_M$) across extended clinical reasoning templates (\texttt{T03} top-1 somatic diagnosis rank pp, \texttt{T13} acute disease probability 0--100 points, \texttt{T10} multi-turn cascade pp, \texttt{T06} character blame attribution pp) and isolated psychometric driver subscales (\texttt{T12}, 1--7 Likert scale where higher = more stigma; full 28-model table in Appendix~\ref{app:drivers}).}
 \label{tab:extended_drivers}
 \end{table*}
+Evaluating organizational facilitators across 93,688 paired contrasts per arm confirms opposing structural effects (Figure~\ref{fig:factor_condition}a). Negative operational strain ($F^-$: ED crowding and boarding backlog) reduces guideline-indicated care by $\Delta_{F^-} = -0.91\text{ pp } [-1.17, -0.64]^*$ (R$\to$W $3.33\%$), with pronounced losses in \texttt{Qwen2.5-3B} ($-5.17\text{ pp}^*$), \texttt{Qwen2.5-7B} ($-4.99\text{ pp}^*$), \texttt{Lingshu-7B} ($-4.54\text{ pp}^*$), and \texttt{Meditron3-7B} ($-3.14\text{ pp}^*$). Moreover, ED crowding compounds disease stigma (Figure~\ref{fig:factor_condition}b): under $F^-$, indicated care for Class III obesity drops by $-5.36\text{ pp}^*$ and for HIV by $-1.84\text{ pp}^*$, paralleling clinical observations that time pressure amplifies reliance on stereotyping heuristics \citep{shefer2014diagnostic}.
 
-Testing HSDF's organizational facilitator hypothesis across 93,688 paired prompts per arm reveals opposing shifts (Figure~\ref{fig:factor_condition}a). Injecting negative operational pressure ($F^-$: ED crowding/boarding) reduces indicated care by $\Delta_{F^-} = -0.91\text{ pp } [-1.17, -0.64]^*$ (R$\to$W $3.33\%$), with large drops in \texttt{Qwen2.5-3B} ($-5.17\text{ pp}^*$), \texttt{Qwen2.5-7B} ($-4.99\text{ pp}^*$), \texttt{Lingshu-7B} ($-4.54\text{ pp}^*$), and \texttt{Meditron3-7B} ($-3.14\text{ pp}^*$). Under $F^-$, indicated care for Class III obesity drops by $-5.36\text{ pp}^*$ and for HIV by $-1.84\text{ pp}^*$ (Table~\ref{tab:condition_summary}), mirroring human studies showing that cognitive load amplifies reliance on stigmatizing heuristics \citep{shefer2014diagnostic}. Conversely, a positive institutional facilitator ($F^+$: clinical equity guardrail) increases guideline adherence by $\Delta_{F^+} = +1.27\text{ pp } [+0.83, +1.69]^*$, improving 18 of 28 models (up to $+4.42\text{ pp}^*$ in \texttt{Aloe-Qwen2.5-7B} and $+4.24\text{ pp}^*$ in \texttt{Aloe-Llama-3.1-8B}). Yet $F^+$ is not a cure-all: while recovering care on OUD ($+3.16\text{ pp}^*$), breast cancer ($+2.71\text{ pp}^*$), tuberculosis ($+2.60\text{ pp}^*$), and AUD ($+2.59\text{ pp}^*$), it backfires on mental health ($-1.35\text{ pp}^*$) and hepatitis C ($-0.85\text{ pp}^*$), where models over-index on the label.
+Conversely, a positive organizational facilitator ($F^+$: departmental clinical equity guardrail) improves guideline adherence by $\Delta_{F^+} = +1.27\text{ pp } [+0.83, +1.69]^*$, increasing indicated care in 18 of 28 models (up to $+4.42\text{ pp}^*$ in \texttt{Aloe-Qwen2.5-7B} and $+4.24\text{ pp}^*$ in \texttt{Aloe-Llama-3.1-8B}). While $F^+$ substantially recovers care for OUD ($+3.16\text{ pp}^*$), breast cancer ($+2.71\text{ pp}^*$), tuberculosis ($+2.60\text{ pp}^*$), and AUD ($+2.59\text{ pp}^*$), it induces negative over-correction on schizophrenia ($-1.35\text{ pp}^*$) and hepatitis C ($-0.85\text{ pp}^*$).
 
 \subsection{Does Medical Fine-Tuning Mitigate or Amplify Stigma?}
-Comparing all \textbf{11 matched medical-vs.-base backbone pairs} across our 34-model panel (Figure~\ref{fig:med_vs_base}; tabular summary in Appendix Table~\ref{tab:med_vs_base}) reveals three patterns. First, \textbf{major medical tune families amplify stigma}: 4 medical models exhibit worse net stigma bias ($\Delta_{\text{all}}$) than their exact general base models, and \textbf{7 of 11 exhibit higher conditional Right$\to$Wrong flip rates} (Figure~\ref{fig:med_vs_base}b). \texttt{Meditron3-Qwen2.5-7B} degrades net stigma sensitivity by $-1.70$ pp relative to \texttt{Qwen2.5-7B} ($\Delta_{\text{all}} = -6.16\text{ pp}^*$ vs.\ $-4.46\text{ pp}^*$) and nearly doubles the Right$\to$Wrong rate ($11.94\%$ vs.\ $6.42\%$; $15.36\%$ on $M$-alone). Similarly, \texttt{MediPhi-3.5} introduces a $-1.68\text{ pp}^*$ bias ($\Delta_{M\text{-alone}} = -2.49\text{ pp}^*$, R$\to$W $5.00\%$) where its base \texttt{Phi-3.5-mini} had $+0.63$ pp (R$\to$W $2.72\%$; net degradation $-2.31$ pp), while \texttt{Med42-8B} ($\Delta_{\text{all}} = -1.66\text{ pp}^*$, $\Delta_{M\text{-alone}} = -4.61\text{ pp}^*$) and \texttt{Meerkat-8B} ($M$-alone R$\to$W $10.14\%$) introduce substantial care loss onto an invariant \texttt{Llama-3-8B} base ($\Delta_{\text{all}} = -0.12$ pp). Second, \textbf{baseline guideline competence often erodes}: in 6 of 11 pairs (\texttt{Meditron3-7B}, \texttt{Med42-8B}, \texttt{MedGemma-1.5-4B}, \texttt{Aloe-Qwen2.5-7B}, \texttt{Apollo2-7B}, \texttt{UltraMedical-8B}), medical fine-tuning \emph{lowers} unmarked accuracy by $4.3$ to $18.0$ pp; \texttt{UltraMedical-8B} shows $\Delta_{\text{all}} = +1.57\text{ pp}^*$ only because its unmarked accuracy drops from $94.16\%$ to $76.21\%$ while its Right$\to$Wrong flip rate doubles ($3.02\%$ vs.\ $1.54\%$). Third, \textbf{genuine attenuation requires alignment-focused tuning}: only \texttt{Aloe-Qwen2.5-7B} ($\Delta_{\text{all}} = -0.52$ pp vs.\ base $-4.46\text{ pp}^*$), \texttt{Aloe-Llama-3.1-8B} ($-0.33$ pp vs.\ $-0.51\text{ pp}^*$), and \texttt{MedGemma-27B} ($-0.72\text{ pp}^*$ vs.\ $-1.02\text{ pp}^*$, unmarked accuracy $98.77\%$) preserve competence while reducing Right$\to$Wrong flips.
+Comparing all \textbf{11 matched medical-vs.-base backbone pairs} across our 34-model panel (Figure~\ref{fig:med_vs_base}; full tabular comparison in Appendix Table~\ref{tab:med_vs_base}) reveals three findings. First, \textbf{major medical fine-tuning pipelines amplify clinical stigma}: four medical models exhibit worse net stigma shifts ($\Delta_{\text{all}}$) than their exact general base models, and \textbf{7 of 11 exhibit higher conditional Right$\to$Wrong flip rates} (Figure~\ref{fig:med_vs_base}b). \texttt{Meditron3-Qwen2.5-7B} worsens net stigma sensitivity by $-1.70$ pp relative to \texttt{Qwen2.5-7B} ($\Delta_{\text{all}} = -6.16\text{ pp}^*$ vs.\ $-4.46\text{ pp}^*$) and nearly doubles the Right$\to$Wrong rate ($11.94\%$ vs.\ $6.42\%$; $15.36\%$ on $M$-alone). Similarly, \texttt{MediPhi-3.5} introduces a $-1.68\text{ pp}^*$ penalty ($\Delta_{M\text{-alone}} = -2.49\text{ pp}^*$, R$\to$W $5.00\%$) onto a \texttt{Phi-3.5-mini} base with $+0.63$ pp (R$\to$W $2.72\%$; net degradation $-2.31$ pp), while \texttt{Med42-8B} ($\Delta_{\text{all}} = -1.66\text{ pp}^*$, $\Delta_{M\text{-alone}} = -4.61\text{ pp}^*$) and \texttt{Meerkat-8B} ($M$-alone R$\to$W $10.14\%$) induce substantial care loss on an invariant \texttt{Llama-3-8B} base ($\Delta_{\text{all}} = -0.12$ pp). Second, \textbf{medical fine-tuning frequently erodes baseline guideline competence}: in 6 of 11 pairs (\texttt{Meditron3-7B}, \texttt{Med42-8B}, \texttt{MedGemma-4B}, \texttt{Aloe-Qwen2.5-7B}, \texttt{Apollo2-7B}, \texttt{UltraMedical-8B}), unmarked control accuracy drops by $4.3$ to $18.0$ pp; \texttt{UltraMedical-8B} shows $\Delta_{\text{all}} = +1.57\text{ pp}^*$ only because its unmarked accuracy falls from $94.16\%$ to $76.21\%$ while its Right$\to$Wrong rate doubles ($3.02\%$ vs.\ $1.54\%$). Third, \textbf{mitigating stigma requires alignment-focused tuning}: only \texttt{Aloe-Qwen2.5-7B} ($\Delta_{\text{all}} = -0.52$ pp vs.\ base $-4.46\text{ pp}^*$), \texttt{Aloe-Llama-3.1-8B} ($-0.33$ pp vs.\ $-0.51\text{ pp}^*$), and \texttt{MedGemma-27B} ($-0.72\text{ pp}^*$ vs.\ $-1.02\text{ pp}^*$, unmarked accuracy $98.77\%$) preserve clinical competence while reducing Right$\to$Wrong flips.
 
 \subsection{Extended Clinical Reasoning and Psychometric Driver Dissociation}
 \label{sec:extended_drivers}
 
 \paragraph{Diagnostic Overshadowing (\texttt{T03}), Probability (\texttt{T13}), and Multi-Turn Cascades (\texttt{T10}).}
-Beyond binary choices, stigma distorts upstream diagnostic reasoning (Table~\ref{tab:extended_drivers}). On 6-candidate differential ranking (\texttt{T03}), marking a stigmatized condition significantly reduces top-1 ranking of the acute somatic diagnosis in 9 of 28 models---including models whose binary decision accuracy appeared stable, such as \texttt{OLMo-3-7B} ($\Delta_{\text{T03}} = -12.50\text{ pp}^*$, R$\to$W $19.16\%$), \texttt{Qwen2.5-7B} ($-6.88\text{ pp}^*$), \texttt{Mistral-Small-3.2-24B} ($-6.73\text{ pp}^*$), \texttt{MedGemma-27B} ($-6.30\text{ pp}^*$), and \texttt{Aloe-Qwen2.5-7B} ($-5.32\text{ pp}^*$). This overshadowing is mirrored in numeric probability estimation (\texttt{T13}, 0--100 scale), where 13 of 28 models assign lower disease probability to marked patients with identical vitals and labs (e.g., \texttt{OLMo-3-7B} $-18.89^*$, \texttt{Qwen2.5-7B} $-10.15^*$, \texttt{Aloe-Qwen2.5-7B} $-9.51^*$, \texttt{Meditron3-7B} $-8.52^*$, \texttt{Qwen3-8B} $-5.69^*$). In multi-turn cascades (\texttt{T10}), errors compound across turns (\texttt{Meditron3-7B} $-9.10\text{ pp}^*$, R$\to$W $16.92\%$; \texttt{Qwen2.5-3B} $-6.28\text{ pp}^*$, R$\to$W $21.25\%$). Conversely, on explicit behavioral attribution (\texttt{T06}) and two-patient scarce resource allocation (\texttt{T09}), frontier models recognize the overt fairness test: 23 of 28 maintain $<1\%$ character blame on \texttt{T06}, and models breaking ties on \texttt{T09} favor the marked patient ($+0.22$ to $+1.00$).
+Stigma also distorts upstream diagnostic reasoning (Table~\ref{tab:extended_drivers}). On 6-candidate differential ranking (\texttt{T03}), disease marking significantly reduces top-1 ranking of the acute somatic diagnosis in 9 of 28 models---including models with stable binary decisions, such as \texttt{OLMo-3-7B} ($\Delta_{\text{T03}} = -12.50\text{ pp}^*$, R$\to$W $19.16\%$), \texttt{Qwen2.5-7B} ($-6.88\text{ pp}^*$), \texttt{Mistral-Small-3.2-24B} ($-6.73\text{ pp}^*$), \texttt{MedGemma-27B} ($-6.30\text{ pp}^*$), and \texttt{Aloe-Qwen2.5-7B} ($-5.32\text{ pp}^*$). This diagnostic overshadowing is echoed in numeric probability estimation (\texttt{T13}, 0--100 scale), where 13 of 28 models assign lower disease probability to marked patients with identical vitals and labs (\texttt{OLMo-3-7B} $-18.89^*$, \texttt{Qwen2.5-7B} $-10.15^*$, \texttt{Aloe-Qwen2.5-7B} $-9.51^*$, \texttt{Meditron3-7B} $-8.52^*$, \texttt{Qwen3-8B} $-5.69^*$). In multi-turn cascades (\texttt{T10}), errors compound across turns (\texttt{Meditron3-7B} $-9.10\text{ pp}^*$, R$\to$W $16.92\%$; \texttt{Qwen2.5-3B} $-6.28\text{ pp}^*$, R$\to$W $21.25\%$). By contrast, on overt behavioral attribution (\texttt{T06}) and two-patient resource allocation (\texttt{T09}), 23 of 28 models maintain $<1\%$ character blame and favor the marked patient ($+0.22$ to $+1.00$) when breaking ties.
 
 \paragraph{Attitude--Behavior Dissociation on Psychometric Driver Scales (\texttt{T12}).}
-Evaluating models on validated clinician attitude instruments in isolated single-turn sessions (\texttt{T12}; Table~\ref{tab:extended_drivers}, Appendix~\ref{app:drivers}) uncovers a sharp dissociation between explicit self-report and clinical behavior. First, on overt fear and regard subscales, 23 of 28 models exhibit \textbf{social-desirability over-correction}: when a stigmatized diagnosis is named, models significantly \emph{decrease} self-reported endorsement of patient dangerousness (\texttt{aq\_dangerousness}, e.g., \texttt{Aloe-Qwen2.5-7B} $-0.51^*$) and infection fear (\texttt{fear\_infection}, down to $-0.67^*$) while reporting higher medical regard (\texttt{mcrs\_regard}). Second, despite suppressing overt fear, \textbf{15 of 28 models significantly increase attribution of personal blame} (\texttt{aq\_blame}, e.g., \texttt{Med42-8B} $+0.70^*$, \texttt{MedGemma-27B} $+0.41^*$, \texttt{Aloe-Qwen2.5-7B} $+0.37^*$, \texttt{Meditron3-7B} $+0.34^*$), \textbf{12 of 28 increase clinical distrust} (\texttt{pass\_distrust}), and \textbf{16 of 28 sharply increase suspicion of illicit drug seeking} on OUD cases---reaching $+4.30^*$ Likert points in \texttt{Aloe-Qwen2.5-7B}, $+2.29^*$ in \texttt{Qwen2.5-7B}, and $+1.08^*$ in \texttt{Meditron3-7B}, mirroring the exact domains (\texttt{U1}, \texttt{U2}) where bedside care degrades most.
+Eliciting validated clinician attitude scales in isolated single-turn sessions (\texttt{T12}; Table~\ref{tab:extended_drivers}, Appendix~\ref{app:drivers}) reveals a dissociation between explicit self-report and clinical behavior. On overt fear and regard subscales, 23 of 28 models exhibit \textbf{social-desirability over-correction}: when a stigmatized diagnosis is named, models significantly \emph{reduce} self-reported endorsement of patient dangerousness (\texttt{aq\_dangerousness}, e.g., \texttt{Aloe-Qwen2.5-7B} $-0.51^*$) and infection fear (\texttt{fear\_infection}, down to $-0.67^*$) while reporting higher general medical regard (\texttt{mcrs\_regard}). Yet despite suppressing overt fear, \textbf{15 of 28 models significantly increase attribution of personal blame} (\texttt{aq\_blame}, e.g., \texttt{Med42-8B} $+0.70^*$, \texttt{MedGemma-27B} $+0.41^*$, \texttt{Aloe-Qwen2.5-7B} $+0.37^*$, \texttt{Meditron3-7B} $+0.34^*$), \textbf{12 of 28 increase clinical distrust} (\texttt{pass\_distrust}), and \textbf{16 of 28 sharply increase suspicion of illicit drug seeking} on OUD cases---reaching $+4.30^*$ Likert points in \texttt{Aloe-Qwen2.5-7B}, $+2.29^*$ in \texttt{Qwen2.5-7B}, and $+1.08^*$ in \texttt{Meditron3-7B}, matching the clinical domains (\texttt{U1}, \texttt{U2}) where bedside care degrades most.
 
 \section{Discussion and Conclusion}
 
-Our findings carry three implications for clinical NLP. First, \textbf{high benchmark accuracy does not imply resistance to clinical stigma}: models exceeding $90\%$ unmarked accuracy (\texttt{Qwen2.5-7B}, \texttt{Qwen3-8B}, \texttt{Llama-3.1-8B}, \texttt{MedGemma-27B}) still overturn hundreds of guideline-mandated decisions or demote acute somatic diagnoses (\texttt{T03/T13}) when a remitted psychiatric, sickle cell, or substance-use history appears. Second, \textbf{domain fine-tuning on uncurated medical corpora can amplify clinical stigma}: models such as \texttt{Meditron3-7B}, \texttt{Med42-8B}, and \texttt{MediPhi-3.5} absorb historical clinical biases unless countered by preference alignment. Third, \textbf{auditing overt attitudes or demographic swaps is insufficient}: models that pass explicit attribution tests (\texttt{T06/T09}) and suppress overt fear on questionnaires (\texttt{T12}) still enact diagnostic overshadowing and undertreatment at the bedside. Grounded in 1,030 verified pre-decision MIMIC-IV vignettes and 38 guidelines, \textsc{Clinical StigmaQA} provides a reproducible testbed for mitigating health-related stigma in clinical language models.
+Our study establishes three conclusions for clinical NLP. First, \textbf{high benchmark accuracy does not confer immunity to clinical stigma}: models exceeding $90\%$ unmarked accuracy (\texttt{Qwen2.5-7B}, \texttt{Qwen3-8B}, \texttt{Llama-3.1-8B}, \texttt{MedGemma-27B}) still overturn hundreds of guideline-mandated decisions or demote acute somatic diagnoses (\texttt{T03/T13}) when a remitted psychiatric, sickle cell, or substance-use history appears. Second, \textbf{domain fine-tuning on uncurated medical corpora can amplify clinical stigma}: models such as \texttt{Meditron3-7B}, \texttt{Med42-8B}, and \texttt{MediPhi-3.5} absorb historical clinical biases unless countered by preference alignment. Third, \textbf{auditing overt attitudes or demographic swaps is insufficient}: models that pass explicit attribution tests (\texttt{T06/T09}) and suppress overt fear on questionnaires (\texttt{T12}) still enact diagnostic overshadowing and undertreatment at the bedside. Grounded in 1,030 pre-decision MIMIC-IV vignettes and 38 guidelines, \textsc{Clinical StigmaQA} provides a foundation for mitigating health-related stigma in clinical language models.
 
 \clearpage
 \section*{Limitations}
 
-We highlight five limitations of the current study:
+We highlight five limitations of our work:
 \begin{enumerate}[leftmargin=*,nosep,topsep=2pt]
-    \item \textbf{Single-Center US EHR Cohort:} All base patient vignettes are extracted from MIMIC-IV \citep{johnson2023mimic}, which reflects emergency department and inpatient encounters at a single quaternary academic medical center in Boston, Massachusetts (Beth Israel Deaconess Medical Center). Clinical documentation norms, triage workflows, and legal frameworks (such as CMS 42 CFR \S482.13 and Massachusetts General Laws c.\ 123) are US-specific and may not generalize to primary care settings or healthcare systems outside the United States.
-    \item \textbf{Guideline Verification vs.\ Prospective Physician Adjudication:} Every event's gold indicated action and medical orthogonality invariant are anchored verbatim in 38 published clinical practice guidelines and federal statutes, and every patient vignette passed a 5-LLM clinical eligibility panel ($1,416 \to 1,030$ cases). However, prospective dual board-certified physician adjudication of individual item pairs has not yet been completed; our automated validator flags this as a tracked governance milestone (\texttt{A5}).
-    \item \textbf{Scope Boundaries Within the HSDF:} Following our strict bedside decision boundary, \textsc{Clinical StigmaQA} operationalizes individual clinician drivers, organizational facilitators, disease and intersectional marking, and bedside practice manifestations. Macro-level structural stigma (such as insurance coverage exclusions, state criminalization statutes, or hospital catchment segregation) and long-term population health outcomes (such as 1-year mortality or clinic retention) lie outside the single-encounter decision scope of an LLM benchmark.
-    \item \textbf{Statistical Power for Sub-Percentage-Point Contrasts:} With a target of 50 independent patient cases per event, subject-clustered bootstrap confidence intervals are well powered ($\ge 80\%$ power at $\alpha=0.05$) to detect condition-level and model-level shifts of $|\Delta| \ge 1.0$--$1.5$ pp and pooled panel shifts of $|\Delta| \ge 0.20$ pp, but single-model$\times$single-event sub-cells have wider intervals where only larger shifts ($|\Delta| \ge 5$ pp) reach significance individually.
-    \item \textbf{Open-Weight Focus Under Data Use Constraints:} To comply strictly with the PhysioNet Credentialed Health Data Use Agreement for MIMIC-IV without transmitting patient text to third-party commercial endpoints that retain prompts, our 34-model evaluation panel focuses on locally hosted open-weight general and medical LLMs (3B to 120B parameters).
+    \item \textbf{Single-Center US EHR Cohort:} All base patient vignettes are extracted from MIMIC-IV \citep{johnson2023mimic}, reflecting emergency department and inpatient admissions at a single academic medical center in Boston, Massachusetts (Beth Israel Deaconess Medical Center). Documentation norms, triage workflows, and legal statutes (such as CMS 42 CFR \S482.13 and Massachusetts General Laws c.\ 123) are US-specific and may not generalize to outpatient primary care or international healthcare systems.
+    \item \textbf{Guideline Verification vs.\ Prospective Dual-Physician Sign-Off:} Every event's gold indicated action and medical orthogonality criterion are anchored verbatim in 38 published clinical practice guidelines and federal statutes, and every patient vignette passed a 5-LLM clinical eligibility panel ($1,416 \to 1,030$ cases). Prospective dual board-certified physician adjudication of individual item pairs remains a tracked future milestone (\texttt{A5}).
+    \item \textbf{Bedside Decision Scope Within the HSDF:} \textsc{Clinical StigmaQA} operationalizes individual clinician drivers, organizational facilitators, disease and intersectional marking, and bedside practice manifestations. Macro-level structural stigma (such as insurance coverage exclusions or hospital catchment segregation) and longitudinal population outcomes (such as 1-year mortality) lie outside the single-encounter scope of an LLM decision audit.
+    \item \textbf{Statistical Power in Fine-Grained Sub-Cells:} With a target of 50 independent patient cases per event, patient-clustered bootstrap confidence intervals achieve $\ge 80\%$ power ($\alpha=0.05$) for condition-level and model-level shifts of $|\Delta| \ge 1.0$--$1.5$ pp and pooled panel shifts of $|\Delta| \ge 0.20$ pp, whereas single-model$\times$single-event sub-cells have wider intervals where only larger shifts ($|\Delta| \ge 5$ pp) reach individual significance.
+    \item \textbf{Open-Weight Evaluation Under Data Use Constraints:} In accordance with the PhysioNet Credentialed Health Data Use Agreement for MIMIC-IV, which prohibits transmitting patient-derived text to third-party commercial APIs that retain prompts, our 34-model panel evaluates locally hosted open-weight general and medical LLMs (3B to 120B parameters).
 \end{enumerate}
 
 \section*{Ethical Considerations}
 
-\paragraph{Patient Privacy and PhysioNet DUA Compliance.}
-This research uses de-identified electronic health record data from MIMIC-IV v3.1 and MIMIC-IV-Note v2.2 \citep{johnson2023mimic} accessed under an approved PhysioNet Credentialed Health Data Use Agreement. In strict compliance with PhysioNet redistribution rules, no raw MIMIC-IV notes or patient-derived vignette texts are committed to public repositories. Our public code and design release distributes the complete machine-readable design specification (\texttt{templates.json}, \texttt{events.json}, \texttt{factors.json}, \texttt{evidence.json}, \texttt{crossing\_plan.json}, \texttt{eligibility\_criteria.json}), the 35-check validator, the deterministic vignette builder and counterfactual generator (\texttt{vignette.py}, \texttt{generate\_from\_design.py}), and the evaluation suite so any credentialed researcher with local MIMIC-IV access can deterministically rebuild the exact 29,845-item benchmark.
+\paragraph{Patient Privacy and Reproducibility Under PhysioNet DUA.}
+This study uses de-identified electronic health record data from MIMIC-IV v3.1 and MIMIC-IV-Note v2.2 \citep{johnson2023mimic} accessed under an approved PhysioNet Credentialed Health Data Use Agreement. In compliance with PhysioNet redistribution rules, no raw MIMIC-IV notes or patient-level vignette texts are distributed in public repositories. Our public release provides the machine-readable benchmark specifications (\texttt{templates.json}, \texttt{events.json}, \texttt{factors.json}, \texttt{evidence.json}, \texttt{crossing\_plan.json}, \texttt{eligibility\_criteria.json}), the 35-check invariance validator (\texttt{validate\_design.py}), the deterministic pre-decision vignette extractor and counterfactual generator (\texttt{vignette.py}, \texttt{generate\_from\_design.py}), and the evaluation suite so any credentialed researcher with local MIMIC-IV access can deterministically reproduce all 29,845 evaluation items.
 
-\paragraph{Dual-Use Risks of Stigmatizing Language Cues.}
-Our benchmark includes a curated catalog of stigmatizing prior-clinician phrases ($P$) and negative stereotype scales (\texttt{T12}) derived from published clinical literature \citep{goddu2018words,park2021physician,beach2021testimonial,harrigian2023characterization}. These templates are designed solely for auditing and stress-testing clinical NLP systems against bias transmission and must not be used to generate synthetic clinical documentation for deployment.
+\paragraph{Dual-Use Safeguards for Stigmatizing Language Templates.}
+Our benchmark curates skeptical prior-clinician phrases ($P$) and stereotype attitude scales (\texttt{T12}) from published clinical disparity studies \citep{goddu2018words,park2021physician,beach2021testimonial,harrigian2023characterization}. These artifacts are provided strictly for auditing and stress-testing clinical NLP systems against bias transmission and must not be used to generate synthetic clinical notes in deployment.
 
 \bibliography{custom}
 
 \clearpage
 \appendix
 
-\section{Complete Catalog of the 31 Clinical Events and Guideline Anchors}
+\section{Complete Catalog of Clinical Practice Domains, Events, and Guideline Anchors}
 \label{app:events}
 
-Table~\ref{tab:app_events} lists all 31 clinical decision events in \textsc{Clinical StigmaQA} across the 6 clinical practice units (\texttt{U1--U6}), detailing each event's clinical scenario, primary clinical practice guideline or regulatory anchor fixing the gold indicated action, separability regime (\texttt{SEPARABLE} vs.\ \texttt{CARRIER\_CONFOUNDED}), number of licensed stigmatized conditions ($M$), verified MIMIC-IV patient cases, and total vote-filtered evaluation items.
+Table~\ref{tab:condition_summary} reports the pooled 28-model disease-marking shift ($\Delta_M$) and organizational facilitator interactions ($\Delta_{F^+}$, $\Delta_{F^-}$) across the 9 stigmatized health conditions. Table~\ref{tab:app_events} lists all 31 clinical decision events in \textsc{Clinical StigmaQA} across the 6 clinical practice domains (\texttt{U1--U6}), detailing each event's clinical presentation, primary clinical practice guideline or regulatory anchor fixing the gold indicated action, separability regime (\texttt{SEPARABLE} vs.\ \texttt{CARRIER\_CONFOUNDED}), number of licensed stigmatized conditions ($|M|$), verified MIMIC-IV patient cases, and vote-filtered evaluation items.
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.8pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Condition ($M$)} & \textbf{Pairs} & \textbf{$\Delta_M$ [95\% CI]} & \textbf{R$\to$W} & \textbf{$-$ / $+$} & \textbf{$\Delta_{F^+}$} & \textbf{$\Delta_{F^-}$} \\
+\midrule
+Mental health & 22,400 & $-2.47$ [$-2.86, -2.13$]* & 3.29\% & 14 / 0 & $-1.35$* & $-0.63\phantom{*}$ \\
+Sickle cell (SCD) & 20,692 & $-2.29$ [$-3.00, -1.64$]* & 3.14\% & 10 / 0 & $-0.71\phantom{*}$ & $-1.36$* \\
+Opioid use (OUD) & 69,440 & $-1.74$ [$-2.24, -1.26$]* & 3.23\% & 20 / 1 & $+3.16$* & $+0.05\phantom{*}$ \\
+Tuberculosis & 12,068 & $-1.28$ [$-1.88, -0.67$]* & 3.33\% & 7 / 2 & $+2.60$* & $-1.37$* \\
+Alcohol use (AUD) & 84,280 & $-0.81$ [$-1.06, -0.58$]* & 2.38\% & 15 / 3 & $+2.59$* & $-0.48$* \\
+Obesity (Class III) & 7,196 & $-0.76$ [$-1.22, -0.32$]* & 1.83\% & 4 / 1 & $+1.34$* & $-5.36$* \\
+Hepatitis C (SVR) & 53,228 & $-0.19$ [$-0.48, +0.07$]\phantom{*} & 1.97\% & 5 / 7 & $-0.85$* & $-0.18\phantom{*}$ \\
+Breast cancer & 36,568 & $-0.18$ [$-0.49, +0.15$]\phantom{*} & 2.76\% & 5 / 6 & $+2.71$* & $-0.52\phantom{*}$ \\
+HIV (undetectable) & 53,536 & $+0.01$ [$-0.27, +0.28$]\phantom{*} & 2.75\% & 6 / 5 & $+0.19\phantom{*}$ & $-1.84$* \\
+\midrule
+\textbf{All Pooled} & \textbf{359,408} & $\mathbf{-0.92}$ [$\mathbf{-1.11, -0.73}$]* & \textbf{2.70\%} & \textbf{16 / 3} & $\mathbf{+1.36}$* & $\mathbf{-0.81}$* \\
+\bottomrule
+\end{tabular}
+\caption{Pooled disease-marking effects ($\Delta_M$, pp), conditional Right$\to$Wrong rates, count of models (out of 28) with significantly negative ($-$) or positive ($+$) CIs, and condition-specific facilitator shifts ($\Delta_{F^+}$, $\Delta_{F^-}$ inside marked charts).}
+\label{tab:condition_summary}
+\end{table}
 
 \begin{table*}[t]
 \centering
@@ -328,7 +337,7 @@ Table~\ref{tab:app_events} lists all 31 clinical decision events in \textsc{Clin
 \setlength{\tabcolsep}{3.0pt}
 \begin{tabular}{@{}llp{5.1cm}p{4.2cm}lrrr@{}}
 \toprule
-\textbf{Event ID} & \textbf{Unit} & \textbf{Clinical Presentation \& Gold Indicated Decision} & \textbf{Primary Guideline / Regulatory Anchor} & \textbf{Separability} & \textbf{$|M|$} & \textbf{Cases} & \textbf{Items} \\
+\textbf{Event ID} & \textbf{Domain} & \textbf{Clinical Presentation \& Gold Indicated Decision} & \textbf{Primary Guideline / Regulatory Anchor} & \textbf{Separability} & \textbf{$|M|$} & \textbf{Cases} & \textbf{Items} \\
 \midrule
 \texttt{E\_ANA\_01} & U1 & SCD vaso-occlusive crisis severe pain: rapid parenteral opioid titration within 30--60 min & ASH 2020 SCD Pain Guideline; NHLBI 2014 & Carrier (SCD) & 1 & 42 & 336 \\
 \texttt{E\_ANA\_02} & U1 & SCD VOC with discordant calm affect / normal vitals: treat self-reported pain without vital-sign gate & ASH 2020 SCD Pain Guideline; NHLBI 2014 & Carrier (SCD) & 1 & 45 & 315 \\
@@ -367,7 +376,7 @@ Table~\ref{tab:app_events} lists all 31 clinical decision events in \textsc{Clin
 \texttt{E\_UNI\_04} & U6 & Stable inpatient taking home non-controlled maintenance medications: standard administration without search & ASAM 2020 Inpatient Care Standard & Separable & 2 & 19 & 190 \\
 \texttt{E\_UNI\_05} & U6 & Cooperative inpatient without behavioral danger or delirium: standard nursing care without 1:1 security sitter & CMS 42 CFR \S482.13(e) Least Restrictive Care & Separable & 2 & 16 & 151 \\
 \midrule
-\textbf{Total} & \textbf{6 Units} & \textbf{31 Ready Clinical Decision Events} & \textbf{38 Verified Clinical Guidelines \& Statutes} & \textbf{27 Sep / 4 Car} & \textbf{73} & \textbf{1,030} & \textbf{29,845} \\
+\textbf{Total} & \textbf{6 Domains} & \textbf{31 Clinical Decision Events} & \textbf{38 Verified Clinical Guidelines \& Statutes} & \textbf{27 Sep / 4 Car} & \textbf{73} & \textbf{1,030} & \textbf{29,845} \\
 \bottomrule
 \end{tabular}
 \caption{Complete catalog of the 31 clinical decision events in \textsc{Clinical StigmaQA}, their guideline anchors, separability regimes, number of licensed condition markings ($|M|$), verified MIMIC-IV patient cases, and vote-filtered evaluation items.}
@@ -450,14 +459,14 @@ Aloe-Qwen2.5-7B & Qwen2.5-7B & 85.06\% & 90.23\% & $-0.52\phantom{*}$ & $-4.46$*
 \texttt{ultramedical\_8b} & medical & Llama-3.1-8B & $76.21 \to 77.78$ & $+1.57$ [$+0.74, +2.43$]* & 3.02\% (295/9,782) & $+2.89$ [$+1.45, +4.36$]* & 3.74\% (108/2,886) & 72 & 0 \\
 \bottomrule
 \end{tabular}
-\caption{Complete evaluation results across all 34 open-weight LLMs on vote-filtered decision templates (\texttt{T01/T02/T08}; 12,836 pairs per model for $\Delta_{\text{all}}$). $*$ denotes 95\% subject-clustered bootstrap CI excluding zero.}
+\caption{Complete evaluation results across all 34 open-weight LLMs on vote-filtered decision templates (\texttt{T01/T02/T08}; 12,836 pairs per model for $\Delta_{\text{all}}$). $*$ denotes 95\% patient-clustered bootstrap CI excluding zero.}
 \label{tab:app_all_models}
 \end{table*}
 
 \section{Rule-Based Parser vs.\ LLM Judge Audit Across 610,176 Responses}
 \label{app:judge}
 
-To verify that our deterministic rule-based parser (\texttt{scripts/eval/template\_scorers.py}) accurately extracts model choices across diverse instruction-following styles, we ran an independent LLM judge (\texttt{gpt-4.1-mini}) across all 21,792 vote-filtered decision items for 28 models (\textbf{610,176 total responses}; \texttt{panel\_r27c\_judge.md}). Table~\ref{tab:app_judge_stages} summarizes the agreement by parsing stage. Overall agreement is \textbf{99.45\%} with \textbf{Cohen's $\kappa = 0.973$}. On the 94.6\% of responses (577,410 rows) where the model states a clear option letter on line 1 (\texttt{letter\_first\_line}), exact agreement is \textbf{99.99\%} (only 45 discrepancies out of 577,410 rows). Virtually all remaining differences arise in \texttt{Meerkat-8B} and \texttt{II-Medical-8B}, which occasionally emit extended chain-of-thought reasoning that hits the 512-token generation limit before printing a final letter (\texttt{no\_choice}, 1,546 rows across the entire 610,176-row corpus).
+To verify that our deterministic rule-based parser accurately extracts model choices across diverse instruction-following styles, we audited all 21,792 vote-filtered decision items across 28 models (\textbf{610,176 total responses}) using an independent LLM judge (\texttt{gpt-4.1-mini}). Table~\ref{tab:app_judge_stages} summarizes agreement by parsing stage. Overall exact agreement is \textbf{99.45\%} (\textbf{Cohen's $\kappa = 0.973$}), and reaches \textbf{99.99\%} on the 94.63\% of responses (577,410 rows) parsed at the first-line letter stage.
 
 \begin{table}[ht]
 \centering
@@ -478,14 +487,14 @@ To verify that our deterministic rule-based parser (\texttt{scripts/eval/templat
 \textbf{All Decision Rows} & \textbf{610,176} & \textbf{100.00\%} & \textbf{99.45\% ($\kappa=0.973$)} & \textbf{3,363} \\
 \bottomrule
 \end{tabular}
-\caption{Parser vs.\ \texttt{gpt-4.1-mini} judge agreement across 610,176 decision responses (28 models $\times$ 21,792 items).}
+\caption{Rule-based parser vs.\ \texttt{gpt-4.1-mini} judge agreement across 610,176 decision responses (28 models $\times$ 21,792 items).}
 \label{tab:app_judge_stages}
 \end{table}
 
 \section{Psychometric Driver Scale (\texttt{T12}) Shifts Across 28 Models}
 \label{app:drivers}
 
-Table~\ref{tab:app_drivers} reports the complete shift ($\Delta_M$ on a 1--7 Likert scale) across all 28 models on the 8 psychometric clinician-driver subscales elicited in isolated single-turn sessions (\texttt{T12}; \texttt{panel\_r27c\_t12\_summary.md}): AQ-12 subscales (\texttt{aq\_dangerousness}, \texttt{aq\_blame}, \texttt{aq\_coercion}, \texttt{aq\_segregation}; \citealp{corrigan2003attribution}), Nyblade Fear of Infection (\texttt{fear\_infection}; \citealp{nyblade2013brief}), Medical Condition Regard Scale (\texttt{mcrs\_regard}; \citealp{christison2002medical}, where higher = higher regard), PASS Regard and Distrust (\texttt{pass\_regard}, \texttt{pass\_distrust}; \citealp{ratanawongsa2009health}), and the single PASS drug-seeking suspicion item on OUD cases (\texttt{pass\_drug\_use\_item}).
+Table~\ref{tab:app_drivers} reports the complete shift ($\Delta_M$ on a 1--7 Likert scale) across all 28 models on the 8 psychometric clinician-driver subscales elicited in isolated single-turn sessions (\texttt{T12}): AQ-12 subscales (\texttt{aq\_dangerousness}, \texttt{aq\_blame}, \texttt{aq\_coercion}, \texttt{aq\_segregation}; \citealp{corrigan2003attribution}), Nyblade Fear of Infection (\texttt{fear\_infection}; \citealp{nyblade2013brief}), Medical Condition Regard Scale (\texttt{mcrs\_regard}; \citealp{christison2002medical}, higher = higher regard), PASS Regard and Distrust (\texttt{pass\_regard}, \texttt{pass\_distrust}; \citealp{ratanawongsa2009health}), and the single PASS drug-seeking suspicion item on OUD cases (\texttt{pass\_drug\_use\_item}).
 
 \begin{table*}[t]
 \centering
