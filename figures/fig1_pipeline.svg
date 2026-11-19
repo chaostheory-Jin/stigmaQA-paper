@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-11-19T19:38:09.230554</dc:date>
+    <dc:date>2026-11-19T21:23:25.159249</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -40,7 +40,7 @@ Q 7.902 6.7608 7.902 11.196
 L 7.902 174.744 
 Q 7.902 179.1792 12.366 179.1792 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #f1f5f9; stroke: #1b365d; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #f1f5f9; stroke: #1b365d; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="patch_3">
     <path d="M 187.578 179.1792 
@@ -53,7 +53,7 @@ Q 183.114 6.7608 183.114 11.196
 L 183.114 174.744 
 Q 183.114 179.1792 187.578 179.1792 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #f0f9ff; stroke: #0072b2; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #f0f9ff; stroke: #0072b2; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="patch_4">
     <path d="M 362.79 179.1792 
@@ -66,7 +66,7 @@ Q 358.326 6.7608 358.326 11.196
 L 358.326 174.744 
 Q 358.326 179.1792 362.79 179.1792 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ecfdf5; stroke: #009e73; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ecfdf5; stroke: #009e73; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
     <path d="M 538.002 179.1792 
@@ -79,7 +79,7 @@ Q 533.538 6.7608 533.538 11.196
 L 533.538 174.744 
 Q 533.538 179.1792 538.002 179.1792 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #fff7ed; stroke: #d55e00; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #fff7ed; stroke: #d55e00; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="patch_6">
     <path d="M 12.366 33.372 
@@ -92,7 +92,7 @@ Q 7.902 6.7608 7.902 11.196
 L 7.902 28.9368 
 Q 7.902 33.372 12.366 33.372 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #1b365d; stroke: #1b365d; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #1b365d; stroke: #1b365d; stroke-linejoin: miter"/>
    </g>
    <g id="patch_7">
     <path d="M 16.83 78.8328 
@@ -105,7 +105,7 @@ Q 14.04 36.6984 14.04 39.4704
 L 14.04 76.0608 
 Q 14.04 78.8328 16.83 78.8328 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #e2e8f0; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #e2e8f0; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_8">
     <path d="M 16.83 125.9568 
@@ -118,7 +118,7 @@ Q 14.04 83.8224 14.04 86.5944
 L 14.04 123.1848 
 Q 14.04 125.9568 16.83 125.9568 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_9">
     <path d="M 16.83 173.0808 
@@ -131,7 +131,7 @@ Q 14.04 130.9464 14.04 133.7184
 L 14.04 170.3088 
 Q 14.04 173.0808 16.83 173.0808 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #dbeafe; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #dbeafe; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_10">
     <path d="M 187.578 33.372 
@@ -144,7 +144,7 @@ Q 183.114 6.7608 183.114 11.196
 L 183.114 28.9368 
 Q 183.114 33.372 187.578 33.372 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #0072b2; stroke: #0072b2; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #0072b2; stroke: #0072b2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_11">
     <path d="M 192.042 78.8328 
@@ -157,7 +157,7 @@ Q 189.252 36.6984 189.252 39.4704
 L 189.252 76.0608 
 Q 189.252 78.8328 192.042 78.8328 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #e0f2fe; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #e0f2fe; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_12">
     <path d="M 192.042 125.9568 
@@ -170,7 +170,7 @@ Q 189.252 83.8224 189.252 86.5944
 L 189.252 123.1848 
 Q 189.252 125.9568 192.042 125.9568 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_13">
     <path d="M 192.042 173.0808 
@@ -183,7 +183,7 @@ Q 189.252 130.9464 189.252 133.7184
 L 189.252 170.3088 
 Q 189.252 173.0808 192.042 173.0808 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #bae6fd; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #bae6fd; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_14">
     <path d="M 362.79 33.372 
@@ -196,7 +196,7 @@ Q 358.326 6.7608 358.326 11.196
 L 358.326 28.9368 
 Q 358.326 33.372 362.79 33.372 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #009e73; stroke: #009e73; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #009e73; stroke: #009e73; stroke-linejoin: miter"/>
    </g>
    <g id="patch_15">
     <path d="M 367.254 78.8328 
@@ -209,7 +209,7 @@ Q 364.464 36.6984 364.464 39.4704
 L 364.464 76.0608 
 Q 364.464 78.8328 367.254 78.8328 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #d1fae5; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #d1fae5; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_16">
     <path d="M 367.254 125.9568 
@@ -222,7 +222,7 @@ Q 364.464 83.8224 364.464 86.5944
 L 364.464 123.1848 
 Q 364.464 125.9568 367.254 125.9568 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_17">
     <path d="M 367.254 173.0808 
@@ -235,7 +235,7 @@ Q 364.464 130.9464 364.464 133.7184
 L 364.464 170.3088 
 Q 364.464 173.0808 367.254 173.0808 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #a7f3d0; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #a7f3d0; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_18">
     <path d="M 538.002 33.372 
@@ -248,7 +248,7 @@ Q 533.538 6.7608 533.538 11.196
 L 533.538 28.9368 
 Q 533.538 33.372 538.002 33.372 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #d55e00; stroke: #d55e00; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #d55e00; stroke: #d55e00; stroke-linejoin: miter"/>
    </g>
    <g id="patch_19">
     <path d="M 542.466 78.8328 
@@ -261,7 +261,7 @@ Q 539.676 36.6984 539.676 39.4704
 L 539.676 76.0608 
 Q 539.676 78.8328 542.466 78.8328 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ffedd5; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ffedd5; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_20">
     <path d="M 542.466 125.9568 
@@ -274,7 +274,7 @@ Q 539.676 83.8224 539.676 86.5944
 L 539.676 123.1848 
 Q 539.676 125.9568 542.466 125.9568 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #ffffff; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_21">
     <path d="M 542.466 173.0808 
@@ -287,103 +287,103 @@ Q 539.676 130.9464 539.676 133.7184
 L 539.676 170.3088 
 Q 539.676 173.0808 542.466 173.0808 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #fed7aa; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #fed7aa; stroke: #cbd5e1; stroke-width: 0.9; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
-    <text style="fill: #ffffff; font: 700 8.3px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="88.254" y="22.297673" transform="rotate(-0 88.254 22.297673)">1. Theory &amp; Guideline Design</text>
+    <text style="fill: #ffffff; font: 700 9.2px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="88.254" y="22.2974" transform="rotate(-0 88.254 22.2974)">1. Theory &amp; Guideline Design</text>
    </g>
    <g id="text_2">
-    <text style="fill: #1b365d; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="88.254" y="47.083931" transform="rotate(-0 88.254 47.083931)">DATA SOURCES</text>
+    <text style="fill: #1b365d; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="88.254" y="46.89815" transform="rotate(-0 88.254 46.89815)">DATA SOURCES</text>
    </g>
    <g id="text_3">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(31.66025 59.720331)">145 empirical HSDF papers</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(22.537125 68.982519)">38 clinical guidelines &amp; US laws</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(40.123562 59.617609)">145 empirical HSDF papers</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(31.518859 68.825991)">38 clinical guidelines &amp; US laws</text>
    </g>
    <g id="text_4">
-    <text style="fill: #1b365d; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="88.254" y="94.207931" transform="rotate(-0 88.254 94.207931)">PARTICIPANTS &amp; RULES</text>
+    <text style="fill: #1b365d; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="88.254" y="94.02215" transform="rotate(-0 88.254 94.02215)">PARTICIPANTS &amp; RULES</text>
    </g>
    <g id="text_5">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(25.260875 106.787456)">Systematic literature synthesis</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(20.96025 116.163394)">Strict medical orthogonality gate</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(35.939125 106.716077)">Systematic literature synthesis</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(31.760734 115.932523)">Strict medical orthogonality gate</text>
    </g>
    <g id="text_6">
-    <text style="fill: #1b365d; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="88.254" y="141.331931" transform="rotate(-0 88.254 141.331931)">DESIGNED ARTIFACTS</text>
+    <text style="fill: #1b365d; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="88.254" y="141.14615" transform="rotate(-0 88.254 141.14615)">DESIGNED ARTIFACTS</text>
    </g>
    <g id="text_7">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(33.689625 154.025206)">6 clinical practice domains</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(19.77525 163.287394)">31 events &amp; 73 condition licenses</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(42.036391 153.852843)">6 clinical practice domains</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(30.086422 163.061226)">31 events &amp; 73 condition licenses</text>
    </g>
    <g id="text_8">
-    <text style="fill: #ffffff; font: 700 8.3px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="263.466" y="22.297673" transform="rotate(-0 263.466 22.297673)">2. Pre-Decision EHR Grounding</text>
+    <text style="fill: #ffffff; font: 700 9.2px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="263.466" y="22.2974" transform="rotate(-0 263.466 22.2974)">2. Pre-Decision EHR Grounding</text>
    </g>
    <g id="text_9">
-    <text style="fill: #0072b2; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="263.466" y="47.083931" transform="rotate(-0 263.466 47.083931)">DATA SOURCES</text>
+    <text style="fill: #0072b2; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="263.466" y="46.89815" transform="rotate(-0 263.466 46.89815)">DATA SOURCES</text>
    </g>
    <g id="text_10">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(207.46225 59.777206)">MIMIC-IV v3.1 &amp; Note v2.2</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(194.495375 69.039394)">Structured ED vitals &amp; initial labs</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(213.065297 59.60014)">MIMIC-IV v3.1 &amp; Note v2.2</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(204.818703 68.808523)">Structured ED vitals &amp; initial labs</text>
    </g>
    <g id="text_11">
-    <text style="fill: #0072b2; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="263.466" y="94.207931" transform="rotate(-0 263.466 94.207931)">5-LLM ELIGIBILITY PANEL</text>
+    <text style="fill: #0072b2; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="263.466" y="94.02215" transform="rotate(-0 263.466 94.02215)">5-LLM ELIGIBILITY PANEL</text>
    </g>
    <g id="text_12">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(197.346 106.844331)">Qwen3.5, Gemma-4, Mistral-3.2,</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(194.146 116.106519)">GLM-4, gpt-oss (Fleiss' k = 0.381)</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(206.021359 106.720109)">Qwen3.5, Gemma-4, Mistral-3.2,</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(203.514594 115.928491)">GLM-4, gpt-oss (Fleiss' κ = 0.381)</text>
    </g>
    <g id="text_13">
-    <text style="fill: #0072b2; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="263.466" y="141.331931" transform="rotate(-0 263.466 141.331931)">VERIFIED COHORT</text>
+    <text style="fill: #0072b2; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="263.466" y="141.14615" transform="rotate(-0 263.466 141.14615)">VERIFIED COHORT</text>
    </g>
    <g id="text_14">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(196.356 154.025206)">Pre-decision temporal truncation</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(204.170375 163.287394)">1,416 -&gt; 1,030 verified cases</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(207.097031 153.84814)">Pre-decision temporal truncation</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(214.263922 163.056523)">1,416 → 1,030 verified cases</text>
    </g>
    <g id="text_15">
-    <text style="fill: #ffffff; font: 700 8.3px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="438.678" y="22.297673" transform="rotate(-0 438.678 22.297673)">3. Counterfactual Synthesis</text>
+    <text style="fill: #ffffff; font: 700 9.2px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="438.678" y="22.306744" transform="rotate(-0 438.678 22.306744)">3. Counterfactual Synthesis</text>
    </g>
    <g id="text_16">
-    <text style="fill: #009e73; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="438.678" y="47.083931" transform="rotate(-0 438.678 47.083931)">4 ORTHOGONAL FACTORS</text>
+    <text style="fill: #009e73; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="438.678" y="46.89815" transform="rotate(-0 438.678 46.89815)">4 ORTHOGONAL FACTORS</text>
    </g>
    <g id="text_17">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(375.538625 59.587206)">M: 9 remitted/stable diagnoses</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(374.468 69.006894)">P: Same-fact wording | X, F-/F+</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(385.765156 59.10312)">M: 9 remitted/stable diagnoses</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(382.085969 69.030073)">P: Same-fact wording | X, F−/F+</text>
    </g>
    <g id="text_18">
-    <text style="fill: #009e73; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="438.678" y="94.207931" transform="rotate(-0 438.678 94.207931)">QUALITY VALIDATOR</text>
+    <text style="fill: #009e73; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="438.678" y="94.02215" transform="rotate(-0 438.678 94.02215)">QUALITY VALIDATOR</text>
    </g>
    <g id="text_19">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(372.923 106.844331)">35 automated invariance checks</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(379.938 116.106519)">Byte-identical objective facts</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(383.62725 106.720109)">35 automated invariance checks</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(388.280656 115.928491)">Byte-identical objective facts</text>
    </g>
    <g id="text_20">
-    <text style="fill: #009e73; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="438.678" y="141.331931" transform="rotate(-0 438.678 141.331931)">BENCHMARK ITEMS</text>
+    <text style="fill: #009e73; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="438.678" y="141.14615" transform="rotate(-0 438.678 141.14615)">BENCHMARK ITEMS</text>
    </g>
    <g id="text_21">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(386.726125 154.025206)">10 clinical task templates</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(373.13675 163.287394)">29,845 verified evaluation items</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(395.083391 153.84814)">10 clinical task templates</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(383.022562 163.056523)">29,845 verified evaluation items</text>
    </g>
    <g id="text_22">
-    <text style="fill: #ffffff; font: 700 8.3px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="613.89" y="22.297673" transform="rotate(-0 613.89 22.297673)">4. Multi-Model Audit &amp; Judge</text>
+    <text style="fill: #ffffff; font: 700 9.2px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="613.89" y="22.2974" transform="rotate(-0 613.89 22.2974)">4. Multi-Model Audit &amp; Judge</text>
    </g>
    <g id="text_23">
-    <text style="fill: #d55e00; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="613.89" y="47.083931" transform="rotate(-0 613.89 47.083931)">34 EVALUATED LLMs</text>
+    <text style="fill: #d55e00; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="613.89" y="46.89815" transform="rotate(-0 613.89 46.89815)">34 EVALUATED LLMs</text>
    </g>
    <g id="text_24">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(550.979375 59.720331)">21 general &amp; 13 medical LLMs</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(552.16375 69.096269)">11 matched med-vs-base pairs</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(559.550094 59.596109)">21 general &amp; 13 medical LLMs</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(561.703453 68.812554)">11 matched med-vs-base pairs</text>
    </g>
    <g id="text_25">
-    <text style="fill: #d55e00; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="613.89" y="94.207931" transform="rotate(-0 613.89 94.207931)">INDEPENDENT LLM JUDGE</text>
+    <text style="fill: #d55e00; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="613.89" y="94.02215" transform="rotate(-0 613.89 94.02215)">INDEPENDENT LLM JUDGE</text>
    </g>
    <g id="text_26">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(543.479375 106.730581)">gpt-4.1-mini on 610,176 responses</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(541.376875 116.106519)">99.45% agreement (kappa = 0.973)</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(554.050797 106.693905)">gpt-4.1-mini on 610,176 responses</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(561.291594 115.964101)">99.45% agreement (κ = 0.973)</text>
    </g>
    <g id="text_27">
-    <text style="fill: #d55e00; font: 700 7.5px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="613.89" y="141.331931" transform="rotate(-0 613.89 141.331931)">STATISTICAL INFERENCE</text>
+    <text style="fill: #d55e00; font: 700 8px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif; text-anchor: middle" x="613.89" y="141.14615" transform="rotate(-0 613.89 141.14615)">STATISTICAL INFERENCE</text>
    </g>
    <g id="text_28">
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(550.52125 153.968331)">Attention-controlled prompting</text>
-    <text style="fill: #0f172a; font: 8px 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(550.503125 163.344269)">Patient-clustered bootstrap CIs</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(559.783906 153.844109)">Attention-controlled prompting</text>
+    <text style="fill: #0f172a; font: 8.6px 'Nimbus Roman', 'Times New Roman', 'Liberation Serif', 'STIX Two Text', serif" transform="translate(560.861594 163.060554)">Patient-clustered bootstrap CIs</text>
    </g>
    <g id="patch_22">
     <path d="M 88.254 80.27646 
@@ -468,37 +468,37 @@ z
    <g id="patch_30">
     <path d="M 171.161684 92.97 
 Q 175.858779 92.97 178.572821 92.97 
-" clip-path="url(#p5d337032ac)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
     <path d="M 172.572821 88.97 
 L 178.572821 92.97 
 L 172.572821 96.97 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
    </g>
    <g id="patch_31">
     <path d="M 346.373684 92.97 
 Q 351.070779 92.97 353.784821 92.97 
-" clip-path="url(#p5d337032ac)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
     <path d="M 347.784821 88.97 
 L 353.784821 92.97 
 L 347.784821 96.97 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
    </g>
    <g id="patch_32">
     <path d="M 521.585684 92.97 
 Q 526.282779 92.97 528.996821 92.97 
-" clip-path="url(#p5d337032ac)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: none; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
     <path d="M 522.996821 88.97 
 L 528.996821 92.97 
 L 522.996821 96.97 
 z
-" clip-path="url(#p5d337032ac)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
+" clip-path="url(#pf4daa228f2)" style="fill: #334155; stroke: #334155; stroke-width: 2.2; stroke-linecap: round"/>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="p5d337032ac">
+  <clipPath id="pf4daa228f2">
    <rect x="2.88" y="2.88" width="697.5" height="180.18"/>
   </clipPath>
  </defs>
