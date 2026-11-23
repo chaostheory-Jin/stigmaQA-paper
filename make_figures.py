@@ -22,7 +22,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle, Polygon, Rectangle, Wedge, Arc
 import numpy as np
 
 # Use Nimbus Roman (exact URW Times Roman used by TeX Live \usepackage{times}) + STIX math
@@ -65,122 +65,320 @@ def save_both(fig, basename: str):
     plt.close(fig)
 
 
+def _draw_book_icon(ax, cx, cy, s=0.28, color="#1B365D"):
+    """Flat-vector open book + guideline checkmark badge."""
+    # Left & right pages
+    left_p = Polygon([(cx, cy - s*0.35), (cx - s*0.85, cy - s*0.20), (cx - s*0.85, cy + s*0.48), (cx, cy + s*0.35)],
+                     closed=True, facecolor="#DBEAFE", edgecolor=color, lw=1.3, zorder=5)
+    right_p = Polygon([(cx, cy - s*0.35), (cx + s*0.85, cy - s*0.20), (cx + s*0.85, cy + s*0.48), (cx, cy + s*0.35)],
+                      closed=True, facecolor="#EFF6FF", edgecolor=color, lw=1.3, zorder=5)
+    ax.add_patch(left_p)
+    ax.add_patch(right_p)
+    # Text lines on pages
+    for dy in (0.14, -0.02, -0.16):
+        ax.plot([cx - s*0.65, cx - s*0.18], [cy + s*dy, cy + s*(dy - 0.05)], color=color, lw=0.9, alpha=0.65, zorder=6)
+        ax.plot([cx + s*0.18, cx + s*0.65], [cy + s*(dy - 0.05), cy + s*dy], color=color, lw=0.9, alpha=0.65, zorder=6)
+    # Green check badge at top-right
+    badge = Circle((cx + s*0.68, cy + s*0.42), s*0.30, facecolor="#009E73", edgecolor="white", lw=1.2, zorder=7)
+    ax.add_patch(badge)
+    ax.plot([cx + s*0.54, cx + s*0.65, cx + s*0.83],
+            [cy + s*0.41, cy + s*0.31, cy + s*0.53], color="white", lw=1.5, solid_capstyle="round", zorder=8)
+
+
+def _draw_ehr_icon(ax, cx, cy, s=0.28, color="#0072B2"):
+    """Flat-vector medical EHR clipboard with red cross + filter shield."""
+    board = FancyBboxPatch((cx - s*0.58, cy - s*0.58), s*1.16, s*1.18,
+                           boxstyle="round,pad=0.02,rounding_size=0.06",
+                           facecolor="#E0F2FE", edgecolor=color, lw=1.3, zorder=5)
+    clip = FancyBboxPatch((cx - s*0.26, cy + s*0.48), s*0.52, s*0.20,
+                          boxstyle="round,pad=0.01,rounding_size=0.03",
+                          facecolor=color, edgecolor=color, lw=0.8, zorder=6)
+    ax.add_patch(board)
+    ax.add_patch(clip)
+    # Medical red cross
+    ax.add_patch(Rectangle((cx - s*0.09, cy + s*0.02), s*0.18, s*0.36, facecolor="#D55E00", edgecolor="none", zorder=6))
+    ax.add_patch(Rectangle((cx - s*0.18, cy + s*0.11), s*0.36, s*0.18, facecolor="#D55E00", edgecolor="none", zorder=6))
+    # Chart lines
+    ax.plot([cx - s*0.38, cx + s*0.38], [cy - s*0.18, cy - s*0.18], color=color, lw=1.1, alpha=0.75, zorder=6)
+    ax.plot([cx - s*0.38, cx + s*0.22], [cy - s*0.36, cy - s*0.36], color=color, lw=1.1, alpha=0.75, zorder=6)
+    # 5-dot panel badge at bottom-right
+    badge = Circle((cx + s*0.58, cy - s*0.40), s*0.30, facecolor="#0072B2", edgecolor="white", lw=1.2, zorder=7)
+    ax.add_patch(badge)
+    ax.text(cx + s*0.58, cy - s*0.41, "5x", ha="center", va="center", color="white",
+            fontsize=6.5, fontweight="bold", zorder=8)
+
+
+def _draw_mini_icon(ax, kind, cx, cy, r=0.10, color="#009E73"):
+    """Crisp mini flat-vector pictograms for M, P, X, F pills."""
+    if kind == "M":
+        # Medical cross inside circle
+        ax.add_patch(Circle((cx, cy), r, facecolor=color, edgecolor="none", zorder=6))
+        ax.add_patch(Rectangle((cx - r*0.22, cy - r*0.58), r*0.44, r*1.16, facecolor="white", zorder=7))
+        ax.add_patch(Rectangle((cx - r*0.58, cy - r*0.22), r*1.16, r*0.44, facecolor="white", zorder=7))
+    elif kind == "P":
+        # Speech bubble
+        ax.add_patch(FancyBboxPatch((cx - r*0.95, cy - r*0.62), r*1.90, r*1.28,
+                                    boxstyle="round,pad=0.01,rounding_size=0.04",
+                                    facecolor=color, edgecolor="none", zorder=6))
+        ax.add_patch(Polygon([(cx - r*0.45, cy - r*0.60), (cx - r*0.10, cy - r*0.60), (cx - r*0.65, cy - r*1.05)],
+                             closed=True, facecolor=color, edgecolor="none", zorder=6))
+        ax.text(cx, cy + r*0.02, "“ ”", ha="center", va="center", color="white", fontsize=7.5, fontweight="bold", zorder=7)
+    elif kind == "X":
+        # Person silhouette inside circle
+        ax.add_patch(Circle((cx, cy), r, facecolor=color, edgecolor="none", zorder=6))
+        ax.add_patch(Circle((cx, cy + r*0.28), r*0.30, facecolor="white", zorder=7))
+        ax.add_patch(Wedge((cx, cy - r*0.68), r*0.58, 30, 150, facecolor="white", zorder=7))
+    elif kind == "F":
+        # Hospital / organization building silhouette
+        ax.add_patch(FancyBboxPatch((cx - r*0.85, cy - r*0.85), r*1.70, r*1.45,
+                                    boxstyle="round,pad=0.01,rounding_size=0.03",
+                                    facecolor=color, edgecolor="none", zorder=6))
+        # Roof pediment
+        ax.add_patch(Polygon([(cx - r*0.98, cy + r*0.58), (cx + r*0.98, cy + r*0.58), (cx, cy + r*1.05)],
+                             closed=True, facecolor=color, edgecolor="none", zorder=6))
+        # 4 tiny windows + door
+        for wx in (-0.42, 0.14):
+            for wy in (0.12, -0.32):
+                ax.add_patch(Rectangle((cx + r*wx, cy + r*wy), r*0.28, r*0.26, facecolor="white", zorder=7))
+        ax.add_patch(Rectangle((cx - r*0.14, cy - r*0.82), r*0.28, r*0.36, facecolor="white", zorder=7))
+
+
+def _draw_check_badge(ax, cx, cy, r=0.075, color="#009E73"):
+    """Crisp flat-vector green checkmark badge (no missing font glyph)."""
+    ax.add_patch(Circle((cx, cy), r, facecolor=color, edgecolor="none", zorder=6))
+    ax.plot([cx - r*0.44, cx - r*0.08, cx + r*0.48],
+            [cy - r*0.02, cy - r*0.38, cy + r*0.38], color="white", lw=1.35, solid_capstyle="round", zorder=7)
+
+
+def _draw_x_badge(ax, cx, cy, r=0.075, color="#DC2626"):
+    """Crisp flat-vector red X badge (no missing font glyph)."""
+    ax.add_patch(Circle((cx, cy), r, facecolor=color, edgecolor="none", zorder=6))
+    ax.plot([cx - r*0.38, cx + r*0.38], [cy - r*0.38, cy + r*0.38], color="white", lw=1.35, solid_capstyle="round", zorder=7)
+    ax.plot([cx - r*0.38, cx + r*0.38], [cy + r*0.38, cy - r*0.38], color="white", lw=1.35, solid_capstyle="round", zorder=7)
+
+
+def _draw_audit_icon(ax, cx, cy, s=0.28, color="#D55E00"):
+    """Flat-vector AI chip + balance scale badge."""
+    # AI chip body
+    chip = FancyBboxPatch((cx - s*0.52, cy - s*0.46), s*1.04, s*0.92,
+                          boxstyle="round,pad=0.02,rounding_size=0.06",
+                          facecolor="#FFEDD5", edgecolor=color, lw=1.3, zorder=5)
+    ax.add_patch(chip)
+    # Pins
+    for d in (-0.28, 0.0, 0.28):
+        ax.plot([cx + s*d, cx + s*d], [cy + s*0.48, cy + s*0.66], color=color, lw=1.1, zorder=4)
+        ax.plot([cx + s*d, cx + s*d], [cy - s*0.48, cy - s*0.66], color=color, lw=1.1, zorder=4)
+        ax.plot([cx - s*0.54, cx - s*0.72], [cy + s*d*0.8, cy + s*d*0.8], color=color, lw=1.1, zorder=4)
+        ax.plot([cx + s*0.54, cx + s*0.72], [cy + s*d*0.8, cy + s*d*0.8], color=color, lw=1.1, zorder=4)
+    ax.text(cx, cy + s*0.02, "LLM", ha="center", va="center", color=color, fontsize=7.0, fontweight="bold", zorder=6)
+    # Balance-scale badge (slanted beam + pans)
+    bx, by, br = cx + s*0.62, cy + s*0.44, s*0.32
+    ax.add_patch(Circle((bx, by), br, facecolor="#1B365D", edgecolor="white", lw=1.2, zorder=7))
+    ax.plot([bx, bx], [by - br*0.52, by + br*0.45], color="white", lw=1.1, zorder=8)
+    ax.plot([bx - br*0.55, bx + br*0.55], [by + br*0.30, by + br*0.12], color="white", lw=1.1, zorder=8)
+    ax.add_patch(Wedge((bx - br*0.50, by + br*0.02), br*0.24, 180, 360, facecolor="white", zorder=8))
+    ax.add_patch(Wedge((bx + br*0.50, by - br*0.16), br*0.24, 180, 360, facecolor="white", zorder=8))
+
+
 def make_fig1_pipeline():
-    """Figure 1: 4-Stage Pipeline Flowchart in SVG and PDF using Nimbus Roman (Times) font."""
-    fig, ax = plt.subplots(figsize=(12.5, 3.25))
-    ax.set_xlim(0, 12.5)
-    ax.set_ylim(0, 3.25)
+    """Figure 1: Visual, low-text, icon-rich top-conference overall pipeline + 1-glance counterfactual strip."""
+    fig, ax = plt.subplots(figsize=(12.6, 4.15))
+    ax.set_xlim(0, 12.6)
+    ax.set_ylim(0, 4.15)
     ax.axis("off")
 
-    stages = [
-        {
-            "title": "1. Theory & Guideline Design",
-            "color": PALETTE["navy"],
-            "bg": "#F1F5F9",
-            "subcards": [
-                ("DATA SOURCES", "145 empirical HSDF papers\n38 clinical guidelines & US laws", "#E2E8F0"),
-                ("PARTICIPANTS & RULES", "Systematic literature synthesis\nStrict medical orthogonality gate", "#FFFFFF"),
-                ("DESIGNED ARTIFACTS", "6 clinical practice domains\n31 events & 73 condition licenses", "#DBEAFE"),
-            ],
-        },
-        {
-            "title": "2. Pre-Decision EHR Grounding",
-            "color": PALETTE["blue"],
-            "bg": "#F0F9FF",
-            "subcards": [
-                ("DATA SOURCES", "MIMIC-IV v3.1 & Note v2.2\nStructured ED vitals & initial labs", "#E0F2FE"),
-                ("5-LLM ELIGIBILITY PANEL", "Qwen3.5, Gemma-4, Mistral-3.2,\nGLM-4, gpt-oss (Fleiss' \u03ba = 0.381)", "#FFFFFF"),
-                ("VERIFIED COHORT", "Pre-decision temporal truncation\n1,416 \u2192 1,030 verified cases", "#BAE6FD"),
-            ],
-        },
-        {
-            "title": "3. Counterfactual Synthesis",
-            "color": PALETTE["teal"],
-            "bg": "#ECFDF5",
-            "subcards": [
-                ("4 ORTHOGONAL FACTORS", "M: 9 remitted/stable diagnoses\nP: Same-fact wording | X, F\u2212/F+", "#D1FAE5"),
-                ("QUALITY VALIDATOR", "35 automated invariance checks\nByte-identical objective facts", "#FFFFFF"),
-                ("BENCHMARK ITEMS", "10 clinical task templates\n29,845 verified evaluation items", "#A7F3D0"),
-            ],
-        },
-        {
-            "title": "4. Multi-Model Audit & Judge",
-            "color": PALETTE["vermilion"],
-            "bg": "#FFF7ED",
-            "subcards": [
-                ("34 EVALUATED LLMs", "21 general & 13 medical LLMs\n11 matched med-vs-base pairs", "#FFEDD5"),
-                ("INDEPENDENT LLM JUDGE", "gpt-4.1-mini on 610,176 responses\n99.45% agreement (\u03ba = 0.973)", "#FFFFFF"),
-                ("STATISTICAL INFERENCE", "Attention-controlled prompting\nPatient-clustered bootstrap CIs", "#FED7AA"),
-            ],
-        },
+    # ── TOP TIER: 4 VISUAL STEP CARDS ──────────────────────────────────────
+    card_w = 2.84
+    card_h = 2.52
+    y_top = 1.50
+    xs = [0.12, 3.29, 6.46, 9.63]
+
+    step_meta = [
+        ("STEP 1", "Theory & Guidelines", PALETTE["navy"], "#F8FAFC", "#DBEAFE",
+         [("145 HSDF Studies", "435 clinician stigma records"),
+          ("38 Clinical Guidelines", "Strict medical orthogonality")],
+         "31 Events  \u00b7  6 Domains  \u00b7  73 Licenses"),
+        ("STEP 2", "Pre-Decision EHRs", PALETTE["blue"], "#F0F9FF", "#BAE6FD",
+         [("MIMIC-IV Admission", "Truncated pre-decision notes"),
+          ("5-LLM Eligibility Panel", "1,416 \u2192 1,030 clean cases")],
+         "1,030 Verified Patient Vignettes"),
+        ("STEP 3", "Counterfactual Synthesis", PALETTE["teal"], "#ECFDF5", "#A7F3D0",
+         None,  # custom 2x2 visual icon pills!
+         "29,845 Items  \u00b7  10 Task Templates"),
+        ("STEP 4", "Multi-Model Audit", PALETTE["vermilion"], "#FFF7ED", "#FED7AA",
+         [("34 Open-Weight LLMs", "21 general + 13 medical (11 pairs)"),
+          ("Attention & Judge Audit", "610k responses \u00b7 99.45% agree")],
+         "Bedside Bias vs. Explicit Attitudes"),
     ]
 
-    card_w = 2.82
-    card_h = 3.05
-    y0 = 0.10
-    xs = [0.12, 3.26, 6.40, 9.54]
-
-    for idx, st in enumerate(stages):
+    for idx, (badge_txt, title, col, bg, pill_bg, items, footer) in enumerate(step_meta):
         x = xs[idx]
-        outer = FancyBboxPatch(
-            (x, y0), card_w, card_h,
-            boxstyle="round,pad=0.03,rounding_size=0.08",
-            facecolor=st["bg"], edgecolor=st["color"], linewidth=1.5, zorder=2
-        )
-        ax.add_patch(outer)
+        # Subtle drop shadow
+        ax.add_patch(FancyBboxPatch((x + 0.04, y_top - 0.04), card_w, card_h,
+                                    boxstyle="round,pad=0.02,rounding_size=0.10",
+                                    facecolor="#CBD5E1", edgecolor="none", alpha=0.40, zorder=1))
+        # Main card
+        ax.add_patch(FancyBboxPatch((x, y_top), card_w, card_h,
+                                    boxstyle="round,pad=0.02,rounding_size=0.10",
+                                    facecolor=bg, edgecolor=col, lw=1.45, zorder=2))
+        # Header band
+        hh = 0.44
+        ax.add_patch(FancyBboxPatch((x, y_top + card_h - hh), card_w, hh,
+                                    boxstyle="round,pad=0.02,rounding_size=0.10",
+                                    facecolor=col, edgecolor=col, lw=1.0, zorder=3))
+        # Step pill inside header
+        ax.add_patch(FancyBboxPatch((x + 0.09, y_top + card_h - hh + 0.10), 0.62, 0.24,
+                                    boxstyle="round,pad=0.01,rounding_size=0.05",
+                                    facecolor="white", edgecolor="none", alpha=0.22, zorder=4))
+        ax.text(x + 0.40, y_top + card_h - hh/2, badge_txt, ha="center", va="center",
+                color="white", fontsize=7.2, fontweight="bold", zorder=5)
+        ax.text(x + 0.80, y_top + card_h - hh/2, title, ha="left", va="center",
+                color="white", fontsize=9.3, fontweight="bold", zorder=5)
 
-        hh = 0.42
-        header = FancyBboxPatch(
-            (x, y0 + card_h - hh), card_w, hh,
-            boxstyle="round,pad=0.03,rounding_size=0.08",
-            facecolor=st["color"], edgecolor=st["color"], linewidth=1.0, zorder=3
-        )
-        ax.add_patch(header)
-        ax.text(
-            x + card_w / 2, y0 + card_h - hh / 2, st["title"],
-            ha="center", va="center", color="white", fontweight="bold", fontsize=9.2, zorder=4
-        )
+        if idx != 2:
+            # Draw large centered vector icon
+            icon_cx, icon_cy = x + card_w / 2, y_top + 1.66
+            if idx == 0:
+                _draw_book_icon(ax, icon_cx, icon_cy, s=0.31, color=col)
+            elif idx == 1:
+                _draw_ehr_icon(ax, icon_cx, icon_cy, s=0.31, color=col)
+            elif idx == 3:
+                _draw_audit_icon(ax, icon_cx, icon_cy, s=0.31, color=col)
 
-        sub_h = 0.72
-        sub_w = card_w - 0.20
-        sub_x = x + 0.10
-        sub_ys = [y0 + 1.80, y0 + 0.95, y0 + 0.10]
+            # Two compact clean white info pills
+            for j, (k_txt, v_txt) in enumerate(items):
+                py = y_top + 0.90 - j * 0.44
+                ax.add_patch(FancyBboxPatch((x + 0.11, py), card_w - 0.22, 0.37,
+                                            boxstyle="round,pad=0.01,rounding_size=0.06",
+                                            facecolor="white", edgecolor="#CBD5E1", lw=0.85, zorder=3))
+                ax.text(x + card_w/2, py + 0.245, k_txt, ha="center", va="center",
+                        color=col, fontsize=8.0, fontweight="bold", zorder=4)
+                ax.text(x + card_w/2, py + 0.095, v_txt, ha="center", va="center",
+                        color="#334155", fontsize=7.5, zorder=4)
+        else:
+            # STEP 3: 2x2 visual icon pills for M, P, X, F + validator badge
+            factors = [
+                ("M", "M: Disease", "9 remitted", "#D55E00", "#FFF7ED"),
+                ("P", "P: Wording", "Same facts", "#E69F00", "#FEFCE8"),
+                ("X", "X: Social", "5 axes", "#CC79A7", "#FDF2F8"),
+                ("F", "F: Context", "ED / Equity", "#0072B2", "#EFF6FF"),
+            ]
+            pw = (card_w - 0.30) / 2
+            ph = 0.56
+            for f_idx, (fk, fl, fs, fc, fbg) in enumerate(factors):
+                col_i = f_idx % 2
+                row_i = f_idx // 2
+                fx = x + 0.11 + col_i * (pw + 0.08)
+                fy = y_top + 1.38 - row_i * (ph + 0.09)
+                ax.add_patch(FancyBboxPatch((fx, fy), pw, ph,
+                                            boxstyle="round,pad=0.01,rounding_size=0.06",
+                                            facecolor=fbg, edgecolor=fc, lw=1.0, zorder=3))
+                _draw_mini_icon(ax, fk, fx + 0.22, fy + ph/2, r=0.13, color=fc)
+                ax.text(fx + 0.41, fy + ph*0.64, fl, ha="left", va="center",
+                        color=fc, fontsize=7.7, fontweight="bold", zorder=4)
+                ax.text(fx + 0.41, fy + ph*0.28, fs, ha="left", va="center",
+                        color="#334155", fontsize=7.1, zorder=4)
 
-        for s_idx, (s_label, s_text, s_fill) in enumerate(st["subcards"]):
-            sy = sub_ys[s_idx]
-            sbox = FancyBboxPatch(
-                (sub_x, sy), sub_w, sub_h,
-                boxstyle="round,pad=0.02,rounding_size=0.05",
-                facecolor=s_fill, edgecolor="#CBD5E1", linewidth=0.9, zorder=3
-            )
-            ax.add_patch(sbox)
-            ax.text(
-                sub_x + sub_w / 2, sy + sub_h - 0.13, s_label,
-                ha="center", va="center", color=st["color"], fontweight="bold", fontsize=8.0, zorder=4
-            )
-            ax.text(
-                sub_x + sub_w / 2, sy + 0.28, s_text,
-                ha="center", va="center", color="#0F172A", fontsize=8.6, linespacing=1.25, zorder=4
-            )
-            if s_idx < 2:
-                ay_top = sy - 0.01
-                ay_bot = sub_ys[s_idx + 1] + sub_h + 0.01
-                ax.annotate(
-                    "", xy=(sub_x + sub_w / 2, ay_bot), xytext=(sub_x + sub_w / 2, ay_top),
-                    arrowprops=dict(arrowstyle="-|>,head_length=0.25,head_width=0.18", color=st["color"], lw=1.1),
-                    zorder=5
-                )
+            # Invariance validator bar
+            vy = y_top + 0.46
+            ax.add_patch(FancyBboxPatch((x + 0.11, vy), card_w - 0.22, 0.21,
+                                        boxstyle="round,pad=0.01,rounding_size=0.05",
+                                        facecolor="white", edgecolor="#009E73", lw=0.85, zorder=3))
+            _draw_check_badge(ax, x + 0.36, vy + 0.105, r=0.068, color="#009E73")
+            ax.text(x + card_w/2 + 0.08, vy + 0.105, "35-Check Invariance Validator", ha="center", va="center",
+                    color="#009E73", fontsize=7.5, fontweight="bold", zorder=4)
 
+        # Output footer pill
+        ax.add_patch(FancyBboxPatch((x + 0.11, y_top + 0.09), card_w - 0.22, 0.29,
+                                    boxstyle="round,pad=0.01,rounding_size=0.06",
+                                    facecolor=pill_bg, edgecolor=col, lw=0.85, zorder=3))
+        ax.text(x + card_w/2, y_top + 0.235, footer, ha="center", va="center",
+                color="#0F172A", fontsize=7.8, fontweight="bold", zorder=4)
+
+    # Flow arrows between top cards
     for i in range(3):
-        x_start = xs[i] + card_w + 0.04
-        x_end = xs[i + 1] - 0.04
-        y_mid = y0 + card_h / 2
-        arrow = FancyArrowPatch(
-            (x_start, y_mid), (x_end, y_mid),
-            arrowstyle="-|>,head_length=6,head_width=4",
-            linewidth=2.2, color="#334155", zorder=5
-        )
-        ax.add_patch(arrow)
+        x_start = xs[i] + card_w + 0.05
+        x_end = xs[i + 1] - 0.05
+        y_mid = y_top + card_h / 2
+        ax.add_patch(FancyArrowPatch((x_start, y_mid), (x_end, y_mid),
+                                     arrowstyle="-|>,head_length=6.5,head_width=4.5",
+                                     lw=2.2, color="#475569", zorder=6))
+
+    # ── BOTTOM TIER: 1-GLANCE VISUAL COUNTERFACTUAL EXAMPLE STRIP ──────────
+    yb, hb = 0.10, 1.15
+    ax.add_patch(FancyBboxPatch((0.12, yb), 12.35, hb,
+                                boxstyle="round,pad=0.02,rounding_size=0.09",
+                                facecolor="#F8FAFC", edgecolor="#94A3B8", lw=1.1, linestyle="--", zorder=2))
+    # Strip label badge
+    ax.add_patch(FancyBboxPatch((0.26, yb + hb - 0.14), 2.55, 0.24,
+                                boxstyle="round,pad=0.01,rounding_size=0.05",
+                                facecolor="#334155", edgecolor="none", zorder=4))
+    ax.text(1.535, yb + hb - 0.02, "ILLUSTRATIVE COUNTERFACTUAL", ha="center", va="center",
+            color="white", fontsize=7.1, fontweight="bold", zorder=5)
+
+    # Box A: Base Pre-Decision Vignette
+    ax.add_patch(FancyBboxPatch((0.28, yb + 0.12), 3.35, 0.80,
+                                boxstyle="round,pad=0.01,rounding_size=0.07",
+                                facecolor="white", edgecolor="#0072B2", lw=1.1, zorder=3))
+    ax.text(0.42, yb + 0.72, "Pre-Decision ED Chart (Byte-Identical)", ha="left", va="center",
+            color="#0072B2", fontsize=7.9, fontweight="bold", zorder=4)
+    ax.text(0.42, yb + 0.43, "48yo \u00b7 Acute substernal chest pressure\nDiaphoresis \u00b7 HR 108 \u00b7 BP 146/88",
+            ha="left", va="center", color="#1E293B", fontsize=7.6, linespacing=1.25, zorder=4)
+    ax.text(3.52, yb + 0.21, "AHA/ACC: 10-min ECG", ha="right", va="center",
+            color="#009E73", fontsize=7.1, fontweight="bold", zorder=4)
+
+    # Plus arrow
+    ax.add_patch(FancyArrowPatch((3.70, yb + 0.52), (4.18, yb + 0.52),
+                                 arrowstyle="-|>,head_length=5.5,head_width=3.8",
+                                 lw=1.8, color="#475569", zorder=5))
+    ax.text(3.92, yb + 0.69, "+", ha="center", va="center", color="#0F172A", fontsize=11, fontweight="bold", zorder=5)
+
+    # Box B: Orthogonal Factor Cues
+    ax.add_patch(FancyBboxPatch((4.25, yb + 0.12), 3.70, 0.80,
+                                boxstyle="round,pad=0.01,rounding_size=0.07",
+                                facecolor="white", edgecolor="#009E73", lw=1.1, zorder=3))
+    ax.text(4.39, yb + 0.72, "Orthogonal Stigma / Context Cue(s)", ha="left", va="center",
+            color="#009E73", fontsize=7.9, fontweight="bold", zorder=4)
+    cue_pills = [
+        (4.37, yb + 0.43, 1.72, "M: Remitted Schizophrenia", "#D55E00", "#FFF7ED"),
+        (6.16, yb + 0.43, 1.68, "P: Patient \"claims\" pain", "#B45309", "#FEFCE8"),
+        (4.37, yb + 0.17, 1.72, "X: Homeless / LEP / Race", "#9D174D", "#FDF2F8"),
+        (6.16, yb + 0.17, 1.68, "F\u2212/+: Crowding vs. Equity", "#0072B2", "#EFF6FF"),
+    ]
+    for px, py, pw, ptxt, pcol, pbg in cue_pills:
+        ax.add_patch(FancyBboxPatch((px, py), pw, 0.20,
+                                    boxstyle="round,pad=0.01,rounding_size=0.04",
+                                    facecolor=pbg, edgecolor=pcol, lw=0.75, zorder=4))
+        ax.text(px + pw/2, py + 0.10, ptxt, ha="center", va="center",
+                color=pcol, fontsize=6.9, fontweight="bold", zorder=5)
+
+    # Arrow to Decision Audit
+    ax.add_patch(FancyArrowPatch((8.02, yb + 0.52), (8.46, yb + 0.52),
+                                 arrowstyle="-|>,head_length=5.5,head_width=3.8",
+                                 lw=1.8, color="#475569", zorder=5))
+
+    # Box C: Control vs Treated Decision Shift
+    ax.add_patch(FancyBboxPatch((8.53, yb + 0.12), 3.80, 0.80,
+                                boxstyle="round,pad=0.01,rounding_size=0.07",
+                                facecolor="white", edgecolor="#D55E00", lw=1.1, zorder=3))
+    ax.text(8.67, yb + 0.72, "Paired Decision Audit  (\u0394P(indicated) & R\u2192W)", ha="left", va="center",
+            color="#D55E00", fontsize=7.9, fontweight="bold", zorder=4)
+    # Control green badge
+    ax.add_patch(FancyBboxPatch((8.65, yb + 0.21), 1.66, 0.38,
+                                boxstyle="round,pad=0.01,rounding_size=0.05",
+                                facecolor="#ECFDF5", edgecolor="#009E73", lw=0.9, zorder=4))
+    _draw_check_badge(ax, 8.81, yb + 0.40, r=0.085, color="#009E73")
+    ax.text(9.58, yb + 0.46, "Control Arm", ha="center", va="center", color="#009E73", fontsize=7.1, fontweight="bold", zorder=5)
+    ax.text(9.58, yb + 0.30, "Order 10-min ECG", ha="center", va="center", color="#0F172A", fontsize=7.2, zorder=5)
+    # Arrow
+    ax.text(10.43, yb + 0.40, "\u2192", ha="center", va="center", color="#D55E00", fontsize=11, fontweight="bold", zorder=5)
+    # Treated red badge
+    ax.add_patch(FancyBboxPatch((10.55, yb + 0.21), 1.66, 0.38,
+                                boxstyle="round,pad=0.01,rounding_size=0.05",
+                                facecolor="#FEF2F2", edgecolor="#DC2626", lw=0.9, zorder=4))
+    _draw_x_badge(ax, 10.71, yb + 0.40, r=0.085, color="#DC2626")
+    ax.text(11.48, yb + 0.46, "Marked Arm", ha="center", va="center", color="#DC2626", fontsize=7.1, fontweight="bold", zorder=5)
+    ax.text(11.48, yb + 0.30, "Attribute to Anxiety", ha="center", va="center", color="#0F172A", fontsize=7.2, zorder=5)
 
     save_both(fig, "fig1_pipeline")
 
